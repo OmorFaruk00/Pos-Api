@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DUM\NoticeController;
 use App\Http\Controllers\DUM\EventController;
-
+use App\Http\Controllers\DUM\FacilitieController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -38,6 +38,14 @@ Route::group(["middleware" => 'auth:sanctum'],function(){
         Route:: get("status/{id}/{status}",[EventController::class,'EventStatus']);
         Route:: get("delete/{id}",[EventController::class,'EventDelete']);
         });
+        Route::prefix('facilitie')->group(function () {
+            Route:: get("show",[FacilitieController::class,'FacilitieShow']);
+            Route:: post("add",[FacilitieController::class,'FacilitieAdd']);
+            Route:: get("edit/{id}",[FacilitieController::class,'FacilitieEdit']);
+            Route:: post("update/{id}",[FacilitieController::class,'FacilitieUpdate']);
+            Route:: get("status/{id}/{status}",[FacilitieController::class,'FacilitieStatus']);
+            Route:: get("delete/{id}",[FacilitieController::class,'FacilitieDelete']);
+            });   
        
     
     

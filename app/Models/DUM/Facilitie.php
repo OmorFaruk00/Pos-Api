@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DUM;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class notice extends Model
+class Facilitie extends Model
 {
     use HasFactory;
 }
