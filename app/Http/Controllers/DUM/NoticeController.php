@@ -11,15 +11,14 @@ class NoticeController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'slug' => 'required|unique:notices',
-            'created_by' => 'required',
+            'slug' => 'required|unique:notices',            
         ]);
         $notice = new notice();
         $notice->title = $request->title;
         $notice->description = $request->description;
         $notice->slug = $request->slug;
         $notice->status = 1;
-        $notice->created_by = $request->created_by;
+        $notice->created_by = auth()->user()->name;  
         $notice->save();
         return response()->json(['message' => 'Notice Added Successfully'],200);
     }
@@ -38,16 +37,14 @@ class NoticeController extends Controller
     function noticeUpdate(Request $request,$id){
         $request->validate([
             'title' => 'required',
-            'description' => 'required',
-            'slug' => 'required|unique:notices',
-            'created_by' => 'required',
+            'description' => 'required',            
+            
         ]);
         $notice = notice::find($id);
         $notice->title = $request->title;
-        $notice->description = $request->description;
-        $notice->slug = $request->slug;
+        $notice->description = $request->description;        
         $notice->status = 1;
-        $notice->created_by = $request->created_by;
+        $notice->created_by = auth()->user()->name;
         $notice->save();
         return response()->json(['message' => 'Notice Updated Successfully'],200);
 

@@ -10,14 +10,14 @@ class FacilitieController extends Controller
     function FacilitieAdd(Request $request){        
         $request->validate([
             'title' => 'required',
-            'description' => 'required',            
-            'created_by' => 'required',
+            'description' => 'required',           
+            
         ]);
         $facilitie = new Facilitie();
         $facilitie->title = $request->title;
         $facilitie->description = $request->description;        
         $facilitie->status = 1;
-        $facilitie->created_by = $request->created_by;
+        $facilitie->created_by = auth()->user()->name;
         $facilitie->save();
         return response()->json(['message' => 'Facilitie Added Successfully'],200);
     }
@@ -37,13 +37,13 @@ class FacilitieController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',           
-            'created_by' => 'required',
+            
         ]);
         $facilitie = facilitie::find($id);
         $facilitie->title = $request->title;
         $facilitie->description = $request->description;       
         $facilitie->status = 1;
-        $facilitie->created_by = $request->created_by;
+        $facilitie->created_by = auth()->user()->name;
         $facilitie->save();
         return response()->json(['message' => 'Facilitie Updated Successfully'],200);
 

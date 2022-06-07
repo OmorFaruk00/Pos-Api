@@ -13,15 +13,14 @@ class EventController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'slug' => 'required|unique:events',
-            'created_by' => 'required',
+            'slug' => 'required|unique:events',            
         ]);
         $event = new Event();
         $event->title = $request->title;
         $event->description = $request->description;
         $event->slug = $request->slug;
         $event->status = 1;
-        $event->created_by = $request->created_by;
+        $event->created_by = auth()->user()->name;
         $event->save();
         return response()->json(['message' => 'Event Added Successfully'],200);
     }
@@ -40,16 +39,13 @@ class EventController extends Controller
     function EventUpdate(Request $request,$id){
         $request->validate([
             'title' => 'required',
-            'description' => 'required',
-            'slug' => 'required|unique:events',
-            'created_by' => 'required',
+            'description' => 'required',            
         ]);
         $event = Event::find($id);
         $event->title = $request->title;
-        $event->description = $request->description;
-        $event->slug = $request->slug;
+        $event->description = $request->description;      
         $event->status = 1;
-        $event->created_by = $request->created_by;
+        $event->created_by = auth()->user()->name;  
         $event->save();
         return response()->json(['message' => 'Event Updated Successfully'],200);
 
