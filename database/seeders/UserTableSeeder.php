@@ -8,18 +8,21 @@ use Illuminate\Support\Facades\Hash;
 
 class UserTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+    protected $connection = 'EMP';
     public function run()
     {
         DB::table('users')->insert([
-            "name"=> "omor",
+            "name"=> "Omor Faruk",
             "email"=>"omor@gmail.com",
             "password" => Hash::make("1234")
 
         ]);
+        // DB::connection('EMP')->table('employees')->insert([
+        //     "name"=> "Omor Faruk",
+        //     "email"=>"omor@gmail.com",
+        //     "password" => Hash::make("1234")
+
+        // ]);
+        
     }
 }

@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use illuminate\Auth\AuthenticationException;
 use App\Models\User;
+// use App\Models\EMP\Employee;
+
+
+
 
 class UserController extends Controller
 {
@@ -49,12 +54,13 @@ class UserController extends Controller
             return 'logout';
         }
     }
+    public function show(){
+        return user::all();
+    }
 
    
 
 
 
-    function show(){
-        return User::all();
-    }
+   
 }

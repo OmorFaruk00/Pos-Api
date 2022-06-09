@@ -8,6 +8,9 @@ use App\Http\Controllers\DUM\EventController;
 use App\Http\Controllers\DUM\FacilitieController;
 use App\Http\Controllers\DUM\SliderController;
 use App\Http\Controllers\DUM\ProgramController;
+use App\Http\Controllers\DUM\DumController;
+use App\Http\Controllers\EMP\DepartmentController;
+use App\Http\Controllers\EMP\DesignationController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -18,6 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
+Route::get("user", [UserController::class, 'show']);
+
+
+
 
 
 
@@ -66,4 +73,23 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("status/{id}/{status}", [ProgramController::class, 'ProgramStatus']);
         Route::get("delete/{id}", [ProgramController::class, 'ProgramDelete']);
     });
+    Route::get("contact/show", [DumController::class, 'ContactShow']);
+
+    Route::prefix('department')->group(function () {
+        Route::get("show", [DepartmentController::class, 'DepartmentShow']);
+        Route::post("add", [DepartmentController::class, 'DepartmentAdd']);
+        Route::get("edit/{id}", [DepartmentController::class, 'DepartmentEdit']);
+        Route::post("update/{id}", [DepartmentController::class, 'DepartmentUpdate']);
+        Route::get("status/{id}", [DepartmentController::class, 'DepartmentStatus']);
+        Route::get("delete/{id}", [DepartmentController::class, 'DepartmentDelete']);
+    });
+    Route::prefix('designation')->group(function () {
+        Route::get("show", [DesignationController::class, 'DesignationShow']);
+        Route::post("add", [DesignationController::class, 'DesignationAdd']);
+        Route::get("edit/{id}", [DesignationController::class, 'DesignationEdit']);
+        Route::post("update/{id}", [DesignationController::class, 'DesignationUpdate']);
+        Route::get("status/{id}", [DesignationController::class, 'DesignationStatus']);
+        Route::get("delete/{id}", [DesignationController::class, 'DesignationDelete']);
+    });
+
 });
