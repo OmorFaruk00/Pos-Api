@@ -13,7 +13,8 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->string('department');
             $table->string('type');
-            $table->string('slug');
+            $table->string('status');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

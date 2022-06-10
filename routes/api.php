@@ -11,17 +11,20 @@ use App\Http\Controllers\DUM\ProgramController;
 use App\Http\Controllers\DUM\DumController;
 use App\Http\Controllers\EMP\DepartmentController;
 use App\Http\Controllers\EMP\DesignationController;
+use App\Http\Controllers\EMP\EmployeeController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    return auth()->user();
+   
 });
 
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
-Route::get("user", [UserController::class, 'show']);
+
+
 
 
 
@@ -90,6 +93,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [DesignationController::class, 'DesignationUpdate']);
         Route::get("status/{id}", [DesignationController::class, 'DesignationStatus']);
         Route::get("delete/{id}", [DesignationController::class, 'DesignationDelete']);
+    });
+    Route::prefix('employee')->group(function () {
+        Route::get("show", [EmployeeController::class, 'EmployeeShow']);
+        Route::post("add", [EmployeeController::class, 'EmployeeAdd']);
+        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
+        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
+        Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
+        Route::get("profile", [EmployeeController::class, 'Employeeprofile']);
     });
 
 });

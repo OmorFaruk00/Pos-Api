@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\EMP;
 
 use Illuminate\Http\Request;
-use App\Models\EMP\Department;
+use App\Models\Department;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
+
 
 
 class DepartmentController extends Controller

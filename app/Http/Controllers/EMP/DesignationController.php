@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\EMP;
 
 use Illuminate\Http\Request;
-use App\Models\EMP\Designation;
+use App\Models\Designation;
 use App\Http\Controllers\Controller;
 
 

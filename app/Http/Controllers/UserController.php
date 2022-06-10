@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use illuminate\Auth\AuthenticationException;
-use App\Models\User;
-// use App\Models\EMP\Employee;
+use App\Models\Employee;
 
 
 
@@ -23,7 +22,7 @@ class UserController extends Controller
             'password' => 'required',            
         ]);
         try{
-            $user = User::where('email',$request->email)->first();
+            $user = Employee::where('email',$request->email)->where('status',1)->first();
             if(!$user){
                 return response()->json(['message'=>'User not found'],403);
             }
@@ -47,6 +46,8 @@ class UserController extends Controller
         
    
     }
+
+ 
     public function logout(Request $request){       
        
         if(auth()->check()){
@@ -54,9 +55,7 @@ class UserController extends Controller
             return 'logout';
         }
     }
-    public function show(){
-        return user::all();
-    }
+    
 
    
 
