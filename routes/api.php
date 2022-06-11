@@ -15,7 +15,8 @@ use App\Http\Controllers\EMP\EmployeeController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return auth()->user();
+    return \App\Models\Employee::with('relDesignation','relDepartment')->find(auth()->user()->id);
+    // return auth()->user();
    
 });
 
@@ -101,7 +102,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
         Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
         Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
-        Route::get("profile", [EmployeeController::class, 'Employeeprofile']);
     });
 
 });

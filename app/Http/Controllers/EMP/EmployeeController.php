@@ -54,7 +54,7 @@ class EmployeeController extends Controller
         $Employee->date_of_join = $request->date_of_joining;        
         $Employee->profile_photo = $file_name;
         $Employee->status = 1;
-        $Employee->created_by = auth()->user()->name;        
+        $Employee->created_by = auth()->user()->id;        
         $Employee->save();
         return response()->json(['message' => 'Employee Added Successfully'],200);
     }
@@ -67,32 +67,58 @@ class EmployeeController extends Controller
         
     }
     function EmployeeEdit($id){
+        
         return Employee::find($id);
+
 
     }
     function EmployeeUpdate(Request $request,$id){
         $request->validate([
-            'title' => 'required',
-            'description' => 'required', 
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
+            'name' => 'required',
+            'email' => 'required|unique:employees', 
+            // 'password' => 'required|confirmed',                        
+            // 'image' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'department' => 'required',
+            'designation' => 'required',
+            'personal_phone_no' => 'required',
+            'date_of_join' => 'required',            
+            'jobtype' => 'required',             
+            'nid_no' => 'required',
+            'date_of_birth' => 'required',   
             
+
+                                   
         ]);
-        $Employee = Employee::find($id);
+        
         if ($request->hasFile('image')) {
-            $file = $request->file('image');       
+            $file = $request->file('image');
+        
 
         $extension = $file->getClientOriginalExtension();
             $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-            $file->move(public_path('images/dum'), $file_name);
-            $image_url = env('APP_URL') . "/images/dum/$file_name"; 
-            unlink(public_path() .'/images/dum/'. $Employee->image);          
+            $file->move(public_path('images/emp'), $file_name);
+            $image_url = env('APP_URL') . "/images/emp/$file_name";            
         }
-        
-        $Employee->title = $request->title;
-        $Employee->description = $request->description;     
-        $Employee->image = $file_name??$Employee->image;
+        $Employee = Employee::find($id);
+        $Employee->name = $request->name;
+        $Employee->email = $request->email;
+        // $Employee->password = Hash::make($request->password);        
+        $Employee->department_id = $request->department;
+        $Employee->designation_id = $request->designation;
+        $Employee->personal_phone_no = $request->personal_phone_no;      
+        $Employee->alternative_phone_no = $request->personal_phone_no;      
+        $Employee->home_phone_no = $request->personal_phone_no;     
+        $Employee->merit = $request->merit;
+        $Employee->jobtype = $request->jobtype;        
+        $Employee->nid_no = $request->nid_no;
+        $Employee->date_of_birth = $request->date_of_birth;
+        $Employee->date_of_join = $request->date_of_join;
+        if($request->hasFile('image')){
+            $Employee->profile_photo = $file_name;
+        }
+        // $Employee->profile_photo = $file_name;
         $Employee->status = 1;
-        $Employee->created_by = auth()->user()->name;        
+        $Employee->created_by = auth()->user()->id;        
         $Employee->save();
         return response()->json(['message' => 'Employee Updated Successfully'],200);
 
@@ -113,11 +139,7 @@ class EmployeeController extends Controller
         $Employee->delete();
         return response()->json(['message' => 'Employee Deleted Successfully'],200);
     }
-    public function Employeeprofile(){
-        $user_id = auth()->user()->id;
-        $user = Employee::with('relDesignation','relDepartment')->where('id',$user_id)->first();
-        return response()->json(['user'=>$user],200);
-    }
+   
         
         
         
