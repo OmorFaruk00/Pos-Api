@@ -35,6 +35,11 @@ class Employee extends Authenticatable
     {
         return $this->belongsTo('App\Models\Department', 'department_id', 'id');
     }
+    public function relSocial()
+    {
+        return $this->hasMany('App\Models\Social',  'employee_id','id');
+    }
+   
     protected $hidden = [
         'password',
         'remember_token',

@@ -12,18 +12,27 @@ use App\Http\Controllers\DUM\DumController;
 use App\Http\Controllers\EMP\DepartmentController;
 use App\Http\Controllers\EMP\DesignationController;
 use App\Http\Controllers\EMP\EmployeeController;
+use App\Http\Controllers\Profile\SocialController;
+use App\Http\Controllers\Profile\QualificationController;
+use App\Http\Controllers\Profile\TrainingController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return \App\Models\Employee::with('relDesignation','relDepartment')->find(auth()->user()->id);
+    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial')->find(auth()->user()->id);
     // return auth()->user();
    
 });
 
 
 
+
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
+
+
+Route::post("social-add", [ProfileController::class, 'SocialAdd']);
+Route::get("user", [ProfileController::class, 'user']);
 
 
 
@@ -102,6 +111,29 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
         Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
         Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
+    });
+    Route::prefix('social')->group(function () {       
+        Route::get("show", [SocialController::class, 'SocialShow']);
+        Route::post("add", [SocialController::class, 'SocialAdd']);
+        Route::get("edit/{id}", [SocialController::class, 'SocialEdit']);
+        Route::post("update/{id}", [SocialController::class, 'SocialUpdate']);
+        Route::get("delete/{id}", [SocialController::class, 'SocialDelete']);       
+    });
+    Route::prefix('qualification')->group(function () {       
+        Route::get("show", [QualificationController::class, 'QualificationShow']);
+        Route::post("add", [QualificationController::class, 'QualificationAdd']);
+        Route::get("edit/{id}", [QualificationController::class, 'QualificationEdit']);
+        Route::post("update/{id}", [QualificationController::class, 'QualificationUpdate']);
+        Route::get("delete/{id}", [QualificationController::class, 'QualificationDelete']);
+       
+    });
+    Route::prefix('training')->group(function () {       
+        Route::get("show", [TrainingController::class, 'TrainingShow']);
+        Route::post("add", [TrainingController::class, 'TrainingAdd']);
+        Route::get("edit/{id}", [TrainingController::class, 'TrainingEdit']);
+        Route::post("update/{id}", [TrainingController::class, 'TrainingUpdate']);
+        Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
+       
     });
 
 });
