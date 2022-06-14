@@ -19,8 +19,10 @@ use App\Http\Controllers\ProfileController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial')->find(auth()->user()->id);
-    // return auth()->user();
+    return \App\Models\Employee::find(auth()->user()->id);
+    // return request()->user();
+
+    
    
 });
 
@@ -31,8 +33,7 @@ Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
 
 
-Route::post("social-add", [ProfileController::class, 'SocialAdd']);
-Route::get("user", [ProfileController::class, 'user']);
+
 
 
 
@@ -43,6 +44,8 @@ Route::get("user", [ProfileController::class, 'user']);
 
 
 Route::group(["middleware" => 'auth:sanctum'], function () {
+    Route::get("profile", [ProfileController::class, 'userProfile']);
+
 
 
     Route::prefix('notice')->group(function () {
@@ -69,7 +72,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("status/{id}/{status}", [FacilitieController::class, 'FacilitieStatus']);
         Route::get("delete/{id}", [FacilitieController::class, 'FacilitieDelete']);
     });
-
     Route::prefix('slider')->group(function () {
         Route::get("show", [SliderController::class, 'SliderShow']);
         Route::post("add", [SliderController::class, 'SliderAdd']);
@@ -111,6 +113,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
         Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
         Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
+        Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
     });
     Route::prefix('social')->group(function () {       
         Route::get("show", [SocialController::class, 'SocialShow']);

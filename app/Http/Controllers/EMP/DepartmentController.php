@@ -20,7 +20,7 @@ class DepartmentController extends Controller
         $department->type = $request->type;
         $department->department = $request->department;
         $department->status = 1;
-        $department->created_by = auth()->user()->name;  
+        $department->created_by = auth()->user()->id;  
         $department->save();
         return response()->json(['message'=>'Department Added Successfully'],201);
     }

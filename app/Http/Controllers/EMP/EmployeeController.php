@@ -7,7 +7,7 @@ use App\Models\Employee;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use PhpParser\Node\Stmt\TryCatch;
 
 class EmployeeController extends Controller
 {
@@ -133,6 +133,10 @@ class EmployeeController extends Controller
         $Employee->save();
         return response()->json(['message' => 'Employee Status Change'],200);
     }
+    function EmployeeDetails($id){
+        return Employee::with('relDesignation','relDepartment','relSocial','relTraining','relQualification')->where('id',$id)->first();
+    }
+
     function EmployeeDelete($id){              
         $Employee = Employee::find($id);        
         // unlink(public_path() .'/images/emp/'. $Employee->image);

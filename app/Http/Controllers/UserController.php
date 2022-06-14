@@ -22,7 +22,7 @@ class UserController extends Controller
             'password' => 'required',            
         ]);
         try{
-            $user = Employee::where('email',$request->email)->where('status',1)->first();
+            $user = Employee::where('email',$request->email)->first();
             if(!$user){
                 return response()->json(['message'=>'User not found'],403);
             }

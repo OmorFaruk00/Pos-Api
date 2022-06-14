@@ -39,6 +39,15 @@ class Employee extends Authenticatable
     {
         return $this->hasMany('App\Models\Social',  'employee_id','id');
     }
+    public function relQualification()
+    {
+        return $this->hasMany('App\Models\Qualification',  'employee_id','id');
+    }
+    public function relTraining()
+    {
+        return $this->hasMany('App\Models\Training',  'employee_id','id');
+    }
+   
    
     protected $hidden = [
         'password',
