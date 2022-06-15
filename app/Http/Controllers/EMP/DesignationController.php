@@ -20,7 +20,7 @@ class DesignationController extends Controller
         $Designation->type = $request->type;
         $Designation->designation = $request->designation;
         $Designation->status = 1;
-        $Designation->created_by = auth()->user()->name;  
+        $Designation->created_by = auth()->user()->id;  
         $Designation->save();
         return response()->json(['message'=>'Designation Added Successfully'],201);
     }
@@ -45,7 +45,7 @@ class DesignationController extends Controller
         $Designation = Designation::find($id);
         $Designation->type = $request->type;
         $Designation->designation = $request->designation;        
-        $Designation->created_by = auth()->user()->name;  
+        $Designation->created_by = auth()->user()->id;  
         $Designation->save();
         return response()->json(['message' => 'Designation Updated Successfully'],200);
 

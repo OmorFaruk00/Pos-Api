@@ -16,6 +16,7 @@ use App\Http\Controllers\Profile\SocialController;
 use App\Http\Controllers\Profile\QualificationController;
 use App\Http\Controllers\Profile\TrainingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ADM\AdmissionFormController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -31,6 +32,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
+
+
+
+// Route::post("import", [AdmissionFormController::class, 'importForm']);
 
 
 
@@ -136,6 +141,13 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("edit/{id}", [TrainingController::class, 'TrainingEdit']);
         Route::post("update/{id}", [TrainingController::class, 'TrainingUpdate']);
         Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
+       
+    });
+    Route::prefix('admission')->group(function () { 
+        Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
+        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);      
+        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);      
+       
        
     });
 
