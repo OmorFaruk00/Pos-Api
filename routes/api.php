@@ -19,11 +19,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ADM\AdmissionFormController;
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return \App\Models\Employee::find(auth()->user()->id);
-    // return request()->user();
-
-    
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {    
+    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();   
    
 });
 
@@ -35,8 +32,8 @@ Route::post("logout", [UserController::class, 'logout'])->name("logout");
 
 
 
-// Route::post("import", [AdmissionFormController::class, 'importForm']);
-
+// Route::get("print", [AdmissionFormController::class, 'generatePDF']); 
+Route::get("/print", [AdmissionFormController::class, 'printShow']); 
 
 
 
@@ -147,6 +144,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
         Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);      
         Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);      
+        Route::get("department", [AdmissionFormController::class, 'getDepartment']);      
+        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);      
+        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']); 
+        Route::get("print-receive", [AdmissionFormController::class, 'generatePDF']); 
+             
        
        
     });
