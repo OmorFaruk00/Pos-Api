@@ -17,39 +17,44 @@ use App\Http\Controllers\Profile\QualificationController;
 use App\Http\Controllers\Profile\TrainingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ADM\AdmissionFormController;
+use App\Http\Controllers\DUM\DumWebsiteController;
+use App\Http\Controllers\DUM\TutionFeeController;
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {    
-    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();   
-   
-});
+
+
+
+
+
+
+Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
+Route::get("notice", [DumWebsiteController::class, 'NoticeShow']);
+Route::get("notice-details/{id}", [DumWebsiteController::class, 'NoticeDetails']);
+Route::get("event-details/{id}", [DumWebsiteController::class, 'EventDetails']);
+Route::get("event", [DumWebsiteController::class, 'EventShow']);
+Route::get("slider", [DumWebsiteController::class, 'SliderShow']);
+Route::post("contact", [DumWebsiteController::class, 'SendMessage']);
+Route::get("tution-fee", [DumWebsiteController::class, 'TutionFeeShow']);
+
+
+
+
+
+
+
+
 
 
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
-
-
-
-// Route::get("print", [AdmissionFormController::class, 'generatePDF']); 
-Route::get("/print", [AdmissionFormController::class, 'printShow']); 
-
-
-
-
-
-
-
-
-
-
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {    
+    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();   
+   
+});
 Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::get("profile", [ProfileController::class, 'userProfile']);
-
-
-
     Route::prefix('notice')->group(function () {
         Route::get("show", [NoticeController::class, 'noticeShow']);
         Route::post("add", [NoticeController::class, 'noticeAdd']);
@@ -89,6 +94,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [ProgramController::class, 'ProgramUpdate']);
         Route::get("status/{id}/{status}", [ProgramController::class, 'ProgramStatus']);
         Route::get("delete/{id}", [ProgramController::class, 'ProgramDelete']);
+    });
+    Route::prefix('tution')->group(function () {       
+        Route::get("show", [TutionFeeController::class, 'TutionFeeShow']);
+        Route::post("add", [TutionFeeController::class, 'TutionFeeAdd']);
+        Route::get("edit/{id}", [TutionFeeController::class, 'TutionFeeEdit']);
+        Route::post("update/{id}", [TutionFeeController::class, 'TutionFeeUpdate']);
+        Route::get("delete/{id}", [TutionFeeController::class, 'TutionFeeDelete']);
+        Route::get("status/{id}", [TutionFeeController::class, 'TutionFeeStatus']);
+       
     });
     Route::get("contact/show", [DumController::class, 'ContactShow']);
 
@@ -140,6 +154,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
        
     });
+ 
     Route::prefix('admission')->group(function () { 
         Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
         Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);      

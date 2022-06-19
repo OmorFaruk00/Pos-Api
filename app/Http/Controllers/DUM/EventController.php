@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\DUM;
-
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DUM\Event;
@@ -9,19 +9,26 @@ use App\Models\DUM\Event;
 class EventController extends Controller
 {
     function EventAdd(Request $request){
-        
         $request->validate([
             'title' => 'required',
-            'description' => 'required',
-            'slug' => 'required|unique:events',            
+            'description' => 'required',             
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
         ]);
-        $event = new Event();
-        $event->title = $request->title;
-        $event->description = $request->description;
-        $event->slug = $request->slug;
-        $event->status = 1;
-        $event->created_by = auth()->user()->name;
-        $event->save();
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+        
+
+        $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/dum'), $file_name);                     
+        }
+        $Event = new Event();
+        $Event->title = $request->title;
+        $Event->description = $request->description;        
+        $Event->image = $file_name;
+        $Event->status = 1;
+        $Event->created_by = auth()->user()->id;        
+        $Event->save();
         return response()->json(['message' => 'Event Added Successfully'],200);
     }
 
@@ -39,14 +46,26 @@ class EventController extends Controller
     function EventUpdate(Request $request,$id){
         $request->validate([
             'title' => 'required',
-            'description' => 'required',            
+            'description' => 'required', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
+            
         ]);
-        $event = Event::find($id);
-        $event->title = $request->title;
-        $event->description = $request->description;      
-        $event->status = 1;
-        $event->created_by = auth()->user()->name;  
-        $event->save();
+        $Event = Event::find($id);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');       
+
+        $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/dum'), $file_name);           
+            unlink(public_path() .'/images/dum/'. $Event->image);          
+        }
+        
+        $Event->title = $request->title;
+        $Event->description = $request->description;     
+        $Event->image = $file_name??$Event->image;
+        $Event->status = 1;
+        $Event->created_by = auth()->user()->name;        
+        $Event->save();
         return response()->json(['message' => 'Event Updated Successfully'],200);
 
     }

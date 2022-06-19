@@ -1,25 +1,34 @@
 <?php
 
 namespace App\Http\Controllers\DUM;
-
 use Illuminate\Http\Request;
 use App\Models\DUM\notice;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 class NoticeController extends Controller
 {
     function noticeAdd(Request $request){
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'slug' => 'required|unique:notices',            
+             
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
         ]);
-        $notice = new notice();
-        $notice->title = $request->title;
-        $notice->description = $request->description;
-        $notice->slug = $request->slug;
-        $notice->status = 1;
-        $notice->created_by = auth()->user()->name;  
-        $notice->save();
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+        
+
+        $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/dum'), $file_name);                     
+        }
+        $Notice = new notice();
+        $Notice->title = $request->title;
+        $Notice->description = $request->description;        
+        $Notice->image = $file_name;
+        $Notice->status = 1;
+        $Notice->created_by = auth()->user()->id;        
+        $Notice->save();
         return response()->json(['message' => 'Notice Added Successfully'],200);
     }
 
@@ -37,15 +46,27 @@ class NoticeController extends Controller
     function noticeUpdate(Request $request,$id){
         $request->validate([
             'title' => 'required',
-            'description' => 'required',            
+            'description' => 'required', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
             
         ]);
-        $notice = notice::find($id);
-        $notice->title = $request->title;
-        $notice->description = $request->description;        
-        $notice->status = 1;
-        $notice->created_by = auth()->user()->name;
-        $notice->save();
+        $Notice = notice::find($id);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');       
+
+        $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/dum'), $file_name);
+            $image_url = env('APP_URL') . "/images/dum/$file_name"; 
+            unlink(public_path() .'/images/dum/'. $Notice->image);          
+        }
+        
+        $Notice->title = $request->title;
+        $Notice->description = $request->description;     
+        $Notice->image = $file_name??$Notice->image;
+        $Notice->status = 1;
+        $Notice->created_by = auth()->user()->name;        
+        $Notice->save();
         return response()->json(['message' => 'Notice Updated Successfully'],200);
 
     }
