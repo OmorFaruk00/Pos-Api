@@ -12,8 +12,8 @@ class ProgramController extends Controller
 {
     function ProgramAdd(Request $request){
         $request->validate([
-            'title' => 'required',           
-            'slug' => 'required|unique:programs',
+            'name' => 'required',           
+            'duration' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
              
                        
@@ -24,15 +24,14 @@ class ProgramController extends Controller
 
         $extension = $file->getClientOriginalExtension();
             $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-            $file->move(public_path('images/dum'), $file_name);
-            $image_url = env('APP_URL') . "/images/dum/$file_name";            
+            $file->move(public_path('images/dum'), $file_name);                       
         }
         $Program = new Program();
-        $Program->title = $request->title;        
-        $Program->slug = $request->slug;
+        $Program->name = $request->name;        
+        $Program->duration = $request->duration;
         $Program->image = $file_name;
         $Program->status = 1;
-        $Program->created_by = auth()->user()->name;        
+        $Program->created_by = auth()->user()->id;        
         $Program->save();
         return response()->json(['message' => 'Program Added Successfully'],200);
     }
@@ -50,7 +49,8 @@ class ProgramController extends Controller
     }
     function ProgramUpdate(Request $request,$id){
         $request->validate([
-            'title' => 'required',
+            'name' => 'required',
+            'duration' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',                       
             
         ]);
@@ -60,22 +60,22 @@ class ProgramController extends Controller
 
         $extension = $file->getClientOriginalExtension();
             $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-            $file->move(public_path('images/dum'), $file_name);
-            $image_url = env('APP_URL') . "/images/dum/$file_name"; 
+            $file->move(public_path('images/dum'), $file_name);            
             unlink(public_path() .'/images/dum/'. $Program->image);          
         }
         
-        $Program->title = $request->title;           
+        $Program->name = $request->name;  
+        $Program->duration = $request->duration;                
         $Program->image = $file_name??$Program->image;
         $Program->status = 1;
-        $Program->created_by = auth()->user()->name;        
+        $Program->created_by = auth()->user()->id;        
         $Program->save();
         return response()->json(['message' => 'Program Updated Successfully'],200);
 
     }
-    function ProgramStatus($id,$status){
+    function ProgramStatus($id){
         $Program = Program::find($id);
-        if($Program->status ==0){
+        if($Program->status == 0){
             $Program->status = 1;
         }else{
             $Program->status = 0;

@@ -48,7 +48,7 @@ class FacilitieController extends Controller
         return response()->json(['message' => 'Facilitie Updated Successfully'],200);
 
     }
-    function FacilitieStatus($id,$status){
+    function FacilitieStatus($id){
         $facilitie = Facilitie::find($id);
         if($facilitie->status ==0){
             $facilitie->status = 1;

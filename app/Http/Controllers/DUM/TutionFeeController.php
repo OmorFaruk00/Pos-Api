@@ -9,15 +9,21 @@ class TutionFeeController extends Controller
 {
     function TutionFeeAdd(Request $request){        
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',           
+            'name_of_program' => 'required',
+            'type' => 'required',
+            'duration' => 'required',
+            'total_fee' => 'required|numeric',
+
+
             
         ]);
         $tutionfee = new TutionFee();
-        $tutionfee->title = $request->title;
-        $tutionfee->description = $request->description;        
+        $tutionfee->name_of_program = $request->name_of_program;
+        $tutionfee->duration = $request->duration;  
+        $tutionfee->type = $request->type;  
+        $tutionfee->total_fee = $request->total_fee;
         $tutionfee->status = 1;
-        $tutionfee->created_by = auth()->user()->name;
+        $tutionfee->created_by = auth()->user()->id;
         $tutionfee->save();
         return response()->json(['message' => 'TutionFee Added Successfully'],200);
     }
@@ -35,15 +41,21 @@ class TutionFeeController extends Controller
     }
     function TutionFeeUpdate(Request $request,$id){
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',           
+            'name_of_program' => 'required',
+            'type' => 'required',
+            'duration' => 'required',
+            'total_fee' => 'required|numeric',
+
+
             
         ]);
-        $tutionfee = tutionfee::find($id);
-        $tutionfee->title = $request->title;
-        $tutionfee->description = $request->description;       
+        $tutionfee = TutionFee::find($id);
+        $tutionfee->name_of_program = $request->name_of_program;
+        $tutionfee->duration = $request->duration;  
+        $tutionfee->type = $request->type;  
+        $tutionfee->total_fee = $request->total_fee;
         $tutionfee->status = 1;
-        $tutionfee->created_by = auth()->user()->name;
+        $tutionfee->created_by = auth()->user()->id;
         $tutionfee->save();
         return response()->json(['message' => 'TutionFee Updated Successfully'],200);
 

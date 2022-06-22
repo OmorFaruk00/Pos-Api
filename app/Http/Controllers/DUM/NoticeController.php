@@ -70,9 +70,9 @@ class NoticeController extends Controller
         return response()->json(['message' => 'Notice Updated Successfully'],200);
 
     }
-    function noticeStatus($id,$status){
+    function noticeStatus($id){
         $notice = notice::find($id);
-        if($notice->status ==0){
+        if($notice->status == 0){
             $notice->status = 1;
         }else{
             $notice->status = 0;

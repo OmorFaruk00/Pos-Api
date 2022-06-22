@@ -70,7 +70,7 @@ class SliderController extends Controller
         return response()->json(['message' => 'Slider Updated Successfully'],200);
 
     }
-    function SliderStatus($id,$status){
+    function SliderStatus($id){
         $Slider = Slider::find($id);
         if($Slider->status ==0){
             $Slider->status = 1;

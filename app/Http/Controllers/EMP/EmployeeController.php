@@ -97,7 +97,7 @@ class EmployeeController extends Controller
         $extension = $file->getClientOriginalExtension();
             $file_name = time() . '_' . Str::random(10) . '.' . $extension;
             $file->move(public_path('images/emp'), $file_name);
-            $image_url = env('APP_URL') . "/images/emp/$file_name";            
+                        
         }
         $Employee = Employee::find($id);
         $Employee->name = $request->name;

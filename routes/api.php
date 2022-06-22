@@ -19,6 +19,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ADM\AdmissionFormController;
 use App\Http\Controllers\DUM\DumWebsiteController;
 use App\Http\Controllers\DUM\TutionFeeController;
+use App\Http\Controllers\DUM\BlogController;
 
 
 
@@ -35,6 +36,10 @@ Route::get("event", [DumWebsiteController::class, 'EventShow']);
 Route::get("slider", [DumWebsiteController::class, 'SliderShow']);
 Route::post("contact", [DumWebsiteController::class, 'SendMessage']);
 Route::get("tution-fee", [DumWebsiteController::class, 'TutionFeeShow']);
+Route::get("program", [DumWebsiteController::class, 'ProgramShow']);
+Route::get("teaching-staff", [DumWebsiteController::class, 'TeachingStaffShow']);
+Route::get("blog", [DumWebsiteController::class, 'BlogShow']);
+Route::get("blog-details/{id}", [DumWebsiteController::class, 'BlogDetails']);
 
 
 
@@ -60,7 +65,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [NoticeController::class, 'noticeAdd']);
         Route::get("edit/{id}", [NoticeController::class, 'noticeEdit']);
         Route::post("update/{id}", [NoticeController::class, 'noticeUpdate']);
-        Route::get("status/{id}/{status}", [NoticeController::class, 'noticeStatus']);
+        Route::get("status/{id}", [NoticeController::class, 'noticeStatus']);
         Route::get("delete/{id}", [NoticeController::class, 'noticeDelete']);
     });
     Route::prefix('event')->group(function () {
@@ -68,7 +73,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [EventController::class, 'EventAdd']);
         Route::get("edit/{id}", [EventController::class, 'EventEdit']);
         Route::post("update/{id}", [EventController::class, 'EventUpdate']);
-        Route::get("status/{id}/{status}", [EventController::class, 'EventStatus']);
+        Route::get("status/{id}", [EventController::class, 'EventStatus']);
         Route::get("delete/{id}", [EventController::class, 'EventDelete']);
     });
     Route::prefix('facilitie')->group(function () {
@@ -76,7 +81,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [FacilitieController::class, 'FacilitieAdd']);
         Route::get("edit/{id}", [FacilitieController::class, 'FacilitieEdit']);
         Route::post("update/{id}", [FacilitieController::class, 'FacilitieUpdate']);
-        Route::get("status/{id}/{status}", [FacilitieController::class, 'FacilitieStatus']);
+        Route::get("status/{id}", [FacilitieController::class, 'FacilitieStatus']);
         Route::get("delete/{id}", [FacilitieController::class, 'FacilitieDelete']);
     });
     Route::prefix('slider')->group(function () {
@@ -84,7 +89,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [SliderController::class, 'SliderAdd']);
         Route::get("edit/{id}", [SliderController::class, 'SliderEdit']);
         Route::post("update/{id}", [SliderController::class, 'SliderUpdate']);
-        Route::get("status/{id}/{status}", [SliderController::class, 'SliderStatus']);
+        Route::get("status/{id}", [SliderController::class, 'SliderStatus']);
         Route::get("delete/{id}", [SliderController::class, 'SliderDelete']);
     });
     Route::prefix('program')->group(function () {
@@ -92,7 +97,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [ProgramController::class, 'ProgramAdd']);
         Route::get("edit/{id}", [ProgramController::class, 'ProgramEdit']);
         Route::post("update/{id}", [ProgramController::class, 'ProgramUpdate']);
-        Route::get("status/{id}/{status}", [ProgramController::class, 'ProgramStatus']);
+        Route::get("status/{id}", [ProgramController::class, 'ProgramStatus']);
         Route::get("delete/{id}", [ProgramController::class, 'ProgramDelete']);
     });
     Route::prefix('tution')->group(function () {       
@@ -102,6 +107,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [TutionFeeController::class, 'TutionFeeUpdate']);
         Route::get("delete/{id}", [TutionFeeController::class, 'TutionFeeDelete']);
         Route::get("status/{id}", [TutionFeeController::class, 'TutionFeeStatus']);
+       
+    });
+    Route::prefix('blog')->group(function () {       
+        Route::get("show", [BlogController::class, 'BlogShow']);
+        Route::post("add", [BlogController::class, 'BlogAdd']);
+        Route::get("edit/{id}", [BlogController::class, 'BlogEdit']);
+        Route::post("update/{id}", [BlogController::class, 'BlogUpdate']);
+        Route::get("delete/{id}", [BlogController::class, 'BlogDelete']);
+        Route::get("status/{id}", [BlogController::class, 'BlogStatus']);
        
     });
     Route::get("contact/show", [DumController::class, 'ContactShow']);

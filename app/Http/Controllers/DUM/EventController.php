@@ -69,7 +69,7 @@ class EventController extends Controller
         return response()->json(['message' => 'Event Updated Successfully'],200);
 
     }
-    function EventStatus($id,$status){
+    function EventStatus($id){
         $Event = Event::find($id);
         if($Event->status ==0){
             $Event->status = 1;
