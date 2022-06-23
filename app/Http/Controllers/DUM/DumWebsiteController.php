@@ -16,6 +16,7 @@ use App\Models\DUM\TutionFee;
 use App\Models\DUM\Program;
 use App\Models\DUM\Blog;
 use App\Models\Employee;
+use App\Models\DUM\Committee;
 
 
 
@@ -123,6 +124,20 @@ class DumWebsiteController extends Controller
             return $e->getMessage();
         }
     }
+    public function CommitteeShow()
+    {
+        try {
+            return Committee::where('status',1)->get()->groupBy('committee_type');
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
+
+
+
+
+
     public function SendMessage(Request $request){
         $request->validate([
             'name' => 'required',

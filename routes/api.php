@@ -20,6 +20,7 @@ use App\Http\Controllers\ADM\AdmissionFormController;
 use App\Http\Controllers\DUM\DumWebsiteController;
 use App\Http\Controllers\DUM\TutionFeeController;
 use App\Http\Controllers\DUM\BlogController;
+use App\Http\Controllers\DUM\CommitteeController;
 
 
 
@@ -40,6 +41,7 @@ Route::get("program", [DumWebsiteController::class, 'ProgramShow']);
 Route::get("teaching-staff", [DumWebsiteController::class, 'TeachingStaffShow']);
 Route::get("blog", [DumWebsiteController::class, 'BlogShow']);
 Route::get("blog-details/{id}", [DumWebsiteController::class, 'BlogDetails']);
+Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 
 
 
@@ -116,6 +118,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [BlogController::class, 'BlogUpdate']);
         Route::get("delete/{id}", [BlogController::class, 'BlogDelete']);
         Route::get("status/{id}", [BlogController::class, 'BlogStatus']);
+       
+    });
+    Route::prefix('committee')->group(function () {       
+        Route::get("show",[CommitteeController::class, 'CommitteeShow']);
+        Route::post("add", [CommitteeController::class, 'CommitteeAdd']);
+        Route::get("edit/{id}", [CommitteeController::class, 'CommitteeEdit']);
+        Route::post("update/{id}", [CommitteeController::class, 'CommitteeUpdate']);
+        Route::get("delete/{id}", [CommitteeController::class, 'CommitteeDelete']);
+        Route::get("status/{id}", [CommitteeController::class, 'CommitteeStatus']);
        
     });
     Route::get("contact/show", [DumController::class, 'ContactShow']);

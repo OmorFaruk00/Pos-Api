@@ -47,7 +47,7 @@ class EventController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required', 
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',           
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',         
             
         ]);
         $Event = Event::find($id);
