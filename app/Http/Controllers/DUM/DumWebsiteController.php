@@ -17,6 +17,7 @@ use App\Models\DUM\Program;
 use App\Models\DUM\Blog;
 use App\Models\Employee;
 use App\Models\DUM\Committee;
+use App\Models\DUM\Gallery;
 
 
 
@@ -128,6 +129,15 @@ class DumWebsiteController extends Controller
     {
         try {
             return Committee::where('status',1)->get()->groupBy('committee_type');
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
+    public function GalleryShow()
+    {
+        try {
+            return Gallery::get()->groupBy('type');
         } catch (\Exception $e) {
 
             return $e->getMessage();

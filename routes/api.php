@@ -25,7 +25,7 @@ use App\Http\Controllers\DUM\CommitteeController;
 
 
 
-
+Route::post("gallery", [DumController::class, 'GalleryAdd']);
 
 
 
@@ -42,6 +42,7 @@ Route::get("teaching-staff", [DumWebsiteController::class, 'TeachingStaffShow'])
 Route::get("blog", [DumWebsiteController::class, 'BlogShow']);
 Route::get("blog-details/{id}", [DumWebsiteController::class, 'BlogDetails']);
 Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
+Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
 
@@ -130,6 +131,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
        
     });
     Route::get("contact/show", [DumController::class, 'ContactShow']);
+    Route::post("gallery/add", [DumController::class, 'GalleryAdd']);
 
     Route::prefix('department')->group(function () {
         Route::get("show", [DepartmentController::class, 'DepartmentShow']);

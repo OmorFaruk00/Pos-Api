@@ -47,6 +47,7 @@ class EmployeeController extends Controller
         $Employee->personal_phone_no = $request->personal_phone_no;      
         $Employee->alternative_phone_no = $request->personal_phone_no;      
         $Employee->home_phone_no = $request->personal_phone_no;     
+        $Employee->parent_phone_no = $request->parent_phone_no;     
         $Employee->merit = $request->merit;
         $Employee->jobtype = $request->job_type;        
         $Employee->nid_no = $request->nid_no;
@@ -75,9 +76,8 @@ class EmployeeController extends Controller
     function EmployeeUpdate(Request $request,$id){
         $request->validate([
             'name' => 'required',
-            'email' => 'required|unique:employees', 
-            // 'password' => 'required|confirmed',                        
-            // 'image' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'email' => "required|unique:employees,email,".$id,                                   
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  
             'department' => 'required',
             'designation' => 'required',
             'personal_phone_no' => 'required',
@@ -101,22 +101,19 @@ class EmployeeController extends Controller
         }
         $Employee = Employee::find($id);
         $Employee->name = $request->name;
-        $Employee->email = $request->email;
-        // $Employee->password = Hash::make($request->password);        
+        $Employee->email = $request->email;                
         $Employee->department_id = $request->department;
         $Employee->designation_id = $request->designation;
         $Employee->personal_phone_no = $request->personal_phone_no;      
         $Employee->alternative_phone_no = $request->personal_phone_no;      
-        $Employee->home_phone_no = $request->personal_phone_no;     
+        $Employee->home_phone_no = $request->personal_phone_no;
+        $Employee->parent_phone_no = $request->parent_phone_no;       
         $Employee->merit = $request->merit;
         $Employee->jobtype = $request->jobtype;        
         $Employee->nid_no = $request->nid_no;
         $Employee->date_of_birth = $request->date_of_birth;
-        $Employee->date_of_join = $request->date_of_join;
-        if($request->hasFile('image')){
-            $Employee->profile_photo = $file_name;
-        }
-        // $Employee->profile_photo = $file_name;
+        $Employee->date_of_join = $request->date_of_join;      
+        $Employee->profile_photo = $file_name ?? $Employee->profile_photo;
         $Employee->status = 1;
         $Employee->created_by = auth()->user()->id;        
         $Employee->save();
