@@ -24,12 +24,12 @@ class UserController extends Controller
         try{
             $user = Employee::where('email',$request->email)->first();
             if(!$user){
-                return response()->json(['message'=>'User not found'],403);
+                return response()->json(['message'=>'User not found'],203);
             }
             if(!Hash::check($request->password, $user->password)){
                 return response([
                     "message" => 'The given password is invalid.'
-                ],403);
+                ],203);
             }
             $token = $user->createToken($request->email)->plainTextToken;
             $response = [

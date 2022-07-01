@@ -61,8 +61,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();   
    
 });
+
 Route::group(["middleware" => 'auth:sanctum'], function () {
+
     Route::get("profile", [ProfileController::class, 'userProfile']);
+    Route::post("profile-update", [ProfileController::class, 'updateProfile']);
+    Route::post("upload-profile-photo", [ProfileController::class, 'upload_profile_photo']);
+
     Route::prefix('notice')->group(function () {
         Route::get("show", [NoticeController::class, 'noticeShow']);
         Route::post("add", [NoticeController::class, 'noticeAdd']);
