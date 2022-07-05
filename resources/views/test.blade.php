@@ -194,12 +194,12 @@
     <div style="width: 100%">
 
         <!--EXIM Copy-->
-        <div style="width: 33%;border-right: 1px dotted #000;float: left; overflow:hidden;padding:0px;">
+        <div style="width: 30%;border-right: 1px dotted #000;float: left;padding-left:0px;">
 
             <table class="b-none">
                 <tr>
                     <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
+                        <b>2100</b>
                     </td>
                     <td class="tr w-40 bb-none">Copy of Accounts</td>
                 </tr>
@@ -213,7 +213,7 @@
                 </tr>
             </table>
 
-            <div style="width: 220px;margin: 0 auto;">
+            <div style="width: 299px;margin: 0 auto;">
 
                 <table class="mt-1 b-none">
                     <tr>
@@ -246,12 +246,12 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>hasan</b></td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
+                            <b>hasan</b>
                         </td>
                     </tr>
 
@@ -261,7 +261,7 @@
 
                     <tr>
                         <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }}</b></td>
+                        <td class="bb-none">Batch: <b>1000</b></td>
                     </tr>
 
                     <tr>
@@ -282,13 +282,13 @@
                         <tr>
                             <td>1</td>
                             <td>ADMISSION FORM</td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
 
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
                     </table>
                 </div>
@@ -310,7 +310,7 @@
 
                     <tr>
                         <td class="br-none bt-none" style="padding-top: 65px" colspan="2">
-                            <span style="border-top: 1px solid #000;">omor</span>
+                            <span style="border-top: 1px solid #000;"> omor</span>
                             <p> it</p>
                             <p >Dhaka International University</p>
                         </td>
@@ -325,12 +325,12 @@
         </div>
 
         <!--DIU Copy by Student-->
-        <div style="width: 33%;border-right: 1px dotted #000;float: left;">
+        <div style="width: 30%;border-right: 1px dotted #000;float: left;">
 
             <table class="b-none">
                 <tr>
                     <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
+                        <b>2100</b>
                     </td>
                     <td class="tr w-40 bb-none">Copy of DIU</td>
                 </tr>
@@ -344,7 +344,7 @@
                 </tr>
             </table>
 
-            <div style="width: 220px;margin: 0 auto;">
+            <div style="width: 299px;margin: 0 auto;">
 
                 <table class="mt-1 b-none">
                     <tr>
@@ -374,12 +374,12 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>hasan</b></td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
+                            <b>hasan</b>
                         </td>
                     </tr>
 
@@ -389,7 +389,7 @@
 
                     <tr>
                         <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }} </b></td>
+                        <td class="bb-none">Batch: <b>1000 </b></td>
                     </tr>
 
                     <tr>
@@ -410,13 +410,13 @@
                         <tr>
                             <td>1</td>
                             <td>ADMISSION FORM</td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
 
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
                     </table>
                 </div>
@@ -451,12 +451,12 @@
         </div>
 
         <!--Student Copy-->
-        <div style="width: 33%;float: left;margin-left: 5px">
+        <div style="width: 30%;float: left;margin-left: 5px">
 
             <table class="b-none">
                 <tr>
                     <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
+                        <b>2100</b>
                     </td>
                     <td class="tr w-40 bb-none">Students Copy</td>
                 </tr>
@@ -470,7 +470,7 @@
                 </tr>
             </table>
 
-            <div style="width: 220px;margin: 0 auto;">
+            <div style="width: 280px;margin: 0 auto;">
 
                 <table class="mt-1 b-none">
                     <tr>
@@ -502,12 +502,12 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>hasan</b></td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
+                            <b>hasan</b>
                         </td>
                     </tr>
 
@@ -517,7 +517,7 @@
 
                     <tr>
                         <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }} </b></td>
+                        <td class="bb-none">Batch: <b>1000 </b></td>
                     </tr>
 
                     <tr>
@@ -538,13 +538,13 @@
                         <tr>
                             <td>1</td>
                             <td>ADMISSION FORM</td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
 
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
-                            <td class="tc">{{ number_format($payable ?? 0) }}</td>
+                            <td class="tc">1000</td>
                         </tr>
                     </table>
                 </div>
