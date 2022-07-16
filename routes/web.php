@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 // namespace App\Models;
 use App\Models\user;
-
+use App\Http\Controllers\ADM\AdmissionFormController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,3 +22,4 @@ Route::get('/', function () {
 Route::get('/user', function () {
     return user::all();
 });
+Route::get("test", [AdmissionFormController::class, 'testPDF']); 

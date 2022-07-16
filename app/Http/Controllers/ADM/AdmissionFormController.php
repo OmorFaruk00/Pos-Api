@@ -8,6 +8,7 @@ use App\Models\Form_stock;
 use App\Models\Course;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
+use App\Models\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -93,7 +94,7 @@ class AdmissionFormController extends Controller
     public function getDepartment(Request $request)
     {
         try {
-            $department = Course::all();
+            $department = Section::all();
             return response()->json(['data' => $department], 200);
         } catch (\Exception $exception) {
             return response(['error' => $exception->getMessage()], 406);
@@ -102,7 +103,7 @@ class AdmissionFormController extends Controller
     public function getBatch(Request $request, $id)
     {
         try {
-            $data = Batch::where('course_id', $id)->get();
+            $data = Batch::where('department_id', $id)->get();
             return response()->json(['data' => $data], 200);
         } catch (\Exception $exception) {
             return response(['error' => $exception->getMessage()], 406);
@@ -147,7 +148,7 @@ class AdmissionFormController extends Controller
         
     }
 
-    public function generatePDF()
+    public function generatePDF($form_no)
     {
       
 
@@ -155,10 +156,13 @@ class AdmissionFormController extends Controller
         // $pdf = PDF::loadView('myPDF', $data);
         // $pdf->save($path);
         // return response()->download($path);
+        
 
-         $student = Admission_form::where('form_number',100)->first();
+         $student = Admission_form::where('form_number',$form_no)->first();
+         $payable = 1000;
+         $recieve_id = "FS" .$student->id;
           
-        $pdf = PDF::loadView('admission_slip',['student'=>$student]);    
+        $pdf = PDF::loadView('admission_slip',compact('student','payable','recieve_id'));    
         return $pdf->stream('print.pdf');
         
        
@@ -166,6 +170,15 @@ class AdmissionFormController extends Controller
   
     
     }
+    public function testPDF()
+    {
+      
+        return view('test');
+       
+    
+    }
+
+    
     public function printShow(){
         $student = Admission_form::where('form_number',100)->first();
         return view('admission_slip',['student'=>$student]);

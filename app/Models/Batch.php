@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Batch extends Model
 {
     use HasFactory;
+    public function department()
+    {
+        return $this->belongsTo('App\Models\Section', 'department_id', 'id');
+    }
 }

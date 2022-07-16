@@ -15,6 +15,6 @@ class Admission_form extends Model
     }
     public function department()
     {
-        return $this->belongsTo('App\Models\Course', 'batch_id', 'id');
+        return $this->belongsTo('App\Models\Section', 'dept_id', 'id');
     }
 }
