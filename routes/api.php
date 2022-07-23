@@ -27,11 +27,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ADM\AdmissionFormController;
-use App\Http\Controllers\DUM\DumWebsiteController;
-use App\Http\Controllers\DUM\TutionFeeController;
-use App\Http\Controllers\DUM\BlogController;
-use App\Http\Controllers\DUM\CommitteeController;
 use App\Http\Controllers\ADM\BatchController;
 use App\Http\Controllers\ADM\SectionController;
 use App\Http\Controllers\ADM\Admissioncontroller;
@@ -56,7 +51,7 @@ Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
-Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']); 
+Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::post("add_student", [Admissioncontroller::class, 'admissionStore']);
 Route::post("student", [Admissioncontroller::class, 'Store']);
 
@@ -88,9 +83,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {    
-    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();   
-   
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();
+
 });
 
 
@@ -237,41 +232,41 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("print-receive", [AdmissionFormController::class, 'generatePDF']);
 
 
-       
+
     });
 
-    Route::prefix('syllabus')->group(function () {       
+    Route::prefix('syllabus')->group(function () {
         Route::get("show", [SyllabusController::class, 'SyllabusShow']);
         Route::post("add", [SyllabusController::class, 'SyllabusAdd']);
         Route::get("edit/{id}", [SyllabusController::class, 'SyllabusEdit']);
         Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate']);
         Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete']);
-       
+
     });
- 
-    Route::prefix('admission')->group(function () { 
-        Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
-        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);      
-        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);      
-        Route::get("department", [AdmissionFormController::class, 'getDepartment']);      
-        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);      
-        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']); 
-        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);     
+
+    Route::prefix('admission')->group(function () {
+        Route::post("form-import", [AdmissionFormController::class, 'importForm']);
+        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
+        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
+        Route::get("department", [AdmissionFormController::class, 'getDepartment']);
+        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
+        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
+        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);
 
         Route::get("department-show", [SectionController::class, 'departmentShow']);
         Route::post("department-add", [SectionController::class, 'departmentAdd']);
         Route::get("department-edit/{id}", [SectionController::class, 'departmentEdit']);
         Route::post("department-update/{id}", [SectionController::class, 'departmentUpdate']);
         Route::get("department-status/{id}", [SectionController::class, 'departmentStatus']);
-        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);        
+        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);
 
-        Route::get("batch-show", [BatchController::class, 'batchShow']); 
-        Route::post("batch-add", [BatchController::class, 'batchAdd']); 
-        Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']); 
-        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']); 
-        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']); 
-        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']); 
-        
+        Route::get("batch-show", [BatchController::class, 'batchShow']);
+        Route::post("batch-add", [BatchController::class, 'batchAdd']);
+        Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']);
+        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
+        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
+        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
+
 
         Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
         Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
@@ -280,13 +275,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
-        
-             
-       
-       
+
+
+
+
     });
 
 
-    
+
 
 });
