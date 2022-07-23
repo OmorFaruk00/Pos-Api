@@ -24,6 +24,7 @@ use App\Http\Controllers\DUM\CommitteeController;
 use App\Http\Controllers\ADM\BatchController;
 use App\Http\Controllers\ADM\SectionController;
 use App\Http\Controllers\ADM\Admissioncontroller;
+use App\Http\Controllers\Student\SyllabusController;
 
 
 
@@ -193,6 +194,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
        
     });
+
+    Route::prefix('syllabus')->group(function () {       
+        Route::get("show", [SyllabusController::class, 'SyllabusShow']);
+        Route::post("add", [SyllabusController::class, 'SyllabusAdd']);
+        Route::get("edit/{id}", [SyllabusController::class, 'SyllabusEdit']);
+        Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate']);
+        Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete']);
+       
+    });
  
     Route::prefix('admission')->group(function () { 
         Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
@@ -221,6 +231,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
         Route::post("add_student", [Admissioncontroller::class, 'admissionStore']);
         Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent']);
+        Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
+        Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
+        Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
         
              
        

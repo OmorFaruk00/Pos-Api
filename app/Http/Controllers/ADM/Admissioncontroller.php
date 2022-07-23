@@ -115,55 +115,57 @@ class Admissioncontroller extends Controller
 
                     $extension = $files->getClientOriginalExtension();
                     $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-                    $files->move(storage_path('images/student_signature'), $file_name);
+                    $files->move(public_path('images/student_signature'), $file_name);
                 }
                 if ($images) {
 
                     $extension = $images->getClientOriginalExtension();
                     $image_name = time() . '_' . Str::random(10) . '.' . $extension;
-                    $images->move(storage_path('images/student_photo'), $image_name);
+                    $images->move(public_path('images/student_photo'), $image_name);
                 }
                 $student = new Student();
-                $student->DEPARTMENT_ID = $request->department_id;
-                $student->BATCH_ID = $request->batch_id;
-                $student->SHIFT_ID = $request->shift_id;
-                $student->GROUP_ID = $request->group_id;
-                $student->ADM_FRM_SL = $request->adm_frm_sl;
-                $student->NAME = $request->student_name;
-                $student->ROLL_NO = $request->roll_no;
-                $student->REG_CODE = $request->reg_no;
-                $student->BLOOD_GROUP = $request->blood_group;
-                $student->EMAIL = $request->email;
-                $student->PHONE_NO = $request->phone_no;
-                $student->RELIGION = $request->religion_id;
-                $student->GENDER = $request->gender;
-                $student->DOB = $request->dob;
-                $student->BIRTH_PLACE = $request->birth_place;
-                $student->STD_BIRTH_OR_NID_NO = $request->std_birth_or_nid_no;
-                $student->FG_MONTHLY_INCOME = $request->fg_monthly_income;
-                $student->PARMANENT_ADD = $request->permanent_add;
-                $student->MAILING_ADD = $request->mailing_add;
-                $student->F_NAME = $request->f_name;
-                $student->F_CELLNO = $request->f_cellno;
-                $student->F_OCCU = $request->f_occu;
-                $student->FATHER_NID_NO = $request->father_nid_no;
-                $student->M_NAME = $request->m_name;
-                $student->M_CELLNO = $request->m_cellno;
-                $student->M_OCCU = $request->m_occu;
-                $student->MOTHER_NID_NO = $request->mother_nid_no;
-                $student->G_NAME = $request->g_name;
-                $student->G_CELLNO = $request->g_cellno;
-                $student->G_OCCU = $request->g_occu;
-                $student->E_NAME = $request->e_name;
-                $student->E_CELLNO = $request->e_cellno;
-                $student->E_OCCU = $request->e_occu;
-                $student->E_RELATION = $request->e_relation;
-                $student->NATIONALITY = $request->nationality;
-                $student->MARITAL_STATUS = $request->marital_status;
-                $student->ADMISSION_BY = auth()->user()->id;
-                $student->ADM_DATE = Carbon::now()->format('Y-m-d');
-                $student->PHOTO = $image_name;
-                $student->SIGNATURE = $file_name;
+                $student->department_id = $request->department_id;
+                $student->batch_id = $request->batch_id;
+                $student->shift_id = $request->shift_id;
+                $student->group_id = $request->group_id;
+                $student->adm_frm_sl = $request->adm_frm_sl;
+                $student->student_name = $request->student_name;
+                $student->roll_no = $request->roll_no;
+                $student->reg_code = $request->reg_no;
+                $student->blood_group = $request->blood_group;
+                $student->email = $request->email;
+                $student->phone_no = $request->phone_no;
+                $student->religion_id = $request->religion_id;
+                $student->gender = $request->gender;
+                $student->dob = $request->dob;
+                $student->birth_place = $request->birth_place;
+                $student->std_birth_or_nid_no = $request->std_birth_or_nid_no;
+                $student->fg_monthly_income = $request->fg_monthly_income;
+                $student->permanent_add = $request->permanent_add;
+                $student->mailing_add = $request->mailing_add;
+                $student->f_name = $request->f_name;
+                $student->f_cellno = $request->f_cellno;
+                $student->f_occu = $request->f_occu;
+                $student->father_nid_no = $request->father_nid_no;
+                $student->m_name = $request->m_name;
+                $student->m_cellno = $request->m_cellno;
+                $student->m_occu = $request->m_occu;
+                $student->mother_nid_no = $request->mother_nid_no;
+                $student->g_name = $request->g_name;
+                $student->g_cellno = $request->g_cellno;
+                $student->g_occu = $request->g_occu;
+                $student->e_name = $request->e_name;
+                $student->e_cellno = $request->e_cellno;
+                $student->e_occu = $request->e_occu;
+                $student->e_relation = $request->e_relation;
+                $student->refereed_by = $request->refereed_by;
+                $student->refereed_by_email = $request->refereed_by_email;
+                $student->nationality = $request->nationality;
+                $student->marital_status = $request->marital_status;
+                $student->admission_by = auth()->user()->id;
+                $student->adm_date = Carbon::now()->format('Y-m-d');
+                $student->photo = $image_name;
+                $student->signature = $file_name;
                 $student->save();
 
                 $education = new Education();
@@ -215,4 +217,101 @@ class Admissioncontroller extends Controller
               return $e->getMessage();
           }
     }
+    public function searchStudent($item){
+        try {           
+           return Student::where(function ($query) use ($item) {
+            $query->where('reg_code', 'LIKE', "%" . $item . "%")
+                // ->orWhere('ROLL_NO', 'LIKE', "%" . $item . "%");
+                ->orWhere('student_name', 'LIKE', "%" . $item . "%");
+        })->get();
+          
+          } catch (\Exception $e) {
+          
+              return $e->getMessage();
+          }
+    }
+    public function studentEdit($id){
+        try {           
+              
+        //    return Student::find($id);       
+           return Student::with('education')->where('id',$id)->first();       
+               
+          
+          } catch (\Exception $e) {
+          
+              return $e->getMessage();
+          }
+    }
+    public function studentUpdate(Request $request,$id){
+        try { 
+
+            return $request->all();
+
+            // $files = $request->file('signature');
+            //     $images = $request->file('file');
+
+            //     if ($files) {
+
+            //         $extension = $files->getClientOriginalExtension();
+            //         $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            //         $files->move(public_path('images/student_signature'), $file_name);
+            //     }
+            //     if ($images) {
+
+            //         $extension = $images->getClientOriginalExtension();
+            //         $image_name = time() . '_' . Str::random(10) . '.' . $extension;
+            //         $images->move(public_path('images/student_photo'), $image_name);
+            //     }
+            $student = Student::find($id);
+            $student->department_id = $request->department_id;
+            $student->batch_id = $request->batch_id;
+            $student->shift_id = $request->shift_id;
+            $student->group_id = $request->group_id;
+            $student->adm_frm_sl = $request->adm_frm_sl;
+            $student->student_name = $request->student_name;
+            $student->roll_no = $request->roll_no;
+            $student->reg_code = $request->reg_no;
+            $student->blood_group = $request->blood_group;
+            $student->email = $request->email;
+            $student->phone_no = $request->phone_no;
+            $student->religion_id = $request->religion_id;
+            $student->gender = $request->gender;
+            $student->dob = $request->dob;
+            $student->birth_place = $request->birth_place;
+            $student->std_birth_or_nid_no = $request->std_birth_or_nid_no;
+            $student->fg_monthly_income = $request->fg_monthly_income;
+            $student->permanent_add = $request->permanent_add;
+            $student->mailing_add = $request->mailing_add;
+            $student->f_name = $request->f_name;
+            $student->f_cellno = $request->f_cellno;
+            $student->f_occu = $request->f_occu;
+            $student->father_nid_no = $request->father_nid_no;
+            $student->m_name = $request->m_name;
+            $student->m_cellno = $request->m_cellno;
+            $student->m_occu = $request->m_occu;
+            $student->mother_nid_no = $request->mother_nid_no;
+            $student->g_name = $request->g_name;
+            $student->g_cellno = $request->g_cellno;
+            $student->g_occu = $request->g_occu;
+            $student->e_name = $request->e_name;
+            $student->e_cellno = $request->e_cellno;
+            $student->e_occu = $request->e_occu;
+            $student->e_relation = $request->e_relation;
+            $student->refereed_by = $request->refereed_by;
+            $student->refereed_by_email = $request->refereed_by_email;
+            $student->nationality = $request->nationality;
+            $student->marital_status = $request->marital_status;
+            $student->admission_by = auth()->user()->id;
+            // $student->adm_date = Carbon::now()->format('Y-m-d');
+            // $student->photo = $image_name;
+            // $student->signature = $file_name;
+            $student->save();
+              
+          
+          } catch (\Exception $e) {
+          
+              return $e->getMessage();
+          }
+    }
+
 }
