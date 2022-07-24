@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use Illuminate\Http\Request;
 use App\Models\Syllabus;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 
@@ -13,15 +14,17 @@ class SyllabusController extends Controller
 {
     function SyllabusAdd(Request $request)
     {
-        try {
-            $request->validate([
-                'department' => 'required',
-                'status' => 'required',
-                'description' => 'required',
-                'short_description' => 'required',
-                // 'file' => 'files:jpeg,png,jpg,gif,svg,pdf|max:2048',
 
-            ]);
+        $request->validate([
+            'department' => 'required',
+            'status' => 'required',
+            'description' => 'required',
+            'short_description' => 'required',
+            'file' => 'required|mimes:pdf|max:2048',
+
+        ]);
+        try {
+         
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
 
@@ -63,17 +66,19 @@ class SyllabusController extends Controller
     }
     function SyllabusUpdate(Request $request, $id)
     {
-        try {
-            $request->validate([
-                'department' => 'required',
-                'status' => 'required',
-                'description' => 'required',
-                'short_description' => 'required',
-                // 'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+        $request->validate([
+            'department' => 'required',
+            'status' => 'required',
+            'description' => 'required',
+            'short_description' => 'required',
+            'new_file' => 'nullable|mimes:pdf|max:2048',
+            
 
-            ]);
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
+        ]);
+        try {
+           
+            if ($request->hasFile('new_file')) {
+                $file = $request->file('new_file');
 
                 $extension = $file->getClientOriginalExtension();
                 $file_name = time() . '_' . Str::random(10) . '.' . $extension;
@@ -105,15 +110,6 @@ class SyllabusController extends Controller
         }
     }
 
-    function SyllabusDownload($id)
-    {
-        try {
-            $Syllabus = Syllabus::find($id);
-           
-            
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
+  
     
 }
