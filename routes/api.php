@@ -201,6 +201,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("edit/{id}", [SyllabusController::class, 'SyllabusEdit']);
         Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate']);
         Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete']);
+        Route::get("file-download/{id}", [SyllabusController::class, 'SyllabusDownload']);
        
     });
  

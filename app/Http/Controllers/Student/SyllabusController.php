@@ -104,4 +104,16 @@ class SyllabusController extends Controller
             return $e->getMessage();
         }
     }
+
+    function SyllabusDownload($id)
+    {
+        try {
+            $Syllabus = Syllabus::find($id);
+           
+            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
 }
