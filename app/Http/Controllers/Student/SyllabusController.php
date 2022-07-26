@@ -18,8 +18,7 @@ class SyllabusController extends Controller
         $request->validate([
             'department' => 'required',
             'status' => 'required',
-            'description' => 'required',
-            'short_description' => 'required',
+            'description' => 'required',           
             'file' => 'required|mimes:pdf|max:2048',
 
         ]);
@@ -34,8 +33,7 @@ class SyllabusController extends Controller
             }
             $Syllabus = new Syllabus();
             $Syllabus->department = $request->department;
-            $Syllabus->description = $request->description;
-            $Syllabus->short_description = $request->short_description;
+            $Syllabus->description = $request->description;           
             $Syllabus->status = $request->status;
             $Syllabus->file = $file_name;
             $Syllabus->created_by = auth()->user()->id;
@@ -69,10 +67,8 @@ class SyllabusController extends Controller
         $request->validate([
             'department' => 'required',
             'status' => 'required',
-            'description' => 'required',
-            'short_description' => 'required',
-            'new_file' => 'nullable|mimes:pdf|max:2048',
-            
+            'description' => 'required',            
+            'new_file' => 'nullable|mimes:pdf|max:2048',           
 
         ]);
         try {
@@ -87,8 +83,7 @@ class SyllabusController extends Controller
 
             $Syllabus = Syllabus::find($id);
             $Syllabus->department = $request->department;
-            $Syllabus->description = $request->description;
-            $Syllabus->short_description = $request->short_description;
+            $Syllabus->description = $request->description;           
             $Syllabus->status = $request->status;
             $Syllabus->file = $file_name ?? $Syllabus->file;
             $Syllabus->created_by = auth()->user()->id;

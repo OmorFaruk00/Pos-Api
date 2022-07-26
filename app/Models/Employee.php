@@ -10,10 +10,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Employee extends Authenticatable
 {
-    
-    use HasApiTokens, HasFactory, Notifiable;    
-    
-    
+
+    use HasApiTokens, HasFactory, Notifiable;
+
+
 
 
     /**
@@ -47,8 +47,8 @@ class Employee extends Authenticatable
     {
         return $this->hasMany('App\Models\Training',  'employee_id','id');
     }
-   
-   
+
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -61,5 +61,6 @@ class Employee extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'permissions' => 'array',
     ];
 }

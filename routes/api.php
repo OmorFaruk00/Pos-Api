@@ -34,6 +34,7 @@ use App\Http\Controllers\Student\SyllabusController;
 use App\Http\Controllers\Student\QuestionController;
 use App\Http\Controllers\Student\LessonplanController;
 use App\Http\Controllers\Student\LecturesheetController;
+use App\Http\Controllers\Student\StudentController;
 
 
 
@@ -64,12 +65,11 @@ Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
-
 });
 
 
 Route::group(["middleware" => 'auth:sanctum'], function () {
-// accounts
+    // accounts
     Route::group(['prefix' => 'accounts', 'as' => 'account.'], function () {
         //fund
         Route::get('/funds', [FundController::class, 'index'])->name('fund.index');
@@ -85,23 +85,21 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 
         //cost
         Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost');
-Route::post("login", [UserController::class, 'login'])->name("login");
-Route::post("logout", [UserController::class, 'logout'])->name("logout");
+        Route::post("login", [UserController::class, 'login'])->name("login");
+        Route::post("logout", [UserController::class, 'logout'])->name("logout");
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return \App\Models\Employee::with('relDesignation','relDepartment','relSocial',)->where('id',auth()->user()->id)->first();
+        Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+            return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
+        });
 
-});
 
-
-//class
+        //class
         Route::get('/class', [ClassController::class, 'index'])->name('class.index');
         Route::post('/class', [ClassController::class, 'store'])->name('class.store');
         // payment purpose
         Route::get('/purpose', [PaymentPurposeController::class, 'index'])->name('payment.purpose.index');
         Route::post('/purpose', [PaymentPurposeController::class, 'store'])->name('payment.purpose.store');
         Route::get('/purpose/{classId}', [PaymentPurposeController::class, 'searchByClass'])->name('payment.searchByClass');
-
     });
 
     Route::get("profile", [ProfileController::class, 'userProfile']);
@@ -155,7 +153,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post("update/{id}", [TutionFeeController::class, 'TutionFeeUpdate']);
         Route::get("delete/{id}", [TutionFeeController::class, 'TutionFeeDelete']);
         Route::get("status/{id}", [TutionFeeController::class, 'TutionFeeStatus']);
-
     });
     Route::prefix('blog')->group(function () {
         Route::get("show", [BlogController::class, 'BlogShow']);
@@ -164,7 +161,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post("update/{id}", [BlogController::class, 'BlogUpdate']);
         Route::get("delete/{id}", [BlogController::class, 'BlogDelete']);
         Route::get("status/{id}", [BlogController::class, 'BlogStatus']);
-
     });
     Route::prefix('committee')->group(function () {
         Route::get("show", [CommitteeController::class, 'CommitteeShow']);
@@ -173,7 +169,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post("update/{id}", [CommitteeController::class, 'CommitteeUpdate']);
         Route::get("delete/{id}", [CommitteeController::class, 'CommitteeDelete']);
         Route::get("status/{id}", [CommitteeController::class, 'CommitteeStatus']);
-
     });
     Route::get("contact/show", [DumController::class, 'ContactShow']);
     Route::post("gallery/add", [DumController::class, 'GalleryAdd']);
@@ -216,7 +211,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("edit/{id}", [QualificationController::class, 'QualificationEdit']);
         Route::post("update/{id}", [QualificationController::class, 'QualificationUpdate']);
         Route::get("delete/{id}", [QualificationController::class, 'QualificationDelete']);
-
     });
     Route::prefix('training')->group(function () {
         Route::get("show", [TrainingController::class, 'TrainingShow']);
@@ -224,7 +218,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("edit/{id}", [TrainingController::class, 'TrainingEdit']);
         Route::post("update/{id}", [TrainingController::class, 'TrainingUpdate']);
         Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
-
     });
 
     // Route::prefix('admission')->group(function () {
@@ -239,14 +232,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
     // });
+    Route::prefix('student')->group(function () {
+        Route::get("show", [StudentController::class, 'studentShow']);
+    });
 
+    
     Route::prefix('syllabus')->group(function () {
         Route::get("show", [SyllabusController::class, 'SyllabusShow']);
         Route::post("add", [SyllabusController::class, 'SyllabusAdd']);
         Route::get("edit/{id}", [SyllabusController::class, 'SyllabusEdit']);
         Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate']);
         Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete']);
-       
     });
     Route::prefix('question')->group(function () {
         Route::get("show", [QuestionController::class, 'QuestionShow']);
@@ -254,7 +250,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("edit/{id}", [QuestionController::class, 'QuestionEdit']);
         Route::post("update/{id}", [QuestionController::class, 'QuestionUpdate']);
         Route::get("delete/{id}", [QuestionController::class, 'QuestionDelete']);
-       
     });
     Route::prefix('lessonplan')->group(function () {
         Route::get("show", [LessonplanController::class, 'LessonShow']);
@@ -262,7 +257,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("edit/{id}", [LessonplanController::class, 'LessonEdit']);
         Route::post("update/{id}", [LessonplanController::class, 'LessonUpdate']);
         Route::get("delete/{id}", [LessonplanController::class, 'LessonDelete']);
-       
     });
     Route::prefix('lecture-sheet')->group(function () {
         Route::get("show", [LecturesheetController::class, 'LectureShow']);
@@ -270,17 +264,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("edit/{id}", [LecturesheetController::class, 'LectureEdit']);
         Route::post("update/{id}", [LecturesheetController::class, 'LectureUpdate']);
         Route::get("delete/{id}", [LecturesheetController::class, 'LectureDelete']);
-       
     });
- 
-    Route::prefix('admission')->group(function () { 
-        Route::post("form-import", [AdmissionFormController::class, 'importForm']);      
-        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);      
-        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);      
-        Route::get("department", [AdmissionFormController::class, 'getDepartment']);      
-        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);      
-        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']); 
-        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);     
+
+    Route::prefix('admission')->group(function () {
+        Route::post("form-import", [AdmissionFormController::class, 'importForm']);
+        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
+        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
+        Route::get("department", [AdmissionFormController::class, 'getDepartment']);
+        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
+        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
+        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);
 
         Route::get("department-show", [SectionController::class, 'departmentShow']);
         Route::post("department-add", [SectionController::class, 'departmentAdd']);
@@ -303,10 +296,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
-
     });
-
-
-
-
 });
