@@ -35,6 +35,8 @@ use App\Http\Controllers\Student\QuestionController;
 use App\Http\Controllers\Student\LessonplanController;
 use App\Http\Controllers\Student\LecturesheetController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\CourseController;
+use App\Http\Controllers\Student\AttendanceController;
 
 
 
@@ -219,22 +221,46 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [TrainingController::class, 'TrainingDelete']);
     });
 
-    // Route::prefix('admission')->group(function () {
-    //     Route::post("form-import", [AdmissionFormController::class, 'importForm']);
-    //     Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
-    //     Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
-    //     Route::get("department", [AdmissionFormController::class, 'getDepartment']);
-    //     Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
-    //     Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
-    //     Route::get("print-receive", [AdmissionFormController::class, 'generatePDF']);
+    Route::prefix('admission')->group(function () {
+        Route::post("form-import", [AdmissionFormController::class, 'importForm']);
+        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
+        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
+        Route::get("department", [AdmissionFormController::class, 'getDepartment']);
+        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
+        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
+        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);
 
+        Route::get("department-show", [SectionController::class, 'departmentShow']);
+        Route::post("department-add", [SectionController::class, 'departmentAdd']);
+        Route::get("department-edit/{id}", [SectionController::class, 'departmentEdit']);
+        Route::post("department-update/{id}", [SectionController::class, 'departmentUpdate']);
+        Route::get("department-status/{id}", [SectionController::class, 'departmentStatus']);
+        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);
 
+        Route::get("batch-show", [BatchController::class, 'batchShow']);
+        Route::get("active-batch", [BatchController::class, 'activeBatchShow']);
+        Route::post("batch-add", [BatchController::class, 'batchAdd']);
+        Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']);
+        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
+        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
+        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
 
-    // });
-    Route::prefix('student')->group(function () {
-        Route::get("show", [StudentController::class, 'studentShow']);
+        Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
+        Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
+        Route::post("add_student", [Admissioncontroller::class, 'admissionStore']);
+        Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent']);
+        Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
+        Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
+        Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
     });
 
+    Route::prefix('course')->group(function () {
+        Route::get("show", [CourseController::class, 'CourseShow']);
+        Route::post("add", [CourseController::class, 'CourseAdd']);
+        Route::get("edit/{id}", [CourseController::class, 'CourseEdit']);
+        Route::post("update/{id}", [CourseController::class, 'CourseUpdate']);
+        Route::get("delete/{id}", [CourseController::class, 'CourseDelete']);
+    });
 
     Route::prefix('syllabus')->group(function () {
         Route::get("show", [SyllabusController::class, 'SyllabusShow']);
@@ -264,36 +290,16 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("update/{id}", [LecturesheetController::class, 'LectureUpdate']);
         Route::get("delete/{id}", [LecturesheetController::class, 'LectureDelete']);
     });
-
-    Route::prefix('admission')->group(function () {
-        Route::post("form-import", [AdmissionFormController::class, 'importForm']);
-        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
-        Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
-        Route::get("department", [AdmissionFormController::class, 'getDepartment']);
-        Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
-        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
-        Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);
-
-        Route::get("department-show", [SectionController::class, 'departmentShow']);
-        Route::post("department-add", [SectionController::class, 'departmentAdd']);
-        Route::get("department-edit/{id}", [SectionController::class, 'departmentEdit']);
-        Route::post("department-update/{id}", [SectionController::class, 'departmentUpdate']);
-        Route::get("department-status/{id}", [SectionController::class, 'departmentStatus']);
-        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);
-
-        Route::get("batch-show", [BatchController::class, 'batchShow']);
-        Route::post("batch-add", [BatchController::class, 'batchAdd']);
-        Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']);
-        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
-        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
-        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
-
-        Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
-        Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
-        Route::post("add_student", [Admissioncontroller::class, 'admissionStore']);
-        Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent']);
-        Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
-        Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
-        Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
+    Route::prefix('student')->group(function () {
+        Route::get("show", [StudentController::class, 'studentShow']);
+        Route::get("course/{id}", [StudentController::class, 'courseShow']);
+        Route::get("course-code/{id}", [StudentController::class, 'courseCodeShow']);
+        Route::get("attendance-show", [AttendanceController::class, 'assignedCourseShow']);
+        Route::get("attendance-course/{id}", [AttendanceController::class, 'AttendanceCourseShow']);
+        Route::get("attendance-student/{department}/{batch}", [AttendanceController::class, 'AttendanceStudentShow']);
+        Route::post("attendance-store", [AttendanceController::class, 'AttendanceStore']);
+        Route::post("attendance-report", [AttendanceController::class, 'AttendanceReport']);
     });
+
+   
 });

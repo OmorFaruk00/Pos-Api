@@ -12,4 +12,12 @@ class Lecturesheet extends Model
     {
         return $this->hasOne('App\Models\Section','id','department');
     }
+    public function course()
+    {
+        return $this->hasOne('App\Models\Course','course_code','course_code');
+    }
+    public function batch()
+    {
+        return $this->hasMany('App\Models\Batch', 'id', 'batch');
+    }
 }

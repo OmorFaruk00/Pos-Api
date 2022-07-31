@@ -22,7 +22,6 @@ class AdmissionFormController extends Controller
 
     public function importForm(Request $request)
     {
-
         $this->validate(
             $request,
             [
@@ -103,7 +102,7 @@ class AdmissionFormController extends Controller
     public function getBatch(Request $request, $id)
     {
         try {
-            $data = Batch::where('department_id', $id)->get();
+            $data = Batch::where('department_id', $id)->where('status',1)->get();
             return response()->json(['data' => $data], 200);
         } catch (\Exception $exception) {
             return response(['error' => $exception->getMessage()], 406);

@@ -20,7 +20,7 @@ class LecturesheetController extends Controller
             'department' => 'required',
             'batch' => 'required',
             'course_name' => 'required',
-            'course_code' => 'required|numeric',            
+            'course_code' => 'required',            
             'description' => 'required',            
             'file' => 'required|mimes:pdf|max:2048',
 
@@ -52,7 +52,7 @@ class LecturesheetController extends Controller
     function LectureShow()
     {
         try {
-            return Lecturesheet::with('Department')->get();
+            return Lecturesheet::with('Department','course','batch')->get();
         } catch (\Exception $e) {
 
             return $e->getMessage();
@@ -74,7 +74,7 @@ class LecturesheetController extends Controller
             'department' => 'required',
             'batch' => 'required',
             'course_name' => 'required',
-            'course_code' => 'required|numeric',            
+            'course_code' => 'required',            
             'description' => 'required',            
             'new_file' => 'nullable|mimes:pdf|max:2048',
             
