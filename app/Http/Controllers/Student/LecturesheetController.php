@@ -32,7 +32,7 @@ class LecturesheetController extends Controller
 
                 $extension = $file->getClientOriginalExtension();
                 $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-                $file->move(public_path('images/Lecturesheet'), $file_name);
+                $file->move(public_path('images/lecturesheet'), $file_name);
             }
             $Lecture = new Lecturesheet();
             $Lecture->department = $request->department;
@@ -87,7 +87,7 @@ class LecturesheetController extends Controller
 
                 $extension = $file->getClientOriginalExtension();
                 $file_name = time() . '_' . Str::random(10) . '.' . $extension;
-                $file->move(public_path('images/Lecturesheet'), $file_name);
+                $file->move(public_path('images/lecturesheet'), $file_name);
             }
 
             $Lecture = Lecturesheet::find($id);
