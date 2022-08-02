@@ -12,4 +12,8 @@ class Attendance_data extends Model
     {
         return $this->hasMany('App\Models\Attendance_report', 'attendance_data_id', 'id');
     }
+    public function batch()
+    {
+        return $this->hasOne('App\Models\Batch', 'id','batch_id')->select('id','batch_name');
+    }
 }

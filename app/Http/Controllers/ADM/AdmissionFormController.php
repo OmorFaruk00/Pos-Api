@@ -172,8 +172,7 @@ class AdmissionFormController extends Controller
     public function testPDF()
     {
       
-        return view('test');
-       
+        return view('test');       
     
     }
 

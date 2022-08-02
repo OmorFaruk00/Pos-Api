@@ -35,8 +35,9 @@ class StudentController extends Controller
     }
     function courseCodeShow($id)
     {
-        try {            
-            return Course::where('course_name',$id)->get();
+        try { 
+            // return $id;           
+            return Course::find($id);
             
             
         } catch (\Exception $e) {

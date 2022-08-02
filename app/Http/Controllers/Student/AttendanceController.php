@@ -12,11 +12,20 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use PDF;
 
 
 
 class AttendanceController extends Controller
 {
+    function CourseShow()
+    {
+        try {            
+            return Course::with('department','batch','teacher')->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
    
     function assignedCourseShow()
     {
@@ -24,7 +33,6 @@ class AttendanceController extends Controller
             $id = auth()->user()->id;
             return Course::with('department','batch')->where('assigned_by_id',$id)->get();
         } catch (\Exception $e) {
-
             return $e->getMessage();
         }
     }
@@ -33,16 +41,28 @@ class AttendanceController extends Controller
         try {
             return Course::with('department','batch')->find($id);
         } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    function AssignCourseTeacher($course_id,$assign_by){
+        try {
+            // return $assign_by;
+            $assign = Course::find($course_id);
+           
+            $assign->assigned_by_id = $assign_by;
+            $assign->save();
+            return response()->json(['message'=>'Course Teacher Assigned Successfully'],201);
+        } catch (\Exception $e) {
 
             return $e->getMessage();
         }
+
     }
     function AttendanceStudentShow($dept,$batch)
     {
         try {
             return Student::where('department_id',$dept)->where('batch_id',$batch)->get();
         } catch (\Exception $e) {
-
             return $e->getMessage();
         }
     }
@@ -52,7 +72,7 @@ class AttendanceController extends Controller
 
     	$this->validate($request,
             [
-                // 'date' => 'required|date_format:Y-m-d|after_or_equal:today',
+                'date' => 'required|date_format:Y-m-d|after_or_equal:today',
                 'time' => ['required'],               
                 
             ]
@@ -79,7 +99,7 @@ class AttendanceController extends Controller
         try {
         //     DB::transaction(function () use ($request) {
                 
-                // if (empty($check_attendance)){
+                if (empty($check_attendance)){
                     $data = new Attendance_data();
                     $data->date= $request->date;
                     $data->time= $request->time;
@@ -98,16 +118,16 @@ class AttendanceController extends Controller
                             $report = new Attendance_report();                    
                             $report->attendance_data_id = $attendance_data_id;
                             $report->student_id = $id;
-                            // $report->comments = $comments[$key];
+                            $report->comments = $comments[$key];
                             $report->save();                 
                         }                
                     }                    
                     return response()->json(['message' => 'Attendance Submited Successfully'], 201);        
     
-                // }else{
-                //     return response()->json(['message' => 'Attendance Already Submited '],200);                  
+                }else{
+                    return response()->json(['message' => 'Attendance Already Submited '],200);                  
         
-                // }               
+                }               
         
         //     });      
           
@@ -118,22 +138,43 @@ class AttendanceController extends Controller
        
         }
         function AttendanceReport(Request $request)
-        {
-            // return $request->all();
-            $department_id = $request->department_id; 
-            $batch_id = $request->batch_id;                 
-            $course_name = $request->course_name;
-            $course_code = $request->course_code;
-            // return $batch_id;
-            $report = Attendance_data::with('report')->where('department_id',$department_id)->where('batch_id',$batch_id)->where('course_code',$course_code)->get()->groupBy('date');
-            return $report;
-            // try {
-            //     // return $request->all();
-              
-            // } catch (\Exception $e) {
+        {                       
+            $request->validate([
+                'department' => 'required',
+                'batch' => 'required',
+                'course_name' => 'required',
+                'date' => 'required',        
     
-            //     return $e->getMessage();
-            // }
+            ]);
+            try {
+                $department_id = $request->department; 
+                $batch_id = $request->batch;                 
+                $course_name = $request->course_name;
+                $date = $request->date; 
+                $report = Attendance_data::with('batch','report.student')->where([
+                    'department_id' => $department_id, 
+                    'batch_id' => $batch_id, 
+                    'course_name' => $course_name, 
+                    'date' => $date, 
+                ])->get();          
+              
+                return $report;
+              
+            } catch (\Exception $e) {    
+                return $e->getMessage();
+            }
+        }
+
+        function AttendanceReportPrint()
+        {  
+            try {
+                $report =  Attendance_data::with('batch','report.student')->find(1);                            
+               $pdf = PDF::loadView('attendance_report',compact('report'));    
+               return $pdf->stream('print-report.pdf');
+              
+            } catch (\Exception $e) {    
+                return $e->getMessage();
+            }
         }
   
     

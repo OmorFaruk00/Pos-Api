@@ -61,6 +61,8 @@ Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 
+Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
+
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
@@ -299,6 +301,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("attendance-student/{department}/{batch}", [AttendanceController::class, 'AttendanceStudentShow']);
         Route::post("attendance-store", [AttendanceController::class, 'AttendanceStore']);
         Route::post("attendance-report", [AttendanceController::class, 'AttendanceReport']);
+        Route::get("attendance-report-print/{id}", [AttendanceController::class, 'AttendanceReportPrint']);
+        Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher']);
+        Route::get("course-show", [AttendanceController::class, 'CourseShow']);
     });
 
    
