@@ -317,4 +317,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher']);
         Route::get("course-show", [AttendanceController::class, 'CourseShow']);
     });
+
+   
 });
