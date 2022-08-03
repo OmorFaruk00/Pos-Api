@@ -16,7 +16,7 @@
         table,
         td,
         th {
-            border: 1px solid #000;
+            border: 1px solid #000;`
             font-size: 9px !important;
             padding: 1px 5px;
         }

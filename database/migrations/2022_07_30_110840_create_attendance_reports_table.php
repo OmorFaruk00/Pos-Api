@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSyllabiTable extends Migration
+class CreateAttendanceReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateSyllabiTable extends Migration
      */
     public function up()
     {
-        Schema::create('syllabi', function (Blueprint $table) {
+        Schema::create('attendance_reports', function (Blueprint $table) {
             $table->id();
-            $table->string('department');
-            $table->string('status');
-            $table->string('description');          
-            $table->string('file');
-            $table->string('created_by');
+            $table->string('attendance_data_id');
+            $table->string('student_id');
+            $table->string('comments');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateSyllabiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('syllabi');
+        Schema::dropIfExists('attendance_reports');
     }
 }

@@ -20,6 +20,17 @@ class BatchController extends Controller
           }
 
     }
+    public function activeBatchShow(){
+        try {            
+
+            return Batch::with('department')->where('status',1)->get();
+          
+          } catch (\Exception $e) {
+          
+              return $e->getMessage();
+          }
+
+    }
     public function batchAdd(Request $request){
         try {
 
