@@ -59,12 +59,16 @@ Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
 Route::group(['as' => 'setting.', 'prefix' => 'setting'], function () {
-    Route::get('roles', [SettingController::class, 'getRole'])->name('roles');
-    Route::post('role', [SettingController::class, 'storeRole'])->name('roles');
-    Route::post('assign-role/{id}', [SettingController::class, 'updateRole'])->name('roles');
-    Route::get('permissions', [SettingController::class, 'getPermission'])->name('roles');
-    Route::post('permission', [SettingController::class, 'storePermission'])->name('roles');
-    Route::post('special-permission/{id}', [SettingController::class, 'specialPermission'])->name('roles');
+    Route::get('roles/{id}', [SettingController::class, 'roleEdit'])->name('roles.edit');
+    Route::get('roles', [SettingController::class, 'getRole'])->name('roles.show');
+    Route::post('role', [SettingController::class, 'storeRole'])->name('roles.store');
+    Route::post('role/{id}', [SettingController::class, 'updateRoleInfo'])->name('roles.update');
+    Route::post('assign-role/{id}', [SettingController::class, 'updateRole'])->name('roles.assignRole');
+    Route::get('permissions', [SettingController::class, 'getPermission'])->name('roles.permission');
+    Route::get('permission/{id}', [SettingController::class, 'getPermissionInfo'])->name('roles.permissionInfo');
+    Route::post('permission/{id}', [SettingController::class, 'updatePermissionInfo'])->name('roles.updatePermissionInfo');
+    Route::post('permission', [SettingController::class, 'storePermission'])->name('roles.permission.store');
+    Route::post('special-permission/{id}', [SettingController::class, 'specialPermission'])->name('roles.specialPermission');
 });
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);

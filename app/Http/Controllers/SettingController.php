@@ -17,6 +17,10 @@ class SettingController extends Controller
     {
         return Permission::all();
     }
+    public function getPermissionInfo($id)
+    {
+        return Permission::findOrFail($id);
+    }
     public function storeRole(Request $req)
     {
         $req->validate([
@@ -33,6 +37,21 @@ class SettingController extends Controller
         ]);
         return response()->json(['message' => 'Role created successfully']);
     }
+    public function updateRoleInfo(Request $req,$id)
+    {
+        $req->validate([
+            'name' => 'required|unique:roles,name,'.$req->id,
+            'permissions' => 'required|array',
+            'permissions.*' => 'required',
+        ]);
+        $role=Role::findOrFail($id);
+        $role->update([
+            'name' => $req->name,
+            'permissions' => $req->permissions
+        ]);
+        $role->save();
+        return response()->json(['message' => 'Role created successfully']);
+    }
     public function storePermission(Request $req)
     {
         $req->validate([
@@ -41,6 +60,18 @@ class SettingController extends Controller
         Permission::create([
             'name' => $req->name,
         ]);
+        return response()->json(['message' => 'Permission created successfully']);
+    }
+    public function updatePermissionInfo(Request $req,$id)
+    {
+        $req->validate([
+            'name' => 'required|unique:permissions,name,'.$req->id,
+        ]);
+        $permission=Permission::findOrFail($id);
+        $permission->update([
+            'name' => $req->name,
+        ]);
+        $permission->save();
         return response()->json(['message' => 'Permission created successfully']);
     }
     public function updateRole(Request $req, $id)
@@ -63,5 +94,9 @@ class SettingController extends Controller
         $user->permissions = $req->permissions;
         $user->save();
         return response()->json(['message' => 'Special Permission Given successfully']);
+    }
+    public function roleEdit($id){
+        $role = Role::findOrFail($id);
+        return response()->json($role);
     }
 }
