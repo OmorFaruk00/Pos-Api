@@ -165,10 +165,10 @@ class AttendanceController extends Controller
             }
         }
 
-        function AttendanceReportPrint()
+        function AttendanceReportPrint($id)
         {  
             try {
-                $report =  Attendance_data::with('batch','report.student')->find(1);                            
+                $report =  Attendance_data::with('batch','report.student')->find($id);                            
                $pdf = PDF::loadView('attendance_report',compact('report'));    
                return $pdf->stream('print-report.pdf');
               

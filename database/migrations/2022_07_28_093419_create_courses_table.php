@@ -19,6 +19,7 @@ class CreateCoursesTable extends Migration
             $table->string('course_code');
             $table->string('department_id');
             $table->string('batch_id');           
+            $table->string('assigned_by_id')->nullable();           
             $table->integer('status');           
             $table->string('created_by');
             $table->timestamps();

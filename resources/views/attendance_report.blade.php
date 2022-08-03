@@ -17,7 +17,7 @@
         color:#fff;
     }
     .title{
-        color:rgb(59, 127, 134)
+        color:rgb(59, 127, 134);
 
     }
   </style>
@@ -64,10 +64,10 @@
         @if($report->comments != null)         
         <td>{{$report->comments}}</td>        
         @else
-        <td> N/C</td>        
-        @endif        
-        </tr>
-        @endforeach
+      <td> N/C</td>        
+       @endif        
+      </tr>
+      @endforeach
       
     </tbody>
   </table>

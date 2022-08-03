@@ -17,8 +17,7 @@ class CreateSyllabiTable extends Migration
             $table->id();
             $table->string('department');
             $table->string('status');
-            $table->string('description');
-            $table->string('short_description');
+            $table->string('description');          
             $table->string('file');
             $table->string('created_by');
             $table->timestamps();
