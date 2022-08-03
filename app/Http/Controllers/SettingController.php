@@ -20,7 +20,7 @@ class SettingController extends Controller
     public function storeRole(Request $req)
     {
         $req->validate([
-            'name' => 'required|unique:roles',
+            'name' => 'required|unique:roles,name',
             'permissions' => 'required|array',
             'permissions.*' => 'required|exists:permissions,name|distinct',
         ],[

@@ -37,6 +37,7 @@ use App\Http\Controllers\Student\LecturesheetController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\AttendanceController;
+use App\Http\Controllers\SettingController;
 
 
 
@@ -57,7 +58,14 @@ Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
-
+Route::group(['as' => 'setting.', 'prefix' => 'setting'], function () {
+    Route::get('roles', [SettingController::class, 'getRole'])->name('roles');
+    Route::post('role', [SettingController::class, 'storeRole'])->name('roles');
+    Route::post('assign-role/{id}', [SettingController::class, 'updateRole'])->name('roles');
+    Route::get('permissions', [SettingController::class, 'getPermission'])->name('roles');
+    Route::post('permission', [SettingController::class, 'storePermission'])->name('roles');
+    Route::post('special-permission/{id}', [SettingController::class, 'specialPermission'])->name('roles');
+});
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 
