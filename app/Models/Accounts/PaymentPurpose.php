@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounts;
 
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class PaymentPurpose extends Model
 
     public function relClass():HasOne
     {
-        return $this->hasOne(Classes::class,'id','class_id');
+        return $this->hasOne(Department::class,'id','id');
     }
 //all database works
     public static function make($req): PaymentPurpose

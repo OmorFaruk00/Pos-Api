@@ -118,7 +118,7 @@ class AttendanceController extends Controller
                             $report = new Attendance_report();                    
                             $report->attendance_data_id = $attendance_data_id;
                             $report->student_id = $id;
-                            $report->comments = $comments[$key];
+                            $report->comments = $comments[$key] ?? null;
                             $report->save();                 
                         }                
                     }                    

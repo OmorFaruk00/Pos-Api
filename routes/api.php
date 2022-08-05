@@ -38,6 +38,7 @@ use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\LeaveApplicationController;
 
 
 
@@ -316,6 +317,19 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("attendance-report-print/{id}", [AttendanceController::class, 'AttendanceReportPrint']);
         Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher']);
         Route::get("course-show", [AttendanceController::class, 'CourseShow']);
+    });
+
+    
+    Route::prefix('leave')->group(function () {
+        Route::post("application-store", [LeaveApplicationController::class, 'ApplicationStore']);
+        Route::get("application-pending", [LeaveApplicationController::class, 'ApplicationPanding']);
+        Route::get("application-withdraw/{id}", [LeaveApplicationController::class, 'ApplicationWithdraw']);
+        Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
+        Route::get("application-deny/{id}", [LeaveApplicationController::class, 'ApplicationDeny']);
+        Route::get("application-approved/{id}", [LeaveApplicationController::class, 'ApplicationApproved']);
+        Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
+        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+        
     });
 
    

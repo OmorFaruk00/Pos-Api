@@ -19,7 +19,7 @@ class StudentCostController extends Controller
         $request->validate([
             'purpose' => 'required|exists:payment_purposes,id',
             'roll' => 'required',
-            'class' => 'required|exists:classes,id',
+            'class' => 'required',
             'payBy' => 'required',
             'amount' => 'required',
         ]);
