@@ -324,11 +324,15 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("application-store", [LeaveApplicationController::class, 'ApplicationStore']);
         Route::get("application-pending", [LeaveApplicationController::class, 'ApplicationPanding']);
         Route::get("application-withdraw/{id}", [LeaveApplicationController::class, 'ApplicationWithdraw']);
+        Route::get("application-withdraw-show", [LeaveApplicationController::class, 'ApplicationWithdrawShow']);
+        Route::get("application-approval/{id}", [LeaveApplicationController::class, 'ApplicationApproval']);
         Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
-        Route::get("application-deny/{id}", [LeaveApplicationController::class, 'ApplicationDeny']);
-        Route::get("application-approved/{id}", [LeaveApplicationController::class, 'ApplicationApproved']);
+        Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
-        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationOtherDeniedShow']);
+        Route::get("application-self-denied/{id}", [LeaveApplicationController::class, 'ApplicationSelfDenied']);
+        Route::get("application-self-denied-show", [LeaveApplicationController::class, 'ApplicationSelfDeniedShow']);
+        Route::get("application-report", [LeaveApplicationController::class, 'ApplicationReport']);
         
     });
 

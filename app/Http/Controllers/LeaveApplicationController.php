@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LeaveApplication;
 use App\Models\Employee;
+use Carbon\Carbon;
 
 class LeaveApplicationController extends Controller
 {
@@ -49,7 +50,7 @@ class LeaveApplicationController extends Controller
     {
         try {
             $applied_by = auth()->user()->id;
-            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $applied_by)->where('status', "Pending")->get();
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $applied_by)->where('status', "Pending")->orderBy('id', 'DESC')->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -65,29 +66,16 @@ class LeaveApplicationController extends Controller
             return $e->getMessage();
         }
     }
-    public function ApplicationApprovalShow()
-    {    
-         
-        try {
-            $id = auth()->user()->id;
-            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('approved_by',$id)->where('status','Pending')->get();           
-           
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-    public function ApplicationDeny($id)
+    public function ApplicationWithdrawShow()
     {
         try {
-            $withdraw =  LeaveApplication::find($id);
-            $withdraw->status = "Deny";
-            $withdraw->save();
-            return response()->json(['message' => 'Leave Application Denied'], 201);
+            $id = auth()->user()->id;
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Withdraw')->orderBy('id', 'DESC')->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-    public function ApplicationApproved($id)
+    public function ApplicationApproval($id)
     {
         try {
             $withdraw =  LeaveApplication::find($id);
@@ -98,24 +86,88 @@ class LeaveApplicationController extends Controller
             return $e->getMessage();
         }
     }
+    public function ApplicationApprovalShow()
+    {
+        try {
+            $id = auth()->user()->id;
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('approved_by', $id)->where('status', 'Pending')->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function ApplicationDenieByOther($id)
+    {
+        try {
+            $withdraw =  LeaveApplication::find($id);
+            $withdraw->status = "Deny_By_Other";
+            $withdraw->save();
+            return response()->json(['message' => 'Leave Application Denied'], 201);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function ApplicationApprovedShow()
-    {  
+    {
         try {
+            $date = Carbon::now()->format('Y-m-d');
             $id = auth()->user()->id;
-            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by',$id)->where('status','Approved')->get();           
-           
+            $data = LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Approved')->orderBy('id', 'DESC')->get();
+            return response()->json(['data' => $data, 'date' => $date], 200);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-    public function ApplicationDeniedShow()
-    {  
+    public function ApplicationOtherDeniedShow()
+    {
         try {
             $id = auth()->user()->id;
-            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by',$id)->where('status','Deny')->get();           
-           
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Deny_By_Other')->orderBy('id', 'DESC')->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
+    public function ApplicationSelfDenied($id)
+    {
+        try {
+            $withdraw =  LeaveApplication::find($id);
+            $withdraw->status = "Self_Deny";
+            $withdraw->save();
+            return response()->json(['message' => 'Leave Application Denied'], 201);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function ApplicationSelfDeniedShow()
+    {
+        try {
+            $id = auth()->user()->id;
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Self_Deny')->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+
+    public function ApplicationReport()
+
+    {
+        $employee_id = auth()->user()->id;        
+        $current_year_str = (date('Y-01-01'));
+        $current_year_end = (date('Y-12-31'));
+        $last_year_str = (date('Y-01-01', strtotime('-1 year')));
+		$last_year_end = (date('Y-12-31', strtotime('-1 year')));        
+
+         $current_year_leaves_report = LeaveApplication::where(['status' => 'Approved', 'applied_by' => $employee_id])->where('start_date', '>=', $current_year_str)->where('end_date', '<=', $current_year_end)->get()->groupBy('kinds_of_leave');
+
+         $last_year_leaves_report = LeaveApplication::where(['status' => 'Approved', 'applied_by' => $employee_id])->where('start_date', '>=', $last_year_str)->where('end_date', '<=', $last_year_end)->get()->groupBy('kinds_of_leave');
+      
+        return response()->json(['this_year' => $current_year_leaves_report, 'last_year' => $last_year_leaves_report], 200);
+
+      
+    }
+
+    
+    
+    
 }
