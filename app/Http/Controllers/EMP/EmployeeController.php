@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EMP;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,14 +20,13 @@ class EmployeeController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'department' => 'required',
             'designation' => 'required',
-            'personal_phone_no' => 'required',
+            'personal_phone_no' => 'required|numeric',
             'date_of_joining' => 'required',            
             'job_type' => 'required',             
-            'nid_no' => 'required',
-            'date_of_birth' => 'required',   
-            
-
-                                   
+            'nid_no' => 'required|numeric',
+            'date_of_birth' => 'required',
+            'supervised_by' => 'required',   
+            'role' => 'required',                                  
         ]);
         
         if ($request->hasFile('image')) {
@@ -52,7 +52,9 @@ class EmployeeController extends Controller
         $Employee->jobtype = $request->job_type;        
         $Employee->nid_no = $request->nid_no;
         $Employee->date_of_birth = $request->date_of_birth;
-        $Employee->date_of_join = $request->date_of_joining;        
+        $Employee->date_of_join = $request->date_of_joining;
+        $Employee->supervised_by = $request->supervised_by;
+        $Employee->role = $request->role;        
         $Employee->profile_photo = $file_name;
         $Employee->status = 1;
         $Employee->created_by = auth()->user()->id;        
@@ -63,15 +65,11 @@ class EmployeeController extends Controller
 
     
     function EmployeeShow(){
-        return Employee::with('relDesignation','relDepartment')->get();
-        
+        return Employee::with('relDesignation','relDepartment')->get();     
         
     }
-    function EmployeeEdit($id){
-        
+    function EmployeeEdit($id){        
         return Employee::find($id);
-
-
     }
     function EmployeeUpdate(Request $request,$id){
         $request->validate([
@@ -80,14 +78,13 @@ class EmployeeController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  
             'department' => 'required',
             'designation' => 'required',
-            'personal_phone_no' => 'required',
+            'personal_phone_no' => 'required|numeric',
             'date_of_join' => 'required',            
             'jobtype' => 'required',             
-            'nid_no' => 'required',
+            'nid_no' => 'required|numeric',
             'date_of_birth' => 'required',   
-            
-
-                                   
+            'supervised_by' => 'required',   
+            'role' => 'required',                                   
         ]);
         
         if ($request->hasFile('image')) {
@@ -111,6 +108,8 @@ class EmployeeController extends Controller
         $Employee->merit = $request->merit;
         $Employee->jobtype = $request->jobtype;        
         $Employee->nid_no = $request->nid_no;
+        $Employee->supervised_by = $request->supervised_by;
+        $Employee->role = $request->role;
         $Employee->date_of_birth = $request->date_of_birth;
         $Employee->date_of_join = $request->date_of_join;      
         $Employee->profile_photo = $file_name ?? $Employee->profile_photo;
@@ -139,6 +138,11 @@ class EmployeeController extends Controller
         // unlink(public_path() .'/images/emp/'. $Employee->image);
         $Employee->delete();
         return response()->json(['message' => 'Employee Deleted Successfully'],200);
+    }
+    function EmployeeRole(){
+        return Role::all();
+        
+        
     }
    
         
