@@ -59,32 +59,39 @@ Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
-Route::group(['as' => 'setting.', 'prefix' => 'setting'], function () {
-    Route::get('roles/{id}', [SettingController::class, 'roleEdit'])->name('roles.edit');
-    Route::get('roles', [SettingController::class, 'getRole'])->name('roles.show');
-    Route::post('role', [SettingController::class, 'storeRole'])->name('roles.store');
-    Route::post('role/{id}', [SettingController::class, 'updateRoleInfo'])->name('roles.update');
-    Route::post('assign-role/{id}', [SettingController::class, 'updateRole'])->name('roles.assignRole');
-    Route::get('permissions', [SettingController::class, 'getPermission'])->name('roles.permission');
-    Route::get('permission/{id}', [SettingController::class, 'getPermissionInfo'])->name('roles.permissionInfo');
-    Route::post('permission/{id}', [SettingController::class, 'updatePermissionInfo'])->name('roles.updatePermissionInfo');
-    Route::post('permission', [SettingController::class, 'storePermission'])->name('roles.permission.store');
-    Route::post('special-permission/{id}', [SettingController::class, 'specialPermission'])->name('roles.specialPermission');
-});
+
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
-
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
+    $user = \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
+    if ($user->role) {
+        $role = \App\Models\Role::where('name', $user->role)->first();
+    }    
+    $parmission = $role->permissions ??[];
+    $special_parmission = $user->permissions ??[];
+    $user['permission'] = array_merge($parmission,$special_parmission);
+    return $user;
 });
 
 
 Route::group(["middleware" => 'auth:sanctum'], function () {
+    Route::group(['as' => 'setting.', 'prefix' => 'setting','middleware' => 'permission:Permission'], function () {
+        Route::get('roles/{id}', [SettingController::class, 'roleEdit'])->name('roles.edit');
+        Route::get('roles', [SettingController::class, 'getRole'])->name('roles.show');
+        Route::post('role', [SettingController::class, 'storeRole'])->name('roles.store');
+        Route::post('role/{id}', [SettingController::class, 'updateRoleInfo'])->name('roles.update');
+        Route::post('assign-role/{id}', [SettingController::class, 'updateRole'])->name('roles.assignRole');
+        Route::get('permissions', [SettingController::class, 'getPermission'])->name('roles.permission');
+        Route::get('permission/{id}', [SettingController::class, 'getPermissionInfo'])->name('roles.permissionInfo');
+        Route::post('permission/{id}', [SettingController::class, 'updatePermissionInfo'])->name('roles.updatePermissionInfo');
+        Route::post('permission', [SettingController::class, 'storePermission'])->name('roles.permission.store');
+        Route::post('special-permission/{id}', [SettingController::class, 'specialPermission'])->name('roles.specialPermission');
+    });
     // accounts
     Route::group(['prefix' => 'accounts', 'as' => 'account.'], function () {
         //fund
@@ -104,9 +111,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("login", [UserController::class, 'login'])->name("login");
         Route::post("logout", [UserController::class, 'logout'])->name("logout");
 
-        Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-            return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
-        });
+        // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        //     return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
+        // });
 
 
         //class
@@ -213,11 +220,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     Route::prefix('employee')->group(function () {
         Route::get("show", [EmployeeController::class, 'EmployeeShow']);
-        Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee');
-        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit'])->middleware('permission:Employee');
-        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee');
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee');
-        Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
+        Route::get("show-paginate", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
+        Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee-add');
+        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
+        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee-update');
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');
+        // Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
         Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
@@ -276,53 +284,53 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
     });
 
-    Route::prefix('course')->group(function () {
-        Route::get("show", [CourseController::class, 'CourseShow']);
-        Route::post("add", [CourseController::class, 'CourseAdd']);
+    Route::prefix('course')->group(function () {    
+        Route::get("show", [CourseController::class, 'CourseShow'])->middleware('permission:Course-show');
+        Route::post("add", [CourseController::class, 'CourseAdd'])->middleware('permission:Course-add');
         Route::get("edit/{id}", [CourseController::class, 'CourseEdit']);
-        Route::post("update/{id}", [CourseController::class, 'CourseUpdate']);
-        Route::get("delete/{id}", [CourseController::class, 'CourseDelete']);
+        Route::post("update/{id}", [CourseController::class, 'CourseUpdate'])->middleware('permission:Course-update');
+        Route::get("delete/{id}", [CourseController::class, 'CourseDelete'])->middleware('permission:Course-delete');
     });
 
     Route::prefix('syllabus')->group(function () {
-        Route::get("show", [SyllabusController::class, 'SyllabusShow']);
-        Route::post("add", [SyllabusController::class, 'SyllabusAdd']);
+        Route::get("show", [SyllabusController::class, 'SyllabusShow'])->middleware('permission:Syllabus-show');
+        Route::post("add", [SyllabusController::class, 'SyllabusAdd'])->middleware('permission:Syllabus-add');
         Route::get("edit/{id}", [SyllabusController::class, 'SyllabusEdit']);
-        Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate']);
-        Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete']);
+        Route::post("update/{id}", [SyllabusController::class, 'SyllabusUpdate'])->middleware('permission:Syllabus-update');
+        Route::get("delete/{id}", [SyllabusController::class, 'SyllabusDelete'])->middleware('permission:Syllabus-delete');
     });
     Route::prefix('question')->group(function () {
-        Route::get("show", [QuestionController::class, 'QuestionShow']);
-        Route::post("add", [QuestionController::class, 'QuestionAdd']);
+        Route::get("show", [QuestionController::class, 'QuestionShow'])->middleware('permission:Question-show');
+        Route::post("add", [QuestionController::class, 'QuestionAdd'])->middleware('permission:Question-add');
         Route::get("edit/{id}", [QuestionController::class, 'QuestionEdit']);
-        Route::post("update/{id}", [QuestionController::class, 'QuestionUpdate']);
-        Route::get("delete/{id}", [QuestionController::class, 'QuestionDelete']);
+        Route::post("update/{id}", [QuestionController::class, 'QuestionUpdate'])->middleware('permission:Question-update');
+        Route::get("delete/{id}", [QuestionController::class, 'QuestionDelete'])->middleware('permission:Question-delete');
     });
     Route::prefix('lessonplan')->group(function () {
-        Route::get("show", [LessonplanController::class, 'LessonShow']);
-        Route::post("add", [LessonplanController::class, 'LessonAdd']);
+        Route::get("show", [LessonplanController::class, 'LessonShow'])->middleware('permission:Lesson-show');
+        Route::post("add", [LessonplanController::class, 'LessonAdd'])->middleware('permission:Lesson-add');
         Route::get("edit/{id}", [LessonplanController::class, 'LessonEdit']);
-        Route::post("update/{id}", [LessonplanController::class, 'LessonUpdate']);
-        Route::get("delete/{id}", [LessonplanController::class, 'LessonDelete']);
+        Route::post("update/{id}", [LessonplanController::class, 'LessonUpdate'])->middleware('permission:Lesson-update');
+        Route::get("delete/{id}", [LessonplanController::class, 'LessonDelete'])->middleware('permission:Lesson-delete');
     });
     Route::prefix('lecture-sheet')->group(function () {
-        Route::get("show", [LecturesheetController::class, 'LectureShow']);
-        Route::post("add", [LecturesheetController::class, 'LectureAdd']);
+        Route::get("show", [LecturesheetController::class, 'LectureShow'])->middleware('permission:Lecture-show');
+        Route::post("add", [LecturesheetController::class, 'LectureAdd'])->middleware('permission:Lecture-add');
         Route::get("edit/{id}", [LecturesheetController::class, 'LectureEdit']);
-        Route::post("update/{id}", [LecturesheetController::class, 'LectureUpdate']);
-        Route::get("delete/{id}", [LecturesheetController::class, 'LectureDelete']);
+        Route::post("update/{id}", [LecturesheetController::class, 'LectureUpdate'])->middleware('permission:Lecture-update');
+        Route::get("delete/{id}", [LecturesheetController::class, 'LectureDelete'])->middleware('permission:Lecture-delete');
     });
     Route::prefix('student')->group(function () {
         Route::get("show", [StudentController::class, 'studentShow']);
         Route::get("course/{id}", [StudentController::class, 'courseShow']);
-        Route::get("course-code/{id}", [StudentController::class, 'courseCodeShow']);
+        Route::get("course-code/{item}", [StudentController::class, 'courseCodeShow']);
         Route::get("attendance-show", [AttendanceController::class, 'assignedCourseShow']);
         Route::get("attendance-course/{id}", [AttendanceController::class, 'AttendanceCourseShow']);
         Route::get("attendance-student/{department}/{batch}", [AttendanceController::class, 'AttendanceStudentShow']);
         Route::post("attendance-store", [AttendanceController::class, 'AttendanceStore']);
-        Route::post("attendance-report", [AttendanceController::class, 'AttendanceReport']);
+        Route::post("attendance-report", [AttendanceController::class, 'AttendanceReport'])->middleware('permission:Attendance-report');
         Route::get("attendance-report-print/{id}", [AttendanceController::class, 'AttendanceReportPrint']);
-        Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher']);
+        Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher'])->middleware('permission:Assign-course');
         Route::get("course-show", [AttendanceController::class, 'CourseShow']);
     });
 

@@ -33,12 +33,11 @@ class StudentController extends Controller
             return $e->getMessage();
         }
     }
-    function courseCodeShow($id)
+    function courseCodeShow($item)
     {
         try { 
             // return $id;           
-            return Course::find($id);
-            
+            return Course::where('course_name',$item)->get();            
             
         } catch (\Exception $e) {
             return $e->getMessage();

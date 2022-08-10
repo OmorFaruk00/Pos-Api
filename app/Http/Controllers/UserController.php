@@ -33,10 +33,11 @@ class UserController extends Controller
             if ($user->role) {
                 $role = Role::where('name', $user->role)->first();
             }
-            $token = $user->createToken($request->email, $role?$role->permissions:[])->plainTextToken;
+            $token = $user->createToken($request->email, $role?$role->permissions:[])->plainTextToken;            
             $response = [
                 'user' => $user,
-                'token' => $token
+                'token' => $token,
+                
             ];
             return response($response, 201);
         } catch (AuthenticationException $e) {

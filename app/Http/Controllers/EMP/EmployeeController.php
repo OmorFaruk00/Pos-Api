@@ -65,7 +65,21 @@ class EmployeeController extends Controller
 
     
     function EmployeeShow(){
-        return Employee::with('relDesignation','relDepartment')->get();     
+        try {            
+            return Employee::with('relDesignation','relDepartment')->get();           
+            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }          
+        
+    }
+    function EmployeeShowPaginate(){
+        try {            
+            return Employee::with('relDesignation','relDepartment')->paginate('5');           
+            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }          
         
     }
     function EmployeeEdit($id){        
