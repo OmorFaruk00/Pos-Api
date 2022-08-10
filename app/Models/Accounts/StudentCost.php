@@ -11,14 +11,12 @@ class StudentCost extends Model
 
     protected $guarded = [];
 
-
-
-    public function relTransaction()
+    public function transactionable()
     {
-        return $this->hasOne(Transaction::class,'id','transaction_id');
+        return $this->morphOne(Transaction::class, 'transactionable');
     }
     public function relFeeType()
     {
-        return $this->hasONe(PaymentPurpose::class,'id','fee_type');
+        return $this->hasONe(PaymentPurpose::class, 'id', 'fee_type');
     }
 }

@@ -40,9 +40,11 @@ use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LeaveApplicationController;
 use App\Models\Accounts\StudentCost;
+use App\Models\Accounts\Transaction;
 
 Route::get('/p', function () {
-    return StudentCost::with('relFeeType','relTransaction')->get();
+    return Transaction::with('transactionable')->get();
+    return StudentCost::with('relFeeType', 'transactionable')->get();
 });
 
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
@@ -268,6 +270,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
         Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
         Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
+
 
         Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
         Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);

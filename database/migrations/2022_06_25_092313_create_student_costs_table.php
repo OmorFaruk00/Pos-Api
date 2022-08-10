@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('student_costs', function (Blueprint $table) {
             $table->id();
+            $table->integer('department_id');
+            $table->integer('batch_id')->nullable();
             $table->integer('student_id');
-            $table->integer('class_id')->nullable();
-            $table->string('fee_type');
+            $table->integer('fee_type')->comment('purpose id');
             $table->integer('month_count')->nullable();
             $table->double('amount');
             $table->string('scholarship')->nullable();
-            $table->integer('transaction_id');
             $table->date('date')->nullable();
             $table->timestamps();
         });

@@ -10,14 +10,15 @@ class PaymentPurposeController extends Controller
 {
     public function index()
     {
-        return PaymentPurpose::with('relClass')->get();
+        return PaymentPurpose::with('relBatch')->get();
     }
     public function store()
     {
         request()->validate([
             'name' => 'required|unique:payment_purposes,name',
             'amount' => 'required|numeric',
-            'class_id' => 'required|numeric',
+            'department_id' => 'required|numeric',
+            'batch_id' => 'required|numeric',
             'fund_id' => 'required|exists:funds,id',
             'sub_fund_id' => 'required|exists:sub_funds,id',
         ]);
@@ -27,6 +28,6 @@ class PaymentPurposeController extends Controller
 
     public function searchByClass($classId)
     {
-        return PaymentPurpose::where('class_id',$classId)->get();
+        return PaymentPurpose::where('batch_id',$classId)->get();
     }
 }

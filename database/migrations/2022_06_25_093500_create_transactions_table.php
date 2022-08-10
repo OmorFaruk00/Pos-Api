@@ -14,18 +14,18 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->double('amount');
-            $table->double('lilha_pay')->nullable();
-            $table->unsignedBigInteger('fund_id');
-            $table->unsignedBigInteger('sub_fund_id');
+            $table->integer('fund_id');
+            $table->integer('sub_fund_id');
             $table->string('type')->comment('Credit or Debit');
+            $table->integer('user_id')->comment('pay to who');
+            $table->integer('received_by')->comment('received by who');
+            $table->double('lilha_pay')->nullable();
             $table->string('trans_type')->comment('bank,cod,lilha');
             $table->string('account_no')->nullable();
             $table->string('scholarship')->nullable();
             $table->string('scholarship_type')->nullable();
-            $table->integer('user_id');
-            $table->integer('received_by');
+            $table->morphs('transactionable');
             $table->timestamps();
         });
     }
