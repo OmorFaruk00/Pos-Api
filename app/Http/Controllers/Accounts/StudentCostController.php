@@ -68,7 +68,7 @@ class StudentCostController extends Controller
                 $newAmount = $request->amount - $request->scholarship;
                 $fund->increment('total_cash', $newAmount);
                 $subfund->increment('total', $newAmount);
-            }else{
+            } else {
                 $fund->increment('total_cash', $request->amount);
                 $subfund->increment('total', $request->amount);
             }
@@ -91,10 +91,10 @@ class StudentCostController extends Controller
         ]);
         DB::commit();
         return response(['message' => 'Student Cost Make Successful']);
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            return response()->json(['error' => $e->getMessage()], 500);
-//        }
+        //        } catch (\Exception $e) {
+        //            DB::rollBack();
+        //            return response()->json(['error' => $e->getMessage()], 500);
+        //        }
 
     }
 }

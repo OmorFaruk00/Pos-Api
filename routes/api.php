@@ -39,9 +39,11 @@ use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LeaveApplicationController;
+use App\Models\Accounts\StudentCost;
 
-
-
+Route::get('/p', function () {
+    return StudentCost::with('relFeeType','relTransaction')->get();
+});
 
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
 Route::get("notice", [DumWebsiteController::class, 'NoticeShow']);
@@ -319,7 +321,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("course-show", [AttendanceController::class, 'CourseShow']);
     });
 
-    
+
     Route::prefix('leave')->group(function () {
         Route::post("application-store", [LeaveApplicationController::class, 'ApplicationStore']);
         Route::get("application-pending", [LeaveApplicationController::class, 'ApplicationPanding']);
@@ -329,8 +331,5 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("application-approved/{id}", [LeaveApplicationController::class, 'ApplicationApproved']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
         Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
-        
     });
-
-   
 });
