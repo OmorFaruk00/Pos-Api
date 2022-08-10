@@ -124,31 +124,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::post("profile-update", [ProfileController::class, 'updateProfile']);
     Route::post("upload-profile-photo", [ProfileController::class, 'upload_profile_photo']);
 
-    Route::prefix('notice')->group(function () {
-        Route::get("show", [NoticeController::class, 'noticeShow']);
-        Route::post("add", [NoticeController::class, 'noticeAdd']);
-        Route::get("edit/{id}", [NoticeController::class, 'noticeEdit']);
-        Route::post("update/{id}", [NoticeController::class, 'noticeUpdate']);
-        Route::get("status/{id}", [NoticeController::class, 'noticeStatus']);
-        Route::get("delete/{id}", [NoticeController::class, 'noticeDelete']);
-    });
-    Route::prefix('event')->group(function () {
-        Route::get("show", [EventController::class, 'EventShow']);
-        Route::post("add", [EventController::class, 'EventAdd']);
-        Route::get("edit/{id}", [EventController::class, 'EventEdit']);
-        Route::post("update/{id}", [EventController::class, 'EventUpdate']);
-        Route::get("status/{id}", [EventController::class, 'EventStatus']);
-        Route::get("delete/{id}", [EventController::class, 'EventDelete']);
-    });
-    Route::prefix('facilitie')->group(function () {
-        Route::get("show", [FacilitieController::class, 'FacilitieShow']);
-        Route::post("add", [FacilitieController::class, 'FacilitieAdd']);
-        Route::get("edit/{id}", [FacilitieController::class, 'FacilitieEdit']);
-        Route::post("update/{id}", [FacilitieController::class, 'FacilitieUpdate']);
-        Route::get("status/{id}", [FacilitieController::class, 'FacilitieStatus']);
-        Route::get("delete/{id}", [FacilitieController::class, 'FacilitieDelete']);
-    });
-    Route::prefix('slider')->group(function () {
+    Route::group(['prefix' => 'slider', 'middleware' => 'permission:Slider'], function () {
         Route::get("show", [SliderController::class, 'SliderShow']);
         Route::post("add", [SliderController::class, 'SliderAdd']);
         Route::get("edit/{id}", [SliderController::class, 'SliderEdit']);
@@ -156,7 +132,34 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("status/{id}", [SliderController::class, 'SliderStatus']);
         Route::get("delete/{id}", [SliderController::class, 'SliderDelete']);
     });
-    Route::prefix('program')->group(function () {
+    Route::group(['prefix' => 'notice', 'middleware' => 'permission:Notice'], function () {
+        Route::get("show", [NoticeController::class, 'noticeShow']);
+        Route::post("add", [NoticeController::class, 'noticeAdd']);
+        Route::get("edit/{id}", [NoticeController::class, 'noticeEdit']);
+        Route::post("update/{id}", [NoticeController::class, 'noticeUpdate']);
+        Route::get("status/{id}", [NoticeController::class, 'noticeStatus']);
+        Route::get("delete/{id}", [NoticeController::class, 'noticeDelete']);
+    });
+
+    Route::group(['prefix' => 'event', 'middleware' => 'permission:Event'], function () {
+        Route::get("show", [EventController::class, 'EventShow']);
+        Route::post("add", [EventController::class, 'EventAdd']);
+        Route::get("edit/{id}", [EventController::class, 'EventEdit']);
+        Route::post("update/{id}", [EventController::class, 'EventUpdate']);
+        Route::get("status/{id}", [EventController::class, 'EventStatus']);
+        Route::get("delete/{id}", [EventController::class, 'EventDelete']);
+    });
+
+    Route::group(['prefix' => 'facilitie', 'middleware' => 'permission:Facilitie'], function () {
+        Route::get("show", [FacilitieController::class, 'FacilitieShow']);
+        Route::post("add", [FacilitieController::class, 'FacilitieAdd']);
+        Route::get("edit/{id}", [FacilitieController::class, 'FacilitieEdit']);
+        Route::post("update/{id}", [FacilitieController::class, 'FacilitieUpdate']);
+        Route::get("status/{id}", [FacilitieController::class, 'FacilitieStatus']);
+        Route::get("delete/{id}", [FacilitieController::class, 'FacilitieDelete']);
+    });
+
+    Route::group(['prefix' => 'program', 'middleware' => 'permission:Program'], function () {
         Route::get("show", [ProgramController::class, 'ProgramShow']);
         Route::post("add", [ProgramController::class, 'ProgramAdd']);
         Route::get("edit/{id}", [ProgramController::class, 'ProgramEdit']);
@@ -164,7 +167,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("status/{id}", [ProgramController::class, 'ProgramStatus']);
         Route::get("delete/{id}", [ProgramController::class, 'ProgramDelete']);
     });
-    Route::prefix('tution')->group(function () {
+    Route::group(['prefix' => 'tution', 'middleware' => 'permission:Tution'], function () {
         Route::get("show", [TutionFeeController::class, 'TutionFeeShow']);
         Route::post("add", [TutionFeeController::class, 'TutionFeeAdd']);
         Route::get("edit/{id}", [TutionFeeController::class, 'TutionFeeEdit']);
@@ -172,7 +175,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [TutionFeeController::class, 'TutionFeeDelete']);
         Route::get("status/{id}", [TutionFeeController::class, 'TutionFeeStatus']);
     });
-    Route::prefix('blog')->group(function () {
+    Route::group(['prefix' => 'blog', 'middleware' => 'permission:Blog'], function () {
         Route::get("show", [BlogController::class, 'BlogShow']);
         Route::post("add", [BlogController::class, 'BlogAdd']);
         Route::get("edit/{id}", [BlogController::class, 'BlogEdit']);
@@ -180,7 +183,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [BlogController::class, 'BlogDelete']);
         Route::get("status/{id}", [BlogController::class, 'BlogStatus']);
     });
-    Route::prefix('committee')->group(function () {
+
+    Route::group(['prefix' => 'committee', 'middleware' => 'permission:Committee'], function () {
         Route::get("show", [CommitteeController::class, 'CommitteeShow']);
         Route::post("add", [CommitteeController::class, 'CommitteeAdd']);
         Route::get("edit/{id}", [CommitteeController::class, 'CommitteeEdit']);
@@ -188,10 +192,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("delete/{id}", [CommitteeController::class, 'CommitteeDelete']);
         Route::get("status/{id}", [CommitteeController::class, 'CommitteeStatus']);
     });
-    Route::get("contact/show", [DumController::class, 'ContactShow']);
-    Route::post("gallery/add", [DumController::class, 'GalleryAdd']);
+    Route::get("contact/show", [DumController::class, 'ContactShow'])->middleware('permission:Contact');
+    Route::post("gallery/add", [DumController::class, 'GalleryAdd'])->middleware('permission:Gallery');
 
-    Route::prefix('department')->group(function () {
+
+    Route::group(['prefix' => 'department', 'middleware' => 'permission:Department'], function () {
         Route::get("show", [DepartmentController::class, 'DepartmentShow']);
         Route::post("add", [DepartmentController::class, 'DepartmentAdd']);
         Route::get("edit/{id}", [DepartmentController::class, 'DepartmentEdit']);
@@ -199,7 +204,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("status/{id}", [DepartmentController::class, 'DepartmentStatus']);
         Route::get("delete/{id}", [DepartmentController::class, 'DepartmentDelete']);
     });
-    Route::prefix('designation')->group(function () {
+
+    Route::group(['prefix' => 'designation', 'middleware' => 'permission:Designation'], function () {
         Route::get("show", [DesignationController::class, 'DesignationShow']);
         Route::post("add", [DesignationController::class, 'DesignationAdd']);
         Route::get("edit/{id}", [DesignationController::class, 'DesignationEdit']);
@@ -209,12 +215,13 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     Route::prefix('employee')->group(function () {
         Route::get("show", [EmployeeController::class, 'EmployeeShow']);
-        Route::post("add", [EmployeeController::class, 'EmployeeAdd']);
-        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
-        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
+        Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee');
+        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit'])->middleware('permission:Employee');
+        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee');
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee');
         Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
+        Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
     Route::prefix('social')->group(function () {
         Route::get("show", [SocialController::class, 'SocialShow']);
@@ -326,10 +333,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("application-store", [LeaveApplicationController::class, 'ApplicationStore']);
         Route::get("application-pending", [LeaveApplicationController::class, 'ApplicationPanding']);
         Route::get("application-withdraw/{id}", [LeaveApplicationController::class, 'ApplicationWithdraw']);
+        Route::get("application-withdraw-show", [LeaveApplicationController::class, 'ApplicationWithdrawShow']);
+        Route::get("application-approval/{id}", [LeaveApplicationController::class, 'ApplicationApproval']);
         Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
-        Route::get("application-deny/{id}", [LeaveApplicationController::class, 'ApplicationDeny']);
-        Route::get("application-approved/{id}", [LeaveApplicationController::class, 'ApplicationApproved']);
+        Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
         Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+
     });
 });

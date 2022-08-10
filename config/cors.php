@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['localhost','http://localhost:3000','http://localhost:38625','https://www.darululoom-moniram.com'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 

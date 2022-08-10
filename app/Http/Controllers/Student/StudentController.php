@@ -16,7 +16,7 @@ class StudentController extends Controller
     function studentShow()
     {
         try {            
-            return Student::with('department','batch')->paginate('2');
+            return Student::with('department','batch')->paginate('5');
             
             
         } catch (\Exception $e) {
