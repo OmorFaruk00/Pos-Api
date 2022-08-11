@@ -19,7 +19,6 @@ use PDF;
 class AdmissionFormController extends Controller
 {
 
-
     public function importForm(Request $request)
     {
         $this->validate(
@@ -32,9 +31,7 @@ class AdmissionFormController extends Controller
         );
 
         try {
-
             DB::transaction(function () use ($request) {
-
                 $stock = new Form_stock();
                 $stock->start = $request->start;
                 $stock->end = $request->end;
@@ -47,7 +44,7 @@ class AdmissionFormController extends Controller
                 for ($i = 0; $i < $request->count; $i++) {
                     $form_details[$i]['form_number'] = $start;
                     $start++;
-                }
+                }               
                 Admission_form::insert($form_details);
             });
 
@@ -67,21 +64,21 @@ class AdmissionFormController extends Controller
     }
     public function searchForm(Request $request, $form)
     {
-        try {
-            // $this->validate($request, [
-            //     'form_number' => ['required','numeric'],
 
-            // ]);
+        // $request->validate([
+        //         'form_number' => 'required|numeric',
+
+        //     ]);
+        try {
+            
             $form_details = Admission_form::where('form_number', $form)
                 ->whereNull('name_of_student')
                 ->whereNull('dept_id')
                 ->whereNull('batch_id')
                 ->first();
 
-
-
             if (empty($form_details)) {
-                $form_info = Admission_form::with('batch', 'department')->where('form_number', $form)->first();
+                $form_info = Admission_form::with('batch', 'department','employee')->where('form_number', $form)->first();
                 return response()->json(['form_info' => $form_info], 302);
             }
 
@@ -132,10 +129,7 @@ class AdmissionFormController extends Controller
             $form->batch_id = $request->batch;
             $form->sale_by = auth()->user()->id;
             $form->sale_date = Carbon::now()->format('Y-m-d');
-            $form->save();
-
-
-            // return response()->json(['message' => 'Form Sale Successfully'], 200);
+            $form->save();  
 
             $receipt_no = 'FS'.$form;
 

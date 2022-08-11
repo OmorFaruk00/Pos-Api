@@ -16,7 +16,8 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->double('amount');
-            $table->integer('class_id');
+            $table->integer('department_id');
+            $table->integer('batch_id')->nullable();
             $table->integer('month_wise')->default(0)->comment('0 for one time payment, 1 for monthly wise');
             $table->integer('fund_id');
             $table->integer('sub_fund_id');

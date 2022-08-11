@@ -14,8 +14,8 @@ class LeaveApplicationController extends Controller
         $request->validate([
             'kinds_of_leave' => 'required',
             'causes_of_leave' => 'required',
-            'start_date' => 'required||date_format:Y-m-d|after:yesterday',
-            'end_date' => 'required||date_format:Y-m-d|after:yesterday',
+            'start_date' => 'required|date_format:Y-m-d|after:yesterday',
+            'end_date' => 'required|date_format:Y-m-d|after:yesterday',
             'no_of_day' => 'required|numeric|min:1',
             'need_permission' => 'required',
             'in_charge' => 'required',

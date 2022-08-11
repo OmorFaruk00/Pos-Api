@@ -11,10 +11,14 @@ class Admission_form extends Model
 
     public function batch()
     {
-        return $this->belongsTo('App\Models\Batch', 'batch_id', 'id');
+        return $this->hasOne('App\Models\Batch',  'id','batch_id')->select('id','batch_name');
     }
     public function department()
     {
-        return $this->belongsTo('App\Models\Section', 'dept_id', 'id');
+        return $this->hasOne('App\Models\Section',  'id','dept_id')->select('id','department_name');
+    }
+    public function employee()
+    {
+        return $this->hasOne('App\Models\Employee', 'id','sale_by')->select('id','name');
     }
 }

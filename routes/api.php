@@ -39,9 +39,13 @@ use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LeaveApplicationController;
+use App\Models\Accounts\StudentCost;
+use App\Models\Accounts\Transaction;
 
-
-
+Route::get('/p', function () {
+    return Transaction::with('transactionable')->get();
+    return StudentCost::with('relFeeType', 'transactionable')->get();
+});
 
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
 Route::get("notice", [DumWebsiteController::class, 'NoticeShow']);
@@ -267,13 +271,14 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("department-status/{id}", [SectionController::class, 'departmentStatus']);
         Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);
 
-        Route::get("batch-show", [BatchController::class, 'batchShow']);
+        Route::get("batch-show", [BatchController::class, 'batchShow'])->middleware('permission:Batch');
         Route::get("active-batch", [BatchController::class, 'activeBatchShow']);
         Route::post("batch-add", [BatchController::class, 'batchAdd']);
         Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']);
         Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
         Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
         Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
+
 
         Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
         Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
@@ -344,9 +349,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
         Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
-        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationOtherDeniedShow']);
-        Route::get("application-self-denied/{id}", [LeaveApplicationController::class, 'ApplicationSelfDenied']);
-        Route::get("application-self-denied-show", [LeaveApplicationController::class, 'ApplicationSelfDeniedShow']);
-        Route::get("application-report", [LeaveApplicationController::class, 'ApplicationReport']);
+        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+
     });
 });

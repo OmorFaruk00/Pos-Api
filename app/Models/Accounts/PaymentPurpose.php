@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounts;
 
+use App\Models\Batch;
 use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,20 +15,25 @@ class PaymentPurpose extends Model
 
     protected  $guarded = [];
 
-    public function relClass():HasOne
+    public function relDepartment(): HasOne
     {
-        return $this->hasOne(Department::class,'id','id');
+        return $this->hasOne(Department::class, 'id', 'departemnt_id');
     }
-//all database works
+    public function relBatch(): HasOne
+    {
+        return $this->hasOne(Batch::class, 'id', 'batch_id');
+    }
+    //all database works
     public static function make($req): PaymentPurpose
     {
         return self::create([
             'name' => $req['name'],
             'amount' => $req['amount'],
             'fund_id' => $req['fund_id'],
-            'class_id' => $req['class_id'],
             'sub_fund_id' => $req['sub_fund_id'],
-            'month_wise' => $req['sub_fund_id'] ? $req['sub_fund_id']:0,
+            'department_id' => $req['department_id'],
+            'batch_id' => $req['batch_id'],
+            'month_wise' => $req['sub_fund_id'] ? $req['sub_fund_id'] : 0,
         ]);
     }
 }
