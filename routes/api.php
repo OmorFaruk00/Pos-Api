@@ -41,10 +41,23 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LeaveApplicationController;
 use App\Models\Accounts\StudentCost;
 use App\Models\Accounts\Transaction;
+use App\Models\Student;
 
 Route::get('/p', function () {
-    return Transaction::with('transactionable')->get();
-    return StudentCost::with('relFeeType', 'transactionable')->get();
+    Transaction::whereHas('transactionable')->with('transactionable')->get();
+    // all summery
+    $scost = StudentCost::whereHas('transactionable')->with(['relFeeType:id,name,amount', 'transactionable' => function ($query) {
+        return $query->select('id', 'amount', 'type', 'trans_type', 'lilha_pay', 'scholarship', 'scholarship_type', 'transactionable_type', 'transactionable_id');
+    }, 'relBatch:id,tution_fee,common_scholarship'])->where('student_id', 1)->get();
+    $student = Student::with('batch')->where('id',  1)->firstOrFail();
+    $total_scholarship = $scost->sum('scholarship');
+    $common_scholarship = $student->batch->common_scholarship;
+    $summary = [];
+    $summary['total_fee'] = (int)$student->batch->tution_fee;
+    $summary['total_scholarship'] = $total_scholarship + $common_scholarship;
+    $summary['total_paid'] = $scost->sum('amount');
+    $summary['current_due'] = (int)$summary['total_fee'] - (int)$summary['total_scholarship'];
+    return ['total'=>$scost, 'summary'=>$summary];
 });
 
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
@@ -75,16 +88,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
     if ($user->role) {
         $role = \App\Models\Role::where('name', $user->role)->first();
-    }    
-    $parmission = $role->permissions ??[];
-    $special_parmission = $user->permissions ??[];
-    $user['permission'] = array_merge($parmission,$special_parmission);
+    }
+    $parmission = $role->permissions ?? [];
+    $special_parmission = $user->permissions ?? [];
+    $user['permission'] = array_merge($parmission, $special_parmission);
     return $user;
 });
 
 
 Route::group(["middleware" => 'auth:sanctum'], function () {
-    Route::group(['as' => 'setting.', 'prefix' => 'setting','middleware' => 'permission:Permission'], function () {
+    Route::group(['as' => 'setting.', 'prefix' => 'setting', 'middleware' => 'permission:Permission'], function () {
         Route::get('roles/{id}', [SettingController::class, 'roleEdit'])->name('roles.edit');
         Route::get('roles', [SettingController::class, 'getRole'])->name('roles.show');
         Route::post('role', [SettingController::class, 'storeRole'])->name('roles.store');
@@ -109,6 +122,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 
         //transaction
         Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
+
+        Route::get('/statement/{sid}', [StudentController::class, 'studentStatement'])->name('studentCost.studentStatement');
+
 
         //cost
         Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost');
@@ -289,7 +305,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
     });
 
-    Route::prefix('course')->group(function () {    
+    Route::prefix('course')->group(function () {
         Route::get("show", [CourseController::class, 'CourseShow'])->middleware('permission:Course-show');
         Route::post("add", [CourseController::class, 'CourseAdd'])->middleware('permission:Course-add');
         Route::get("edit/{id}", [CourseController::class, 'CourseEdit']);
@@ -350,6 +366,5 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
         Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
-
     });
 });

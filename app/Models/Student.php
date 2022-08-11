@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    
+
     public function education()
     {
         return $this->hasOne('App\Models\Education', 'student_reg_code', 'reg_code');
@@ -19,6 +19,6 @@ class Student extends Model
     }
     public function batch()
     {
-        return $this->hasMany('App\Models\Batch', 'id', 'batch_id');
+        return $this->hasOne('App\Models\Batch', 'id', 'batch_id');
     }
 }
