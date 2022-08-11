@@ -166,6 +166,13 @@ class Admissioncontroller extends Controller
                 $student->signature = $file_name;
                 $student->save();
 
+                $batch = Batch::find($request->batch_id);
+                if($batch->available_seat >0){
+                $available_seat = $batch->available_seat - 1 ;
+                $batch->available_seat = $available_seat;                
+                }
+                $batch->save();
+                
                 $education = new Education();
                 $education->exam_name1 = $request->e_exam_name1;
                 $education->student_reg_code = $request->reg_no;

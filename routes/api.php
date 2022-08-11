@@ -228,8 +228,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee-add');
         Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee-update');
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');
-        // Route::get("delete/{id}", [EmployeeController::class, 'EmployeeDelete']);
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');        
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
         Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
@@ -256,37 +255,37 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
 
     Route::prefix('admission')->group(function () {
-        Route::post("form-import", [AdmissionFormController::class, 'importForm']);
-        Route::get("form-stock", [AdmissionFormController::class, 'stockForm']);
+        Route::post("form-import", [AdmissionFormController::class, 'importForm'])->middleware('permission:Form-import');
+        Route::get("form-stock", [AdmissionFormController::class, 'stockForm'])->middleware('permission:Form-stock');
         Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
         Route::get("department", [AdmissionFormController::class, 'getDepartment']);
         Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
-        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale']);
+        Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale'])->middleware('permission:Form-sale');
         Route::get("print-receive/{form}", [AdmissionFormController::class, 'generatePDF']);
 
-        Route::get("department-show", [SectionController::class, 'departmentShow']);
-        Route::post("department-add", [SectionController::class, 'departmentAdd']);
+        Route::get("department-show", [SectionController::class, 'departmentShow'])->middleware('permission:Std-department-show');
+        Route::post("department-add", [SectionController::class, 'departmentAdd'])->middleware('permission:Std-department-add');
         Route::get("department-edit/{id}", [SectionController::class, 'departmentEdit']);
-        Route::post("department-update/{id}", [SectionController::class, 'departmentUpdate']);
-        Route::get("department-status/{id}", [SectionController::class, 'departmentStatus']);
-        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete']);
+        Route::post("department-update/{id}", [SectionController::class, 'departmentUpdate'])->middleware('permission:Std-department-update');
+        Route::get("department-status/{id}", [SectionController::class, 'departmentStatus'])->middleware('permission:Std-department-status');
+        Route::get("department-delete/{id}", [SectionController::class, 'departmentDelete'])->middleware('permission:Std-department-delete');
 
-        Route::get("batch-show", [BatchController::class, 'batchShow'])->middleware('permission:Batch');
+        Route::get("batch-show", [BatchController::class, 'batchShow'])->middleware('permission:Batch-show');
         Route::get("active-batch", [BatchController::class, 'activeBatchShow']);
-        Route::post("batch-add", [BatchController::class, 'batchAdd']);
+        Route::post("batch-add", [BatchController::class, 'batchAdd'])->middleware('permission:Batch-add');
         Route::get("batch-edit/{id}", [BatchController::class, 'batchEdit']);
-        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate']);
-        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus']);
-        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete']);
+        Route::post("batch-update/{id}", [BatchController::class, 'batchUpdate'])->middleware('permission:Batch-update');
+        Route::get("batch-status/{id}", [BatchController::class, 'batchStatus'])->middleware('permission:Batch-status');
+        Route::get("batch-delete/{id}", [BatchController::class, 'batchDelete'])->middleware('permission:Batch-delete');
 
 
         Route::get("department", [Admissioncontroller::class, 'activeDepartment']);
         Route::get("shift-group/{id}", [Admissioncontroller::class, 'getShiftGroup']);
-        Route::post("add_student", [Admissioncontroller::class, 'admissionStore']);
-        Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent']);
-        Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent']);
+        Route::post("add_student", [Admissioncontroller::class, 'admissionStore'])->middleware('permission:Student-admission');
+        Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent'])->middleware('permission:Student-search');
+        Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent'])->middleware('permission:Student-search');
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
-        Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate']);
+        Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
     });
 
     Route::prefix('course')->group(function () {    
