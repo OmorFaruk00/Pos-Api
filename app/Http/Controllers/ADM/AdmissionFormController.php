@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Admission_form;
 use App\Models\Form_stock;
 use App\Models\Course;
+use App\Models\Employee;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
@@ -142,32 +143,20 @@ class AdmissionFormController extends Controller
     }
 
     public function generatePDF($form_no)
-    {
-      
-
-        // $path = public_path() . '/pdf/' .time() . '.pdf';
-        // $pdf = PDF::loadView('myPDF', $data);
-        // $pdf->save($path);
-        // return response()->download($path);
+    {  
         
-
-         $student = Admission_form::where('form_number',$form_no)->first();
+         $student = Admission_form::with('department','batch')->where('form_number',$form_no)->first();
+         $employee_info = Employee::with('relDesignation')->find(auth()->user()->id);
+         $employee['name'] = $employee_info->name;
+         $employee['designation'] = $employee_info->relDesignation->designation;
          $payable = 1000;
-         $recieve_id = "FS" .$student->id;
-          
-        $pdf = PDF::loadView('admission_slip',compact('student','payable','recieve_id'));    
+         $recieve_id = "FS" .$form_no;
+         $date = Carbon::now()->format('Y-m-d');
+
+         $customPaper = array(0,0,720,1440);
+        $pdf = PDF::loadView('admission_slip',compact('student','payable','recieve_id','employee','date'))->setPaper($customPaper, 'landscape');       
         return $pdf->stream('print.pdf');
         
-       
-  
-  
-    
-    }
-    public function testPDF()
-    {
-      
-        return view('test');       
-    
     }
 
     
@@ -177,32 +166,5 @@ class AdmissionFormController extends Controller
 
     }
 
-
-
-
-
-    // public function getPrintRecieve($recieve){
-
-    //     $payable = 1000;
-    //     $recieve_id = $recieve;
-    //     $form_no = substr($recieve, 2);
-    //     $form_info = Admission_form::where('form_number', $form_no)->first();
-    //     // dd($form_info);
-
-                   
-     
-    
-
-       
-    //     $purpose = 'ADMISSION FORM';
-        
-
-    //     $bank_info['account_no'] = '6113100002042';
-
-    //     $view = view('otherDownloadForm/admission_slip', compact('student',  'recieve_id', 'purpose', 'payable', 'bank_info','saler'));
-    //     $mpdf = new \dompdf\dompdf(['tempDir' => storage_path('temp'), 'mode' => 'utf-8', 'format' => 'A4-L', 'orientation' => 'L']);
-    //     $mpdf->WriteHTML($view);
-    //     return $mpdf->Output('payment_slip', 'I');
-
-    // }
+   
 }

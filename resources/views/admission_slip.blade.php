@@ -85,104 +85,26 @@
         .mt-15 {
             margin-top: 30px;
         }
+        .f-10 {
+            font-size: 10px !important;
+        }
+        .fr {
+            float: right !important;
+        }
 
         .f-12 {
             font-size: 12px !important;
         }
-
-        .f-19 {
+        .f-14 {
             font-size: 14px !important;
         }
-
         /*padding*/
         .p-0 {
             padding: 0 !important;
         }
 
         /*new*/
-        .bank_one {
-            position: absolute;
-            top: 15%;
-            left: 11%;
-            transform: translate(50%, -50%);
-        }
-
-        .bank_two {
-            position: absolute;
-            top: 15%;
-            left: 41%;
-            transform: translate(50%, -50%);
-        }
-
-        .bank_three {
-            position: absolute;
-            top: 15%;
-            left: 71%;
-            transform: translate(50%, -50%);
-        }
-
-        .bank_section_one {
-            position: absolute;
-            top: 52%;
-            left: 11%;
-            transform: translate(50%, -50%);
-        }
-
-        .bank_section_two {
-            position: absolute;
-            top: 52%;
-            left: 41%;
-            transform: translate(50%, -50%);
-        }
-
-        .bank_section_three {
-            position: absolute;
-            top: 52%;
-            left: 71%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_one {
-            position: absolute;
-            top: 30%;
-            left: 12%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_two {
-            position: absolute;
-            top: 30%;
-            left: 42%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_three {
-            position: absolute;
-            top: 30%;
-            left: 72%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_section_one {
-            position: absolute;
-            top: 68%;
-            left: 12%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_section_two {
-            position: absolute;
-            top: 68%;
-            left: 42%;
-            transform: translate(50%, -50%);
-        }
-
-        .diu_section_three {
-            position: absolute;
-            top: 68%;
-            left: 72%;
-            transform: translate(50%, -50%);
-        }
+     
 
     </style>
 </head>
@@ -193,35 +115,26 @@
     <!-- <div style="width:100%;" class="test"> -->
     <div style="width: 100%">
 
-        <!--EXIM Copy-->
-        <div style="width: 33%;border-right: 1px dotted #000;float: left; overflow:hidden;padding:0px;">
-
-            <table class="b-none">
+        {{-- Bank Copy --}}
+        <div style="width:33%;border-right: 1px dotted #000;float: left; overflow:hidden;padding-right:20px;padding-left:0px">
+            <table class="b-none">               
                 <tr>
-                    <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
-                    </td>
-                    <td class="tr w-40 bb-none">Copy of Accounts</td>
+                    <td colspan="2" class="bb-none br-none">Receipt No.
+                        <b>{{ $recieve_id ?? N/A }}</b>
+                        <td class="tr w-40 bb-none">Copy of Bank</td>
                 </tr>
-
                 <tr>
-                    <th class='f-12 bt-none' colspan="3">
-
+                    <th class='f-14 bt-none' colspan="3">
                         Export Import Bank of Bangladesh Limited
-
                     </th>
                 </tr>
             </table>
-
-            <div style="width: 220px;margin: 0 auto;">
-
+            <div style="margin: 0 auto;">
                 <table class="mt-1 b-none">
                     <tr>
                         <td class="tc f-12 bb-none p-0">
-
                             House # 49, Block # H, Road # 11,
                             Kazi's Heritage, Banani , Dhaka- 1213
-
                         </td>
                     </tr>
                     <tr>
@@ -229,94 +142,122 @@
                     </tr>
                     <tr>
                         <td class="tc f-12 bb-none p-0">
-
                             MSND Account No: 6113100002042
-
                         </td>
                     </tr>
-
                     <tr>
-                        <th class="tc f-19 bb-none p-0">Dhaka International University</th>
+                        <th class="tc f-19 bb-none p-0">Darul Uloom Islamia</th>
                     </tr>
                     <tr>
                         <th class="tc f-12 p-0">Receipt of Fees</th>
                     </tr>
                 </table>
-
-
                 <table class="mt-5 b-none">
                     <tr>
                         <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
-                    </tr>
-
+                    </tr>                   
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
-                        </td>
+                        <td class="bb-none br-none mt-15">Department: <b>{{ $student->department->department_name ?? N/A}}</b></td>
+                        <td class="bb-none">Batch: <b>{{ $student->batch->batch_name ?? N/A}}</b></td>
                     </tr>
-
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Reg. Code: <b>N/A</b></td>
-                    </tr>
-
+                        <td class="bb-none br-none">Reg. Code:<b>N/A </b></td>
+                        <td class="bb-none">Roll No: <b>N/A </b></td>
+                    </tr>                   
                     <tr>
-                        <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }}</b></td>
-                    </tr>
-
-                    <tr>
-                        <td class="br-none">Roll No: <b>N/A </b></td>
-                        <td>Semester: <b>N/A</b></td>
-                    </tr>
+                        <td class="bb-none br-none">Session: <b>N/A </b></td>                       
+                    </tr>                   
                 </table>
-
-                <div style="height: 180px">
+                <div style="height: 320px">
                     <table class="mt-8">
-                        <tr>
-                            <th class="w-15">Sl.No.</th>
+                        <tr  class="">
+                            <th class="w-1">Sl.No.</th>
                             <th>Description</th>
                             <th class="w-40">Amount (In Taka)</th>
                         </tr>
-
-
                         <tr>
                             <td>1</td>
-                            <td>ADMISSION FORM</td>
+                            <td>Admission Form Fee</td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
                         </tr>
-
+                        <tr>
+                            <td>2</td>
+                            <td>Admission Fee</td>
+                            <td class="tc"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Certificate Verificaton & ID Card</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr style="padding-top: 100px !importent">
+                            <td>4</td>
+                            <td>Extra Curricular Activities Fee</td> 
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Registration Fee</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Tution/Course Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Lab Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Library Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Examination Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>
+                                Others<br>
+                                (a)<br>
+                                (b)<br>
+                                (c)<br>
+                            </td>                      
+                            <td class="tc"></td>                          
+                        </tr>
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
-
-
-                <table class="mt-8 b-none">
+                <table class="mt-15 b-none">
                     <tr>
                         <td class="bb-none" colspan="2">Received taka (In
                             words) <span
                                 style="text-transform: capitalize"><b> 
-                                    taka</b></span>
+                                    one thousand taka</b></span>
                             only.
                         </td>
+                        <td class="b-none"><b>Date:</b>{{$date}}</td>                        
                     </tr>
                 </table>
-
-                <table class="mt-15 b-none">
-
-
+                <table class="mt-5 b-none">
                     <tr>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2">
-                            <span style="border-top: 1px solid #000;">omor</span>
-                            <p> it</p>
-                            <p >Dhaka International University</p>
+                        <td class="br-none bt-none" style="padding-top: 45px" colspan="2">
+                            <span style="border-top: 1px dotted #000;">{{$employee['name']}}</span>                            
+                            <p> {{$employee['designation']}}</p>                      
+                            <p >Darul Ullom Islamia</p>
                         </td>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2"><span
-                                style="border-top: 1px solid #000;">Signature Of
-                                Student</span>
+                        <td class="br-none bt-none" style="padding-top: 35px" ><span
+                                style="border-top: 1px dotted #000;">Signature Of
+                                Student</span></td>
                     </tr>
                 </table>
 
@@ -324,28 +265,21 @@
 
         </div>
 
-        <!--DIU Copy by Student-->
-        <div style="width: 33%;border-right: 1px dotted #000;float: left;">
-
-            <table class="b-none">
+        <!--DUI Copy-->
+        <div style="width:33%;border-right: 1px dotted #000;float: left; overflow:hidden;padding-right:15px;padding-left:15px">
+            <table class="b-none">               
                 <tr>
-                    <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
-                    </td>
-                    <td class="tr w-40 bb-none">Copy of DIU</td>
+                    <td colspan="2" class="bb-none br-none">Receipt No.
+                        <b>{{ $recieve_id ?? N/A }}</b>
+                        <td class="tr w-40 bb-none">Copy of DUI</td>
                 </tr>
-
                 <tr>
-                    <th class='f-12 bt-none' colspan="3">
-
+                    <th class='f-14 bt-none' colspan="3">
                         Export Import Bank of Bangladesh Limited
-
                     </th>
                 </tr>
             </table>
-
-            <div style="width: 220px;margin: 0 auto;">
-
+            <div style="margin: 0 auto;">
                 <table class="mt-1 b-none">
                     <tr>
                         <td class="tc f-12 bb-none p-0">
@@ -354,316 +288,283 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-transform: capitalize" class="tc f-12 bb-none p-0"><b>Banani Branch </b></td>
+                        <td style="text-transform: capitalize" class="tc f-12 bb-none p-0"><b>Banani Branch</b></td>
                     </tr>
                     <tr>
                         <td class="tc f-12 bb-none p-0">
-
                             MSND Account No: 6113100002042
-
                         </td>
                     </tr>
-
                     <tr>
-                        <th class="tc f-19 bb-none p-0">Dhaka International University</th>
+                        <th class="tc f-19 bb-none p-0">Darul Uloom Islamia</th>
                     </tr>
                     <tr>
                         <th class="tc f-12 p-0">Receipt of Fees</th>
                     </tr>
                 </table>
-
                 <table class="mt-5 b-none">
                     <tr>
                         <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
-                    </tr>
-
+                    </tr>                   
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
-                        </td>
+                        <td class="bb-none br-none mt-15">Department: <b>{{ $student->department->department_name ?? N/A}}</b></td>
+                        <td class="bb-none">Batch: <b>{{ $student->batch->batch_name ?? N/A}}</b></td>
                     </tr>
-
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Reg. Code: <b>N/A</b></td>
-                    </tr>
-
+                        <td class="bb-none br-none">Reg. Code:<b>N/A </b></td>
+                        <td class="bb-none">Roll No: <b>N/A </b></td>
+                    </tr>                   
                     <tr>
-                        <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }} </b></td>
-                    </tr>
-
-                    <tr>
-                        <td class="br-none">Roll No: <b>N/A</b></td>
-                        <td>Semester: <b>N/A</b></td>
-                    </tr>
+                        <td class="bb-none br-none">Session: <b>N/A </b></td>                       
+                    </tr>                   
                 </table>
-
-                <div style="height: 180px">
+                <div style="height: 320px">
                     <table class="mt-8">
-                        <tr>
-                            <th class="w-15">Sl.No.</th>
+                        <tr  class="">
+                            <th class="w-1">Sl.No.</th>
                             <th>Description</th>
                             <th class="w-40">Amount (In Taka)</th>
                         </tr>
-
-
                         <tr>
                             <td>1</td>
-                            <td>ADMISSION FORM</td>
+                            <td>Admission Form Fee</td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
                         </tr>
-
+                        <tr>
+                            <td>2</td>
+                            <td>Admission Fee</td>
+                            <td class="tc"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Certificate Verificaton & ID Card</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr style="padding-top: 100px !importent">
+                            <td>4</td>
+                            <td>Extra Curricular Activities Fee</td> 
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Registration Fee</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Tution/Course Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Lab Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Library Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Examination Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>
+                                Others<br>
+                                (a)<br>
+                                (b)<br>
+                                (c)<br>
+                            </td>                      
+                            <td class="tc"></td>                          
+                        </tr>
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
-
-                <table class="mt-8 b-none">
+                <table class="mt-15 b-none">
                     <tr>
                         <td class="bb-none" colspan="2">Received taka (In
                             words) <span
                                 style="text-transform: capitalize"><b> 
-                                    taka</b></span>
+                                    one thousand taka</b></span>
                             only.
                         </td>
+                        <td class="b-none"><b>Date:</b>{{$date}}</td>                        
                     </tr>
                 </table>
-
-                <table class="mt-15 b-none">
-
-
+                <table class="mt-5 b-none">
                     <tr>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2">
-                            <span style="border-top: 1px solid #000;"> omor</span>
-                            <p> it</p>
-                            <p >Dhaka International University</p>
+                        <td class="br-none bt-none" style="padding-top: 45px" colspan="2">
+                            <span style="border-top: 1px dotted #000;">{{$employee['name']}}</span>                            
+                            <p> {{$employee['designation']}}</p>                      
+                            <p >Darul Ullom Islamia</p>
                         </td>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2"><span
-                                style="border-top: 1px solid #000;">Signature Of
-                                Student</span>
+                        <td class="br-none bt-none" style="padding-top: 35px" ><span
+                                style="border-top: 1px dotted #000;">Signature Of
+                                Student</span></td>
                     </tr>
                 </table>
 
             </div>
+
         </div>
 
         <!--Student Copy-->
-        <div style="width: 33%;float: left;margin-left: 5px">
-
-            <table class="b-none">
+        <div style="width:33%;float: left; overflow:hidden;padding-right:15px;padding-left:5px">
+            <table class="b-none">               
                 <tr>
-                    <td colspan="2" class="bb-none br-none" style="padding-left: 13px">Receipt No.
-                        <b>{{ $recieve_id ?? '' }}</b>
-                    </td>
-                    <td class="tr w-40 bb-none">Students Copy</td>
+                    <td colspan="2" class="bb-none br-none">Receipt No.
+                        <b>{{ $recieve_id ?? N/A }}</b>
+                        <td class="tr w-40 bb-none">Copy of Student</td>
                 </tr>
-
                 <tr>
-                    <th class='f-12 bt-none' colspan="3">
-
+                    <th class='f-14 bt-none' colspan="3">
                         Export Import Bank of Bangladesh Limited
-
                     </th>
                 </tr>
             </table>
-
-            <div style="width: 220px;margin: 0 auto;">
-
+            <div style="margin: 0 auto;">
                 <table class="mt-1 b-none">
                     <tr>
                         <td class="tc f-12 bb-none p-0">
-
                             House # 49, Block # H, Road # 11,
                             Kazi's Heritage, Banani , Dhaka- 1213
-
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-transform: capitalize" class="tc f-12 bb-none p-0"><b> Banani Branch</b></td>
+                        <td style="text-transform: capitalize" class="tc f-12 bb-none p-0"><b>Banani Branch</b></td>
                     </tr>
                     <tr>
                         <td class="tc f-12 bb-none p-0">
-
                             MSND Account No: 6113100002042
-
                         </td>
                     </tr>
-
                     <tr>
-                        <th class="tc f-19 bb-none p-0">Dhaka International University</th>
+                        <th class="tc f-19 bb-none p-0">Darul Uloom Islamia</th>
                     </tr>
                     <tr>
                         <th class="tc f-12 p-0">Receipt of Fees</th>
                     </tr>
                 </table>
-
                 <table class="mt-5 b-none">
                     <tr>
                         <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
-                    </tr>
-
+                    </tr>                   
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Department:
-                            <b>{{ $student->department_name ?? '' }}</b>
-                        </td>
+                        <td class="bb-none br-none mt-15">Department: <b>{{ $student->department->department_name ?? N/A}}</b></td>
+                        <td class="bb-none">Batch: <b>{{ $student->batch->batch_name ?? N/A}}</b></td>
                     </tr>
-
                     <tr>
-                        <td colspan="2" class="bb-none bt-none">Reg. Code: <b>N/A</b></td>
-                    </tr>
-
+                        <td class="bb-none br-none">Reg. Code:<b>N/A </b></td>
+                        <td class="bb-none">Roll No: <b>N/A </b></td>
+                    </tr>                   
                     <tr>
-                        <td class="bb-none br-none">Session: <b>N/A </b></td>
-                        <td class="bb-none">Batch: <b>{{ number_format($payable ?? 0) }} </b></td>
-                    </tr>
-
-                    <tr>
-                        <td class="br-none">Roll No: <b>N/A</b></td>
-                        <td>Semester: <b>N/A</b></td>
-                    </tr>
+                        <td class="bb-none br-none">Session: <b>N/A </b></td>                       
+                    </tr>                   
                 </table>
-
-                <div style="height: 180px">
+                <div style="height: 320px">
                     <table class="mt-8">
-                        <tr>
-                            <th class="w-15">Sl.No.</th>
+                        <tr  class="">
+                            <th class="w-1">Sl.No.</th>
                             <th>Description</th>
                             <th class="w-40">Amount (In Taka)</th>
                         </tr>
-
-
                         <tr>
                             <td>1</td>
-                            <td>ADMISSION FORM</td>
+                            <td>Admission Form Fee</td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
                         </tr>
-
+                        <tr>
+                            <td>2</td>
+                            <td>Admission Fee</td>
+                            <td class="tc"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Certificate Verificaton & ID Card</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr style="padding-top: 100px !importent">
+                            <td>4</td>
+                            <td>Extra Curricular Activities Fee</td> 
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Registration Fee</td>
+                            <td class="tc"></td>                            
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Tution/Course Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Lab Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Library Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Examination Fee</td>  
+                            <td class="tc"></td>                          
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>
+                                Others<br>
+                                (a)<br>
+                                (b)<br>
+                                (c)<br>
+                            </td>                      
+                            <td class="tc"></td>                          
+                        </tr>
                         <tr>
                             <td></td>
                             <td class="tr"><strong>Total :</strong></td>
                             <td class="tc">{{ number_format($payable ?? 0) }}</td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
-
-                <table class="mt-8 b-none">
+                <table class="mt-15 b-none">
                     <tr>
                         <td class="bb-none" colspan="2">Received taka (In
                             words) <span
                                 style="text-transform: capitalize"><b> 
-                                    taka</b></span>
+                                    one thousand taka</b></span>
                             only.
                         </td>
+                        <td class="b-none"><b>Date:</b>{{$date}}</td>                        
                     </tr>
                 </table>
-
-                <table class="mt-15 b-none">
-
-
+                <table class="mt-5 b-none">
                     <tr>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2">
-                            <span style="border-top: 1px solid #000;"> omor</span>
-                            <p> it</p>
-                            <p >Dhaka International University</p>
+                        <td class="br-none bt-none" style="padding-top: 45px" colspan="2">
+                            <span style="border-top: 1px dotted #000;">{{$employee['name']}}</span>                            
+                            <p> {{$employee['designation']}}</p>                      
+                            <p >Darul Ullom Islamia</p>
                         </td>
-                        <td class="br-none bt-none" style="padding-top: 65px" colspan="2"><span
-                            style="border-top: 1px solid #000;">Signature Of
-                                Student</span>
+                        <td class="br-none bt-none" style="padding-top: 35px" ><span
+                                style="border-top: 1px dotted #000;">Signature Of
+                                Student</span></td>
                     </tr>
                 </table>
 
             </div>
+
         </div>
-
-    </div>
-
-
-    {{-- section one start --}}
-    {{-- <div class="diu_one">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div>
-
-    <div class="diu_two">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div>
-
-    <div class="diu_three">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div>
-
-    <div class="bank_one">
-
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-
-    </div>
-
-    <div class="bank_two">
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-    </div>
-
-    <div class="bank_three">
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-    </div> --}}
-
-
-    {{-- section one end --}}
-
-    {{-- section two start --}}
-    {{-- <div class="bank_section_one">
-
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-
-    </div>
-
-    <div class="bank_section_two">
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-    </div>
-
-    <div class="bank_section_three">
-        @if ($bank_info['account_no'] == '114013119503633')
-            <img src="{{ storage_path('assets/marcantile.png') }}" alt="" width="200px" style="opacity: .2">
-        @else
-            <img src="{{ storage_path('assets/exim.png') }}" alt="" width="200px" height="80px">
-        @endif
-    </div>
-
-
-    <div class="diu_section_one">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div>
-
-    <div class="diu_section_two">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div>
-
-    <div class="diu_section_three">
-        <img src="{{ storage_path('assets/diu_back.png') }}" alt="" width="150px">
-    </div> --}}
-
-    {{-- section two end --}}
+    </div>   
 </body>
 
 </html>

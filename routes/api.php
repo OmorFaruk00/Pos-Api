@@ -77,7 +77,9 @@ Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
 
-
+Route::get('/test', function () {
+    return view('bank_slip.blade.php');
+});
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
 

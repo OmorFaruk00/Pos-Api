@@ -9,6 +9,7 @@ use App\Models\Batch;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Education;
+use App\Models\Admission_form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -28,7 +29,6 @@ class Admissioncontroller extends Controller
 
     public function admissionStore(Request $request)
     {
-
            $this->validate($request, [
                'department_id' => 'required|integer',
                'batch_id' => 'required|integer',
@@ -97,7 +97,6 @@ class Admissioncontroller extends Controller
                'e_ltr_grd_tmarks4' => 'nullable',
                'e_div_cls_cgpa4' => 'nullable',
                'e_board_institute4' => 'nullable',
-
               
                'file' => 'required|mimes:jpeg,jpg,png|max:1024',
                'signature' => 'required|mimes:jpeg,jpg,png|max:500',
@@ -172,6 +171,13 @@ class Admissioncontroller extends Controller
                 $batch->available_seat = $available_seat;                
                 }
                 $batch->save();
+
+                $admisson_form = Admission_form::where('form_number',$request->adm_frm_sl)->update([
+                'roll' => $request->roll_no,
+                'reg_code' => $request->reg_no, 
+                'admission_date' => Carbon::now()->format('Y-m-d'), 
+                'admission_by' => auth()->user()->id,
+                ]);            
                 
                 $education = new Education();
                 $education->exam_name1 = $request->e_exam_name1;
@@ -204,10 +210,9 @@ class Admissioncontroller extends Controller
                 $education->div_cls_cgpa4 = $request->e_div_cls_cgpa4;
                 $education->board_institute4 = $request->e_board_institute4;
                 $education->save();
+
             });
-
-
-            return response()->json(['message' => 'Student Admission successfully'], 200);
+            return response()->json(['message' => 'Student Admission Successfull'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
         }
@@ -225,25 +230,19 @@ class Admissioncontroller extends Controller
     public function searchStudent($item){
         try {           
            return Student::where(function ($query) use ($item) {
-            $query->where('reg_code', 'LIKE', "%" . $item . "%")
-                // ->orWhere('ROLL_NO', 'LIKE', "%" . $item . "%");
+            $query->where('reg_code', 'LIKE', "%" . $item . "%")                
                 ->orWhere('student_name', 'LIKE', "%" . $item . "%");
         })->get();
           
-          } catch (\Exception $e) {
-          
+          } catch (\Exception $e) {          
               return $e->getMessage();
           }
     }
     public function studentEdit($id){
-        try {           
-              
-        //    return Student::find($id);       
-           return Student::with('education')->where('id',$id)->first();       
-               
+        try {              
+           return Student::with('education')->where('id',$id)->first();     
           
-          } catch (\Exception $e) {
-          
+          } catch (\Exception $e) {          
               return $e->getMessage();
           }
     }
@@ -328,14 +327,14 @@ class Admissioncontroller extends Controller
                 $files = $request->file('signature');
                 $images = $request->file('file');
 
-                if ($files) {
-
+                if ($files)
+                {
                     $extension = $files->getClientOriginalExtension();
                     $file_name = time() . '_' . Str::random(10) . '.' . $extension;
                     $files->move(public_path('images/student_signature'), $file_name);
                 }
-                if ($images) {
-
+                if ($images)
+                {
                     $extension = $images->getClientOriginalExtension();
                     $image_name = time() . '_' . Str::random(10) . '.' . $extension;
                     $images->move(public_path('images/student_photo'), $image_name);
@@ -348,8 +347,7 @@ class Admissioncontroller extends Controller
                 $student->group_id = $request->group_id;
                 $student->adm_frm_sl = $request->adm_frm_sl;
                 $student->student_name = $request->student_name;
-                $student->roll_no = $request->roll_no;
-                // $student->reg_code = $request->reg_code;
+                $student->roll_no = $request->roll_no;              
                 $student->blood_group = $request->blood_group;
                 $student->email = $request->email;
                 $student->phone_no = $request->phone_no;
@@ -385,9 +383,7 @@ class Admissioncontroller extends Controller
                 $student->signature = $file_name??$student->signature;
                 $student->save();                
    
-                $education =  Education::where('student_reg_code',$student->reg_code)->first();                
-                
-                // $education->student_reg_code = $request->reg_code;                
+                $education =  Education::where('student_reg_code',$student->reg_code)->first();                             
                 $education->exam_name1 = $request->exam_name1;                
                 $education->group1 = $request->group1;
                 $education->roll_no1 = $request->roll_no1;
