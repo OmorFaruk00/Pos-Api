@@ -146,7 +146,7 @@ class AdmissionFormController extends Controller
     {  
         
          $student = Admission_form::with('department','batch')->where('form_number',$form_no)->first();
-         $employee_info = Employee::with('relDesignation')->find(auth()->user()->id);
+         $employee_info = Employee::with('relDesignation')->find(4);
          $employee['name'] = $employee_info->name;
          $employee['designation'] = $employee_info->relDesignation->designation;
          $payable = 1000;

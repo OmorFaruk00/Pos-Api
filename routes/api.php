@@ -77,9 +77,6 @@ Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
 
-Route::get('/test', function () {
-    return view('bank_slip.blade.php');
-});
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
 
@@ -365,7 +362,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("application-approval/{id}", [LeaveApplicationController::class, 'ApplicationApproval']);
         Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
         Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
+
+        Route::get("application-denied-other-show", [LeaveApplicationController::class, 'ApplicationOtherDeniedShow']);
+
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
-        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+        Route::get("application-self-denied/{id}", [LeaveApplicationController::class, 'ApplicationSelfDenied']);
+        Route::get("application-self-denied-show", [LeaveApplicationController::class, 'ApplicationSelfDeniedShow']);
+        Route::get("application-report", [LeaveApplicationController::class, 'ApplicationReport']);
     });
 });
