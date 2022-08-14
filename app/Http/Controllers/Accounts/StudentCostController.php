@@ -38,7 +38,7 @@ class StudentCostController extends Controller
 
         $lilha = Fund::where('name', 'LILHA')->first();
         if ($request->payBy == 'LILHA') {
-            if (!$lilha || !$lilha->tatal_cash) {
+            if (!$lilha || !$lilha->total_cash) {
                 return response(['message' => 'LILHA has not enough money'], 422);
             }
             if ($lilha && $lilha->total_cash < $request->lilha_pay) {
