@@ -17,6 +17,9 @@ class AuthPermission
      */
     public function handle(Request $request, Closure $next, $permission)
     {
+        if(app()->environment('local')) {
+            return $next($request);
+        }
         if (!Auth::check()) {
             return response()->json(['message' => 'You are not authorized.'], 401);
         }
