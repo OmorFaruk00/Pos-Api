@@ -545,7 +545,7 @@
                                     one thousand taka</b></span>
                             only.
                         </td>
-                        <td class="b-none"><b>Date:</b>{{$date}}</td>                        
+                        <td class="b-none"><b>Date :</b>{{$date}}</td>                        
                     </tr>
                 </table>
                 <table class="mt-5 b-none">

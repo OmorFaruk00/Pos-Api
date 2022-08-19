@@ -106,6 +106,16 @@ class LeaveApplicationController extends Controller
             return $e->getMessage();
         }
     }
+    public function ApplicationOtherDeniedShow()
+    {
+        
+        try {
+            $id = auth()->user()->id;
+            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Deny_By_Other')->orderBy('id', 'DESC')->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     public function ApplicationApprovedShow()
     {
@@ -118,15 +128,7 @@ class LeaveApplicationController extends Controller
             return $e->getMessage();
         }
     }
-    public function ApplicationOtherDeniedShow()
-    {
-        try {
-            $id = auth()->user()->id;
-            return LeaveApplication::with('applied_by.relDesignation', 'approved_by.relDesignation')->where('applied_by', $id)->where('status', 'Deny_By_Other')->orderBy('id', 'DESC')->get();
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
+   
     public function ApplicationSelfDenied($id)
     {
         try {
@@ -158,7 +160,7 @@ class LeaveApplicationController extends Controller
         $last_year_str = (date('Y-01-01', strtotime('-1 year')));
 		$last_year_end = (date('Y-12-31', strtotime('-1 year')));        
 
-         $current_year_leaves_report = LeaveApplication::where(['status' => 'Approved', 'applied_by' => $employee_id])->where('start_date', '>=', $current_year_str)->where('end_date', '<=', $current_year_end)->get()->groupBy('kinds_of_leave');
+        $current_year_leaves_report = LeaveApplication::where(['status' => 'Approved', 'applied_by' => $employee_id])->where('start_date', '>=', $current_year_str)->where('end_date', '<=', $current_year_end)->get()->groupBy('kinds_of_leave');
 
          $last_year_leaves_report = LeaveApplication::where(['status' => 'Approved', 'applied_by' => $employee_id])->where('start_date', '>=', $last_year_str)->where('end_date', '<=', $last_year_end)->get()->groupBy('kinds_of_leave');
       

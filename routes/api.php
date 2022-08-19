@@ -43,22 +43,7 @@ use App\Models\Accounts\StudentCost;
 use App\Models\Accounts\Transaction;
 use App\Models\Student;
 
-Route::get('/p', function () {
-    Transaction::whereHas('transactionable')->with('transactionable')->get();
-    // all summery
-    $scost = StudentCost::whereHas('transactionable')->with(['relFeeType:id,name,amount', 'transactionable' => function ($query) {
-        return $query->select('id', 'amount', 'type', 'trans_type', 'lilha_pay', 'scholarship', 'scholarship_type', 'transactionable_type', 'transactionable_id');
-    }, 'relBatch:id,tution_fee,common_scholarship'])->where('student_id', 1)->get();
-    $student = Student::with('batch')->where('id',  1)->firstOrFail();
-    $total_scholarship = $scost->sum('scholarship');
-    $common_scholarship = $student->batch->common_scholarship;
-    $summary = [];
-    $summary['total_fee'] = (int)$student->batch->tution_fee;
-    $summary['total_scholarship'] = $total_scholarship + $common_scholarship;
-    $summary['total_paid'] = $scost->sum('amount');
-    $summary['current_due'] = (int)$summary['total_fee'] - (int)$summary['total_scholarship'];
-    return ['total'=>$scost, 'summary'=>$summary];
-});
+
 
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
 Route::get("notice", [DumWebsiteController::class, 'NoticeShow']);
@@ -77,15 +62,14 @@ Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 
 
 
-Route::get('/test', function () {
-    return view('bank_slip.blade.php');
-});
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
-Route::post("logout", [UserController::class, 'logout'])->name("logout");
+Route::get("password-reset/{email}", [UserController::class, 'Password_Reset']);
+Route::post("password-reset-confirm/{token}", [UserController::class, 'Password_Reset_Confirm']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
     if ($user->role) {
@@ -117,27 +101,16 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get('/funds', [FundController::class, 'index'])->name('fund.index');
         Route::post('/funds', [FundController::class, 'store'])->name('fund.store');
         Route::get('/funds-subfunds/{id}', [FundController::class, 'getSubFunds'])->name('fund.getSubFunds');
-
         //sub fund
         Route::get('/sub-fund', [SubFundController::class, 'index'])->name('subFund.index');
         Route::post('/sub-fund', [SubFundController::class, 'store'])->name('subFund.store');
-
         //transaction
         Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
-
         Route::get('/statement/{sid}', [StudentController::class, 'studentStatement'])->name('studentCost.studentStatement');
-
-
         //cost
         Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost');
         Route::post("login", [UserController::class, 'login'])->name("login");
         Route::post("logout", [UserController::class, 'logout'])->name("logout");
-
-        // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        //     return \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
-        // });
-
-
         //class
         Route::get('/class', [ClassController::class, 'index'])->name('class.index');
         Route::post('/class', [ClassController::class, 'store'])->name('class.store');
@@ -150,6 +123,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::get("profile", [ProfileController::class, 'userProfile']);
     Route::post("profile-update", [ProfileController::class, 'updateProfile']);
     Route::post("upload-profile-photo", [ProfileController::class, 'upload_profile_photo']);
+    Route::post("logout", [UserController::class, 'logout'])->name("logout");
+    Route::post("change-password", [UserController::class, 'Change_Password']);
 
     Route::group(['prefix' => 'slider', 'middleware' => 'permission:Slider'], function () {
         Route::get("show", [SliderController::class, 'SliderShow']);
@@ -246,7 +221,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee-add');
         Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee-update');
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');        
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
         Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
@@ -365,7 +340,10 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("application-approval/{id}", [LeaveApplicationController::class, 'ApplicationApproval']);
         Route::get("application-approval-show", [LeaveApplicationController::class, 'ApplicationApprovalShow']);
         Route::get("application-denied-by-other/{id}", [LeaveApplicationController::class, 'ApplicationDenieByOther']);
+        Route::get("application-denied-other-show", [LeaveApplicationController::class, 'ApplicationOtherDeniedShow']);
         Route::get("application-approved-show", [LeaveApplicationController::class, 'ApplicationApprovedShow']);
-        Route::get("application-denied-show", [LeaveApplicationController::class, 'ApplicationDeniedShow']);
+        Route::get("application-self-denied/{id}", [LeaveApplicationController::class, 'ApplicationSelfDenied']);
+        Route::get("application-self-denied-show", [LeaveApplicationController::class, 'ApplicationSelfDeniedShow']);
+        Route::get("application-report", [LeaveApplicationController::class, 'ApplicationReport']);
     });
 });
