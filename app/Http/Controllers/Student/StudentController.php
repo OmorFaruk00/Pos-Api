@@ -3,15 +3,10 @@
 namespace App\Http\Controllers\Student;
 
 use Illuminate\Http\Request;
-use App\Models\Student;
 use App\Models\Course;
 use App\Http\Controllers\Controller;
 use App\Models\Accounts\StudentCost;
-use App\Models\Accounts\Transaction;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-
-
+use App\Models\Student;
 
 class StudentController extends Controller
 {
