@@ -43,7 +43,7 @@
                   </table>          
               
             </div>        
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered text-center">
     <thead>
       <tr class="th-bg">
         <th>Sl</th>
@@ -56,7 +56,7 @@
     </thead>
     <tbody>
         @foreach (  $report->report as $key => $report  )         
-      <tr class="table-border text-center">        
+      <tr>        
         <td>{{$key+1}}</td>
         <td>{{$report->student->student_name}}</td>
         <td>{{$report->student->roll_no}}</td>

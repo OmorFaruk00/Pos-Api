@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Accounts\ClassController;
 use App\Http\Controllers\Accounts\FundController;
 use App\Http\Controllers\Accounts\PaymentPurposeController;
@@ -25,8 +27,6 @@ use App\Http\Controllers\Profile\SocialController;
 use App\Http\Controllers\Profile\TrainingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ADM\BatchController;
 use App\Http\Controllers\ADM\SectionController;
 use App\Http\Controllers\ADM\Admissioncontroller;
@@ -39,9 +39,11 @@ use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LeaveApplicationController;
+use App\Http\Controllers\ResourceController;
 use App\Models\Accounts\StudentCost;
 use App\Models\Accounts\Transaction;
 use App\Models\Student;
+
 
 
 
@@ -59,7 +61,6 @@ Route::get("blog", [DumWebsiteController::class, 'BlogShow']);
 Route::get("blog-details/{id}", [DumWebsiteController::class, 'BlogDetails']);
 Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
-
 
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
@@ -99,24 +100,22 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'accounts', 'as' => 'account.'], function () {
         //fund
         Route::get('/funds', [FundController::class, 'index'])->name('fund.index');
-        Route::post('/funds', [FundController::class, 'store'])->name('fund.store');
+        Route::post('/funds', [FundController::class, 'store'])->name('fund.store')->middleware('permission:Funds');
         Route::get('/funds-subfunds/{id}', [FundController::class, 'getSubFunds'])->name('fund.getSubFunds');
         //sub fund
         Route::get('/sub-fund', [SubFundController::class, 'index'])->name('subFund.index');
-        Route::post('/sub-fund', [SubFundController::class, 'store'])->name('subFund.store');
+        Route::post('/sub-fund', [SubFundController::class, 'store'])->name('subFund.store')->middleware('permission:Sub-funds');
         //transaction
         Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
-        Route::get('/statement/{sid}', [StudentController::class, 'studentStatement'])->name('studentCost.studentStatement');
+        Route::get('/statement/{sid}', [StudentController::class, 'studentStatement'])->name('studentCost.studentStatement')->middleware('permission:Account-statement');
         //cost
-        Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost');
-        Route::post("login", [UserController::class, 'login'])->name("login");
-        Route::post("logout", [UserController::class, 'logout'])->name("logout");
+        Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost')->middleware('permission:Accounts');
         //class
         Route::get('/class', [ClassController::class, 'index'])->name('class.index');
         Route::post('/class', [ClassController::class, 'store'])->name('class.store');
         // payment purpose
         Route::get('/purpose', [PaymentPurposeController::class, 'index'])->name('payment.purpose.index');
-        Route::post('/purpose', [PaymentPurposeController::class, 'store'])->name('payment.purpose.store');
+        Route::post('/purpose', [PaymentPurposeController::class, 'store'])->name('payment.purpose.store')->middleware('permission:Account-purpose');
         Route::get('/purpose/{classId}', [PaymentPurposeController::class, 'searchByClass'])->name('payment.searchByClass');
     });
 
@@ -327,7 +326,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("attendance-store", [AttendanceController::class, 'AttendanceStore']);
         Route::post("attendance-report", [AttendanceController::class, 'AttendanceReport'])->middleware('permission:Attendance-report');
         Route::get("attendance-report-print/{id}", [AttendanceController::class, 'AttendanceReportPrint']);
-        Route::get("assign-course-teacher/{course_id}/{assign_by}", [AttendanceController::class, 'AssignCourseTeacher'])->middleware('permission:Assign-course');
+        Route::get("teacher-show", [AttendanceController::class, 'TeacherShow']);
+        Route::post("assign-course-teacher", [AttendanceController::class, 'AssignCourseTeacher'])->middleware('permission:Assign-course');
         Route::get("course-show", [AttendanceController::class, 'CourseShow']);
     });
 

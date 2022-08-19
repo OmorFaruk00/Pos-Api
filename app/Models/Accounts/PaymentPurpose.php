@@ -3,7 +3,7 @@
 namespace App\Models\Accounts;
 
 use App\Models\Batch;
-use App\Models\Department;
+use App\Models\Section;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,11 +17,11 @@ class PaymentPurpose extends Model
 
     public function relDepartment(): HasOne
     {
-        return $this->hasOne(Department::class, 'id', 'departemnt_id');
+        return $this->hasOne(Section::class, 'id', 'department_id')->select('id','department_name');
     }
     public function relBatch(): HasOne
     {
-        return $this->hasOne(Batch::class, 'id', 'batch_id');
+        return $this->hasOne(Batch::class, 'id', 'batch_id')->select('id','batch_name');
     }
     //all database works
     public static function make($req): PaymentPurpose

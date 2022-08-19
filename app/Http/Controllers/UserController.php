@@ -26,7 +26,7 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         try {
-            $user = Employee::where('email', $request->email)->first();
+            $user = Employee::where('email', $request->email)->where('status', 1)->first();
             if (!$user) {
                 return response()->json(['message' => 'User not found'], 203);
             }
@@ -134,6 +134,9 @@ class UserController extends Controller
             ],
         ]);
         try {
+            // $formatted = Carbon::now()->subMinute(1)->toDateTimeString();
+            // Password_reset::where('created_at', '<=', $formatted)->delete();
+
             $PasswordReset = Password_reset::where('token', $token)->first();
             if (!$PasswordReset) {
                 return response(['message' => 'Token is Invalid or Expired', 'status' => 404]);

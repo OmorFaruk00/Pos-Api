@@ -10,7 +10,7 @@ class PaymentPurposeController extends Controller
 {
     public function index()
     {
-        return PaymentPurpose::with('relBatch')->get();
+        return PaymentPurpose::with('relBatch','relDepartment')->get();
     }
     public function store()
     {
