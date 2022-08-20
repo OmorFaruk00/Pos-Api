@@ -70,6 +70,7 @@ Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPr
 Route::post("login", [UserController::class, 'login'])->name("login");
 Route::get("password-reset/{email}", [UserController::class, 'Password_Reset']);
 Route::post("password-reset-confirm/{token}", [UserController::class, 'Password_Reset_Confirm']);
+Route::get("password-reset-option/{token}", [UserController::class, 'Password_Reset_Option']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = \App\Models\Employee::with('relDesignation', 'relDepartment', 'relSocial',)->where('id', auth()->user()->id)->first();
