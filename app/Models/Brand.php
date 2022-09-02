@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\DUM;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contact extends Model
+class Brand extends Model
 {
     use HasFactory;
 }

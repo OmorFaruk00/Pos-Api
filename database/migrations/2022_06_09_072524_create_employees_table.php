@@ -26,6 +26,7 @@ class CreateEmployeesTable extends Migration
             $table->string('profile_photo', 100)->nullable();            
             $table->integer('status');           
             $table->text('permissions')->nullable();
+            $table->string('role')->nullable();           
             $table->string('weekly_working_hours', 7)->nullable();           
             $table->string('created_by');
             $table->string('merit', 20)->nullable();

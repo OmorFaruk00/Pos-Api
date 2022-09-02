@@ -26,6 +26,7 @@ class UserTableSeeder extends Seeder
             "personal_phone_no"=> "12233",
             "alternative_phone_no"=> "1232341",
             "home_phone_no"=> "1332",
+            "role"=> "Admin",
             "jobtype"=> "full time",
             "created_by"=> "omor",
             "status"=> 1

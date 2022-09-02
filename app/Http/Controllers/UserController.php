@@ -121,18 +121,18 @@ class UserController extends Controller
     }
     public function Password_Reset_Confirm(Request $request, $token)
     {
-        // $request->validate([
-        //     'password' => [
-        //         'required',
-        //         'confirmed',
-        //         Password::min(8)
-        //             ->mixedCase()
-        //             ->letters()
-        //             ->numbers()
-        //             ->symbols()
-        //             ->uncompromised(),
-        //     ],
-        // ]);
+        $request->validate([
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ]);
         try {
             // $formatted = Carbon::now()->subMinute(1)->toDateTimeString();
             // Password_reset::where('created_at', '<=', $formatted)->delete();
@@ -155,9 +155,5 @@ class UserController extends Controller
         return view('password-reset-option',compact('token'));
 
     }
-    // public function Password_Reset_Confirm(Request $request, $token)
-    // {
-       
-    //     dd($request->password) ;
-    // }
+   
 }
