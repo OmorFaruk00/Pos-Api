@@ -14,30 +14,30 @@ use Illuminate\Validation\Rules\Password;
 class EmployeeController extends Controller
 {
     function EmployeeAdd(Request $request){
-        $request->validate([
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->mixedCase()
-                    ->letters()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-            ],
-            'name' => 'required',
-            'email' => 'required|unique:employees',                                    
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'department' => 'required',
-            'designation' => 'required',
-            'personal_phone_no' => 'required|numeric',
-            'date_of_joining' => 'required',            
-            'job_type' => 'required',             
-            'nid_no' => 'required|numeric',
-            'date_of_birth' => 'required',
-            'supervised_by' => 'required',   
-            'role' => 'required',                                  
-        ]);
+        // $request->validate([
+        //     'password' => [
+        //         'required',
+        //         'confirmed',
+        //         Password::min(8)
+        //             ->mixedCase()
+        //             ->letters()
+        //             ->numbers()
+        //             ->symbols()
+        //             ->uncompromised(),
+        //     ],
+        //     'name' => 'required',
+        //     'email' => 'required|unique:employees',                                    
+        //     'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        //     'department' => 'required',
+        //     'designation' => 'required',
+        //     'personal_phone_no' => 'required|numeric',
+        //     'date_of_joining' => 'required',            
+        //     'job_type' => 'required',             
+        //     'nid_no' => 'required|numeric',
+        //     'date_of_birth' => 'required',
+        //     'supervised_by' => 'required',   
+        //     'role' => 'required',                                  
+        // ]);
         
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -83,9 +83,10 @@ class EmployeeController extends Controller
         }          
         
     }
-    function EmployeeShowPaginate(){
+    function EmployeeShowPaginate($item){
         try {            
-            return Employee::with('relDesignation','relDepartment')->paginate('5');           
+            $employee = Employee::with('relDesignation','relDepartment')->paginate($item); 
+            return response()->json($employee);          
             
         } catch (\Exception $e) {
             return $e->getMessage();

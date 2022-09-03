@@ -5,16 +5,25 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\Unit;
+use App\Models\Category;
+use App\Models\Product;
 
-class BrandController extends Controller
+class ProductController extends Controller
 {
 
     public function index()
     {
+        
     }
 
     public function create()
     {
+        
+        $product['unit'] = Unit::all('id','name');
+        $product['brand'] = Brand::all('id','name');
+        $product['category'] = Category::all('id','name');
+        return response()->json($product);
     }
 
     public function store(Request $request)
@@ -37,7 +46,7 @@ class BrandController extends Controller
     public function show($id)
     {
         try {
-            
+            // return Brand::paginate(3); 
             $Brand = Brand::orderBy('id', 'desc')->paginate($id);
             return response()->json($Brand);
         } catch (\Exception $e) {

@@ -8,6 +8,9 @@ use App\Http\Controllers\EMP\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Product\BrandController;
+use App\Http\Controllers\Product\CategoryController;
+use App\Http\Controllers\Product\UnitController;
+use App\Http\Controllers\Product\ProductController;
 
 
 
@@ -66,7 +69,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     Route::prefix('employee')->group(function () {
         Route::get("show", [EmployeeController::class, 'EmployeeShow']);
-        Route::get("show-paginate", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
+        Route::get("show-paginate/{item}", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
         Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee-add');
         Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
         Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee-update');
@@ -74,8 +77,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
         Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
-    
+
     Route::resource('brand', Product\BrandController::class);
+    Route::resource('category', Product\CategoryController::class);
+    Route::resource('unit', Product\UnitController::class);
+    Route::resource('product', Product\ProductController::class);
     
 
     
