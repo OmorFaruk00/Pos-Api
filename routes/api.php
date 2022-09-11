@@ -25,6 +25,8 @@ Route::get("password-reset-option/{token}", [UserController::class, 'Password_Re
 Route::post("logout", [UserController::class, 'logout'])->name("logout");
 Route::post("change-password", [UserController::class, 'Change_Password']);
 
+Route::post('test', [ProductController::class,'test']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = \App\Models\Employee::with('relDesignation', 'relDepartment')->where('id', auth()->user()->id)->first();
     if ($user->role) {

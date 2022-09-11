@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
+use App\Http\Services\ProductService;
 use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\Category;
@@ -11,6 +13,24 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    
+    private $service;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->service = $productService;
+    }
+
+    public function test(Request $request){
+        Product::create($this->service->storeProduct($request));
+        // $user = $request->storeUser();
+        // return response()->json([$pro,$user]);
+        // return 'success';
+        // $this->service->storeProduct();
+        // return $this->service->storeProduct();
+        return 'success';
+
+    }
 
     public function index()
     {
@@ -26,29 +46,16 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|unique:brands,name',
-
-        ]);
-        try {
-            $brand = new Brand();
-            $brand->name = $request->name;
-            $brand->created_by = auth()->user()->id;
-            $brand->save();
-            return response()->json(['message' => 'Brand Added Successfully'], 201);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+      return $request->storeProduct();
+       
     }
 
     public function show($id)
     {
         try {
-            // return Brand::paginate(3); 
-            $Brand = Brand::orderBy('id', 'desc')->paginate($id);
-            return response()->json($Brand);
+            
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -66,19 +73,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
 
-        $request->validate([
-            'name' => 'required|unique:brands,name,' . $id
-
-        ]);
-        try {
-            $brand = Brand::findOrFail($id);
-            $brand->name = $request->name;
-            $brand->updated_by = auth()->user()->id;
-            $brand->save();
-            return response()->json(['message' => 'Brand Updated Successfully'], 201);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        
     }
 
     public function destroy($id)
@@ -91,4 +86,6 @@ class ProductController extends Controller
             return $e->getMessage();
         }
     }
+
+
 }
