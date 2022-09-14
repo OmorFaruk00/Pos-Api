@@ -1,25 +1,96 @@
 <?php
+
 namespace App\Http\Services;
 
-use App\model\Product;
+use App\Models\Product;
+use App\Models\Product_stock;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 
 
-
-class ProductService 
+class ProductService
 {
-    
+
     public function storeProduct($request)
     {
-       $data['name'] = $request->name;
-       $data['product_code'] = $request->code;
-       return $data;
-    // return "product service";
-        
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/product'), $file_name);
+        }
+        $data = new Product();
+        $data->product_name = $request->product_name;
+        $data->product_code = $request->product_code;
+        $data->brand = $request->brand;
+        $data->category = $request->category;
+        $data->unit = $request->unit;
+        $data->tax = $request->tax;
+        $data->purchase_price = $request->purchase_price;
+        $data->sales_price = $request->sales_price;
+        $data->barcode = $request->barcode;
+        $data->opening_qty = $request->opening_qty;
+        $data->alert_qty = $request->alert_qty;
+        $data->warranty = $request->warranty;
+        $data->guarantee = $request->guarantee;
+        $data->description = $request->description;
+        $data->image = $file_name ?? 'image';
+        $data->created_by = auth()->user()->id;
+        $data->save();
+
+        $stock = new Product_stock();
+        $stock->product_id = $data->id;
+        $stock->opening_quantity = $request->opening_qty;
+        $stock->available_quantity = $request->opening_qty;
+        $stock->created_by = auth()->user()->id;
+        $stock->save();
+        return response()->json(['message' => 'Product Added Successfully'], 200);
     }
-    public function storeUser()
+    public function updateProduct($request,$id)
     {
-       dd("user service") ;
         
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            $extension = $file->getClientOriginalExtension();
+            $file_name = time() . '_' . Str::random(10) . '.' . $extension;
+            $file->move(public_path('images/product'), $file_name);
+        }
+        $data = Product::find($id);
+        $data->product_name =  $request->product_code;
+        $data->product_code = $request->product_code;
+        $data->brand = $request->brand;
+        $data->category = $request->category;
+        $data->unit = $request->unit;
+        $data->tax = $request->tax;
+        $data->purchase_price = $request->purchase_price;
+        $data->sales_price = $request->sales_price;
+        $data->barcode = $request->barcode;
+        $data->opening_qty = $request->opening_qty;
+        $data->alert_qty = $request->alert_qty;
+        $data->warranty = $request->warranty;
+        $data->guarantee = $request->guarantee;
+        $data->description = $request->description;
+        $data->image = $file_name ?? $data->image;
+        $data->updated_by = auth()->user()->id;
+        $data->save();
+
+        // $stock = Product_stock::where('product_id',$id);
+        // return $stock;
+        // // $stock->product_id = $data->id;
+        // $stock->opening_quantity = $request->opening_qty;
+        // $stock->available_quantity = $request->opening_qty;
+        // $stock->updated_by = auth()->user()->id;
+        // $stock->update();
+        return response()->json(['message' => 'Product Update Successfully'], 200);
+    }
+    public function deleteProduct($id)
+    {
+        Product::find($id)->delete();
+        Product_stock::where('product_id',$id)->delete();
     }
 }

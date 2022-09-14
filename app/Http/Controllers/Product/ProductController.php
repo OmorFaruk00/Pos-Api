@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -22,18 +23,23 @@ class ProductController extends Controller
     }
 
     public function test(Request $request){
-        Product::create($this->service->storeProduct($request));
+        // Product::create($this->service->storeProduct($request));
         // $user = $request->storeUser();
         // return response()->json([$pro,$user]);
         // return 'success';
         // $this->service->storeProduct();
-        // return $this->service->storeProduct();
+        return $this->service->storeProduct($request);
         return 'success';
 
     }
 
     public function index()
     {
+        try {
+            return Product::paginate(2);            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
         
     }
 
@@ -48,14 +54,21 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-      return $request->storeProduct();
-       
+        try {
+            return $this->service->storeProduct($request);            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+   
     }
 
     public function show($id)
     {
         try {
             
+            $product = Product::with('unit','category')->orderBy('id', 'desc')->paginate($id);
+            return response()->json($product);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -64,7 +77,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         try {
-            return Brand::find($id);
+            return Product::find($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -72,16 +85,19 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        
+        try {
+            // return $request;
+            return $this->service->updateProduct($request,$id);            
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function destroy($id)
-    {
-        // return $id;
+    {        
         try {
-            Brand::find($id)->delete();
-            return response()->json(['message' => 'Brand Delete Successfully'], 201);
+            return $this->service->deleteProduct($id);  
+            return response()->json(['message' => 'Product Delete Successfully'], 201);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
