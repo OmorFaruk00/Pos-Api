@@ -11,10 +11,10 @@ class Product extends Model
 
     public function unit()
     {
-        return $this->hasOne('App\Models\Unit',  'id','unit');
+        return $this->hasOne('App\Models\Unit',  'id','unit')->select('id','name');
     }
     public function category()
     {
-        return $this->hasOne('App\Models\Category',  'id','category');
+        return $this->hasOne('App\Models\Category',  'id','category')->select('id','name');
     }
 }

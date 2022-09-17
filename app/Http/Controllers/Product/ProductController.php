@@ -22,34 +22,19 @@ class ProductController extends Controller
         $this->service = $productService;
     }
 
-    public function test(Request $request){
-        // Product::create($this->service->storeProduct($request));
-        // $user = $request->storeUser();
-        // return response()->json([$pro,$user]);
-        // return 'success';
-        // $this->service->storeProduct();
-        return $this->service->storeProduct($request);
-        return 'success';
-
+    public function SearchProduct(Request $request){
+        return $this->service->GetProductBySearch($request);
     }
 
     public function index()
     {
-        try {
-            return Product::paginate(2);            
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        return $this->service->GetProductDetails();
         
     }
 
     public function create()
-    {
-        
-        $product['unit'] = Unit::all('id','name');
-        $product['brand'] = Brand::all('id','name');
-        $product['category'] = Category::all('id','name');
-        return response()->json($product);
+    {        
+       
     }
 
     public function store(ProductRequest $request)
@@ -58,20 +43,13 @@ class ProductController extends Controller
             return $this->service->storeProduct($request);            
         } catch (\Exception $e) {
             return $e->getMessage();
-        }
-        
+        }        
    
     }
 
     public function show($id)
     {
-        try {
-            
-            $product = Product::with('unit','category')->orderBy('id', 'desc')->paginate($id);
-            return response()->json($product);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        
     }
 
     public function edit($id)

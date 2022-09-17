@@ -85,6 +85,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::resource('unit', Product\UnitController::class);
     Route::resource('product', Product\ProductController::class);
     Route::post('products/update/{id}', [ProductController::class, 'update']);
+    Route::post('product-search', [ProductController::class, 'SearchProduct']);
     
 
     

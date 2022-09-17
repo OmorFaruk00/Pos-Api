@@ -31,6 +31,7 @@ class CreateProductsTable extends Migration
             $table->string('guarantee')->default(0);
             $table->string('product_references')->nullable();
             $table->string('image')->nullable();
+            $table->string('discount')->nullable();
             $table->text('description')->nullable();
             $table->string('created_by');
             $table->string('updated_by')->nullable();

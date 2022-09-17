@@ -4,6 +4,9 @@ namespace App\Http\Services;
 
 use App\Models\Product;
 use App\Models\Product_stock;
+use App\Models\Unit;
+use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +14,13 @@ use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
+    public function GetProductDetails(){
+        $product['unit'] = Unit::all('id','name');
+        $product['brand'] = Brand::all('id','name');
+        $product['category'] = Category::all('id','name');
+        return response()->json($product);
 
+    }
     public function storeProduct($request)
     {
 
@@ -34,6 +43,7 @@ class ProductService
         $data->barcode = $request->barcode;
         $data->opening_qty = $request->opening_qty;
         $data->alert_qty = $request->alert_qty;
+        $data->discount = $request->discount;
         $data->warranty = $request->warranty;
         $data->guarantee = $request->guarantee;
         $data->description = $request->description;
@@ -50,8 +60,7 @@ class ProductService
         return response()->json(['message' => 'Product Added Successfully'], 200);
     }
     public function updateProduct($request,$id)
-    {
-        
+    {      
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -74,6 +83,7 @@ class ProductService
         $data->alert_qty = $request->alert_qty;
         $data->warranty = $request->warranty;
         $data->guarantee = $request->guarantee;
+        $data->discount = $request->discount;
         $data->description = $request->description;
         $data->image = $file_name ?? $data->image;
         $data->updated_by = auth()->user()->id;
@@ -87,6 +97,30 @@ class ProductService
         // $stock->updated_by = auth()->user()->id;
         // $stock->update();
         return response()->json(['message' => 'Product Update Successfully'], 200);
+    }
+    public function GetProductBySearch($request){
+        $type = $request->type;
+        $item = $request->item;
+        $list = $request->list;     
+        $search = $request->search;     
+
+        if('search_by_category' == $type ){
+            return Product::with('unit','category')->where('category',$item)->paginate($list);
+        }
+        else if('search_by_brand' == $type){
+            return Product::with('unit','category')->where('brand',$item)->paginate($list);
+        }
+        else if('search_by_global'== $type){            
+            return Product::with('unit','category')->where(function ($query) use ($search){
+                $query->where('product_name', 'like', '%'.$search.'%')
+                    ->orWhere('product_code', 'like', '%'.$search.'%')
+                    ->orWhere('barcode', 'like', '%'.$search.'%')
+                    ->orWhere('sales_price', 'like', '%'.$search.'%');
+            })->paginate($list);            
+        }
+        else{
+            return Product::with('unit','category')->orderBy('id', 'desc')->paginate($list);
+        }
     }
     public function deleteProduct($id)
     {
