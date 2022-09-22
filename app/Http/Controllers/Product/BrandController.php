@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Brand as RequestsBrand;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 
@@ -18,12 +17,12 @@ class BrandController extends Controller
     {
     }
 
-    public function store(Brand $request)
+    public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|unique:brands,name',
+        $request->validate([
+            'name' => 'required|unique:brands,name',
 
-        // ]);
+        ]);
         try {
             $brand = new Brand();
             $brand->name = $request->name;

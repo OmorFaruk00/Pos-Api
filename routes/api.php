@@ -11,6 +11,7 @@ use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\UnitController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Customer\CustomerCategoryController;
 
 
 
@@ -84,6 +85,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::resource('category', Product\CategoryController::class);
     Route::resource('unit', Product\UnitController::class);
     Route::resource('product', Product\ProductController::class);
+    Route::resource('customer-category',Customer\CustomerCategoryController::class);
     Route::post('products/update/{id}', [ProductController::class, 'update']);
     Route::post('product-search', [ProductController::class, 'SearchProduct']);
     

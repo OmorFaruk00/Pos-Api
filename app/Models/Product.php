@@ -17,4 +17,8 @@ class Product extends Model
     {
         return $this->hasOne('App\Models\Category',  'id','category')->select('id','name');
     }
+    public function stock()
+    {
+        return $this->hasOne('App\Models\Product_stock',  'product_id','id')->select('id','product_id','available_quantity');
+    }
 }

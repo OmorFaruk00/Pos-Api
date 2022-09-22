@@ -119,7 +119,7 @@ class ProductService
             })->paginate($list);            
         }
         else{
-            return Product::with('unit','category')->orderBy('id', 'desc')->paginate($list);
+            return Product::with('unit','category','stock')->orderBy('id', 'desc')->select('id','product_name','product_code','category','brand','unit','sales_price','barcode','image','discount')->paginate($list);
         }
     }
     public function deleteProduct($id)
