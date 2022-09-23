@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+    public function category()
+    {
+        return $this->hasOne('App\Models\CustomerCategory',  'id','category')->select('id','name');
+    }
 }

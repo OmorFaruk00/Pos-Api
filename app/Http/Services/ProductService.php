@@ -23,6 +23,7 @@ class ProductService
     }
     public function storeProduct($request)
     {
+       
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -47,7 +48,7 @@ class ProductService
         $data->warranty = $request->warranty;
         $data->guarantee = $request->guarantee;
         $data->description = $request->description;
-        $data->image = $file_name ?? 'image';
+        $data->image = $file_name ?? null;
         $data->created_by = auth()->user()->id;
         $data->save();
 
@@ -60,17 +61,15 @@ class ProductService
         return response()->json(['message' => 'Product Added Successfully'], 200);
     }
     public function updateProduct($request,$id)
-    {      
-
+    {
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-
             $extension = $file->getClientOriginalExtension();
             $file_name = time() . '_' . Str::random(10) . '.' . $extension;
             $file->move(public_path('images/product'), $file_name);
         }
-        $data = Product::find($id);
-        $data->product_name =  $request->product_code;
+        $data = Product::findOrFail($id);
+        $data->product_name =  $request->product_name;
         $data->product_code = $request->product_code;
         $data->brand = $request->brand;
         $data->category = $request->category;
@@ -89,14 +88,11 @@ class ProductService
         $data->updated_by = auth()->user()->id;
         $data->save();
 
-        // $stock = Product_stock::where('product_id',$id);
-        // return $stock;
-        // // $stock->product_id = $data->id;
-        // $stock->opening_quantity = $request->opening_qty;
-        // $stock->available_quantity = $request->opening_qty;
-        // $stock->updated_by = auth()->user()->id;
-        // $stock->update();
-        return response()->json(['message' => 'Product Update Successfully'], 200);
+        $stock = Product_stock::where('product_id',$id)->first();       
+        $stock->opening_quantity = $request->opening_qty;        
+        $stock->updated_by = auth()->user()->id;
+        $stock->save();
+        return response()->json(['message' => 'Product Updated Successfully'], 200);
     }
     public function GetProductBySearch($request){
         $type = $request->type;

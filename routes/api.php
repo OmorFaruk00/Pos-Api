@@ -7,11 +7,9 @@ use App\Http\Controllers\EMP\DesignationController;
 use App\Http\Controllers\EMP\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\Product\BrandController;
-use App\Http\Controllers\Product\CategoryController;
-use App\Http\Controllers\Product\UnitController;
 use App\Http\Controllers\Product\ProductController;
-use App\Http\Controllers\Customer\CustomerCategoryController;
+use App\Http\Controllers\Customer\CustomerController;
+
 
 
 
@@ -85,9 +83,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::resource('category', Product\CategoryController::class);
     Route::resource('unit', Product\UnitController::class);
     Route::resource('product', Product\ProductController::class);
-    Route::resource('customer-category',Customer\CustomerCategoryController::class);
-    Route::post('products/update/{id}', [ProductController::class, 'update']);
+    Route::post('product-update/{id}', [ProductController::class, 'update']);
     Route::post('product-search', [ProductController::class, 'SearchProduct']);
+    Route::resource('customer-category',Customer\CustomerCategoryController::class);
+    Route::resource('customer',Customer\CustomerController::class);
+    Route::post('customer-update/{id}',[CustomerController::class,'update']);
+    Route::post('customer-search',[CustomerController::class,'SearchCustomer']);
     
 
     

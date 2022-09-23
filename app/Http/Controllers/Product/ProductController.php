@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\UpdateRequest;
 use App\Http\Services\ProductService;
 use App\Models\Brand;
 use App\Models\Unit;
@@ -22,9 +23,7 @@ class ProductController extends Controller
         $this->service = $productService;
     }
 
-    public function SearchProduct(Request $request){
-        return $this->service->GetProductBySearch($request);
-    }
+  
 
     public function index()
     {
@@ -46,12 +45,7 @@ class ProductController extends Controller
         }        
    
     }
-
-    public function show($id)
-    {
-        
-    }
-
+    
     public function edit($id)
     {
         try {
@@ -63,12 +57,26 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
-            // return $request;
+        $request->validate([
+           'product_name'=> 'required|unique:products,product_name,'.$id,
+           'product_code'=> 'required|unique:products,product_code,'.$id,
+           'barcode'=> 'nullable|unique:products,barcode,'.$id,
+           'category'=> 'required',
+           'unit'=> 'required',
+           'purchase_price'=> 'required|numeric',
+           'sales_price'=> 'required|numeric',
+           'opening_qty'=> 'required|numeric',
+        //    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+
+        ]);
+        try {            
             return $this->service->updateProduct($request,$id);            
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+    public function SearchProduct(Request $request){
+        return $this->service->GetProductBySearch($request);
     }
 
     public function destroy($id)
