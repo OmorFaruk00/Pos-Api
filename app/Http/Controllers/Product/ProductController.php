@@ -66,7 +66,7 @@ class ProductController extends Controller
            'purchase_price'=> 'required|numeric',
            'sales_price'=> 'required|numeric',
            'opening_qty'=> 'required|numeric',
-        //    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+           'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
 
         ]);
         try {            
