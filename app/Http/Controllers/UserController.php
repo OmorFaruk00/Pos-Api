@@ -35,10 +35,11 @@ class UserController extends Controller
                     "message" => 'The given password is invalid.'
                 ], 203);
             }
-            if ($user->role) {
-                $role = Role::where('name', $user->role)->first();
-            }
-            $token = $user->createToken($request->email, $role ? $role->permissions : [])->plainTextToken;
+            // if ($user->role) {
+            //     $role = Role::where('name', $user->role)->first();
+            // }
+            // $token = $user->createToken($request->email, $role ? $role->permissions : [])->plainTextToken;
+            $token = $user->createToken($request->email)->plainTextToken;
             $response = [
                 'user' => $user,
                 'token' => $token,

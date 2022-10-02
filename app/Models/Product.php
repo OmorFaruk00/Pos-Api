@@ -15,10 +15,10 @@ class Product extends Model
     }
     public function category()
     {
-        return $this->hasOne('App\Models\Category',  'id','category')->select('id','name');
+        return $this->belongsTo('App\Models\Category',  'category','id')->select('id','name');
     }
     public function stock()
     {
-        return $this->hasOne('App\Models\Product_stock',  'product_id','id')->select('id','product_id','available_quantity');
+        return $this->hasOne('App\Models\Product_stock',  'product_id','id')->select('id','product_id','available_quantity','purchased_quantity','sold_quantity','wastage_quantity');
     }
 }

@@ -23,6 +23,7 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+         
         return [
            'product_name'=> 'required|unique:products,product_name',
            'product_code'=> 'required|unique:products,product_code',

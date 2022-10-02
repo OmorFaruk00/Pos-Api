@@ -27,27 +27,15 @@ class Employee extends Authenticatable
         'password',
     ];
 
-    public function relDesignation()
+    public function designation()
     {
         return $this->belongsTo('App\Models\Designation', 'designation_id', 'id');
     }
-    public function relDepartment()
+    public function department()
     {
         return $this->belongsTo('App\Models\Department', 'department_id', 'id');
     }
-    public function relSocial()
-    {
-        return $this->hasMany('App\Models\Social',  'employee_id','id');
-    }
-    public function relQualification()
-    {
-        return $this->hasMany('App\Models\Qualification',  'employee_id','id');
-    }
-    public function relTraining()
-    {
-        return $this->hasMany('App\Models\Training',  'employee_id','id');
-    }
-
+ 
 
     protected $hidden = [
         'password',

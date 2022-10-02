@@ -4,11 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EMP\DepartmentController;
 use App\Http\Controllers\EMP\DesignationController;
-use App\Http\Controllers\EMP\EmployeeController;
+// use App\Http\Controllers\EMP\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\PosController;
 
 
 
@@ -27,7 +29,7 @@ Route::post("change-password", [UserController::class, 'Change_Password']);
 Route::post('test', [ProductController::class,'test']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    $user = \App\Models\Employee::with('relDesignation', 'relDepartment')->where('id', auth()->user()->id)->first();
+    $user = \App\Models\Employee::with('designation', 'department')->where('id', auth()->user()->id)->first();
     if ($user->role) {
         $role = \App\Models\Role::where('name', $user->role)->first();
     }
@@ -51,23 +53,9 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     // accounts  
 
-    Route::group(['prefix' => 'department', 'middleware' => 'permission:Department'], function () {
-        Route::get("show", [DepartmentController::class, 'DepartmentShow']);
-        Route::post("add", [DepartmentController::class, 'DepartmentAdd']);
-        Route::get("edit/{id}", [DepartmentController::class, 'DepartmentEdit']);
-        Route::post("update/{id}", [DepartmentController::class, 'DepartmentUpdate']);
-        Route::get("status/{id}", [DepartmentController::class, 'DepartmentStatus']);
-        Route::get("delete/{id}", [DepartmentController::class, 'DepartmentDelete']);
-    });
+   
 
-    Route::group(['prefix' => 'designation', 'middleware' => 'permission:Designation'], function () {
-        Route::get("show", [DesignationController::class, 'DesignationShow']);
-        Route::post("add", [DesignationController::class, 'DesignationAdd']);
-        Route::get("edit/{id}", [DesignationController::class, 'DesignationEdit']);
-        Route::post("update/{id}", [DesignationController::class, 'DesignationUpdate']);
-        Route::get("status/{id}", [DesignationController::class, 'DesignationStatus']);
-        Route::get("delete/{id}", [DesignationController::class, 'DesignationDelete']);
-    });
+  
     Route::prefix('employee')->group(function () {
         Route::get("show", [EmployeeController::class, 'EmployeeShow']);
         Route::get("show-paginate/{item}", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
@@ -85,11 +73,18 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::resource('product', Product\ProductController::class);
     Route::post('product-update/{id}', [ProductController::class, 'update']);
     Route::post('product-search', [ProductController::class, 'SearchProduct']);
+    Route::post('product-stock', [ProductController::class, 'StockProduct']);
     Route::resource('customer-category',Customer\CustomerCategoryController::class);
     Route::resource('customer',Customer\CustomerController::class);
     Route::post('customer-update/{id}',[CustomerController::class,'update']);
     Route::post('customer-search',[CustomerController::class,'SearchCustomer']);
-    
+    Route::resource('department',Employee\DepartmentController::class);
+    Route::resource('designation',Employee\DesignationController::class);
+    Route::resource('employee',Employee\EmployeeController::class);
+    Route::get('employee-status/{id}',[EmployeeController::class,'status']);
+    Route::post('employee-get',[EmployeeController::class,'getEmployee']);
+    Route::post('employee-update/{id}',[EmployeeController::class,'update']);
+    Route::post('create-invoice',[PosController::class,'createInvoice']);
 
     
 
@@ -104,4 +99,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 
 
 });
+
+Route::get('pos',[PosController::class,'index']);
 

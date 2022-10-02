@@ -17,13 +17,16 @@ class CustomerController extends Controller
     {        
         $this->service = $customerService;
     }
-   
+       
     public function index()
     {
-        //
-    }
-
-   
+        try {
+            return Customer::select("id","name","previous_due")->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+    }   
     public function SearchCustomer(Request $request){
         return $this->service->GetCustomerBySearch($request);
     }
@@ -44,9 +47,7 @@ class CustomerController extends Controller
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-    } 
-
-    
+    }
     public function update(Request $request, $id)
     {      
         try {
@@ -56,8 +57,6 @@ class CustomerController extends Controller
         } 
        
     }
-
- 
     public function destroy($id)
     {
         try {

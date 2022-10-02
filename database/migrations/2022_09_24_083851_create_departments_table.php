@@ -6,15 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateDepartmentsTable extends Migration
 {
-
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->string('department');
-            $table->string('type');
-            $table->string('status');
-            $table->string('created_by');
+            $table->string('name');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

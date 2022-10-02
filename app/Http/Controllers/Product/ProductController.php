@@ -76,7 +76,11 @@ class ProductController extends Controller
         }
     }
     public function SearchProduct(Request $request){
-        return $this->service->GetProductBySearch($request);
+        try {            
+            return $this->service->GetProductBySearch($request);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function destroy($id)
@@ -84,6 +88,15 @@ class ProductController extends Controller
         try {
             return $this->service->deleteProduct($id);  
             return response()->json(['message' => 'Product Delete Successfully'], 201);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
+    
+    public function StockProduct(Request $request){
+        try {            
+            return $this->service->GetProductStockBySearch($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
