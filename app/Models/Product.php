@@ -9,16 +9,16 @@ class Product extends Model
 {
     use HasFactory;
 
-    public function unit()
+    public function relUnit()
     {
-        return $this->hasOne('App\Models\Unit',  'id','unit')->select('id','name');
+        return $this->hasOne('App\Models\Unit',  'id','unit');
     }
-    public function category()
+    public function relCategory()
     {
-        return $this->belongsTo('App\Models\Category',  'category','id')->select('id','name');
+        return $this->belongsTo('App\Models\Category',  'category','id');
     }
     public function stock()
     {
-        return $this->hasOne('App\Models\Product_stock',  'product_id','id')->select('id','product_id','available_quantity','purchased_quantity','sold_quantity','wastage_quantity');
+        return $this->hasOne('App\Models\Product_stock',  'product_id','id');
     }
 }

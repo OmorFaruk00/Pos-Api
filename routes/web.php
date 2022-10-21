@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 // namespace App\Models;
 use App\Models\user;
@@ -22,4 +23,5 @@ Route::get('/', function () {
 Route::get('/user', function () {
     return user::all();
 });
+Route::get('sale','PosController@test');
 Route::get("test", [AdmissionFormController::class, 'testPDF']); 

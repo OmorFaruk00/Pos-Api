@@ -16,4 +16,8 @@ class Sale extends Model
     {
         return $this->hasOne('App\Models\Customer',  'id','customer_id');
     }
+    public function product()
+    {
+        return $this->hasOne('App\Models\Product',  'id','product_id');
+    }
 }

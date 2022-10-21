@@ -53,16 +53,13 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     // accounts  
 
-   
-
-  
     Route::prefix('employee')->group(function () {
         Route::get("show", [EmployeeController::class, 'EmployeeShow']);
         Route::get("show-paginate/{item}", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
-        Route::post("add", [EmployeeController::class, 'EmployeeAdd'])->middleware('permission:Employee-add');
+        Route::post("add", [EmployeeController::class, 'EmployeeAdd']);
         Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
-        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate'])->middleware('permission:Employee-update');
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus'])->middleware('permission:Employee-status');
+        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
+        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
         Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
         Route::get("role", [EmployeeController::class, 'EmployeeRole']);
     });
@@ -85,6 +82,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::post('employee-get',[EmployeeController::class,'getEmployee']);
     Route::post('employee-update/{id}',[EmployeeController::class,'update']);
     Route::post('create-invoice',[PosController::class,'createInvoice']);
+    Route::post('sales',[PosController::class,'salesList']);
+    Route::get('sales-info/{id}',[PosController::class,'salesInfo']);
 
     
 
@@ -101,4 +100,5 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 });
 
 Route::get('pos',[PosController::class,'index']);
+Route::get('/data/{type?}/{item?}',[ProductController::class,'product']);
 

@@ -25,7 +25,7 @@ class CustomerService
           $customer->name = $request->customer_name ;
           $customer->email = $request->email ;
           $customer->phone = $request->phone;
-          $customer->category = $request->category;
+          $customer->category_id = $request->category;
           $customer->card_number = $request->card_number;
           $customer->due_limit = $request->due_limit;
           $customer->current_balance = $request->opening_balance;
@@ -50,7 +50,7 @@ class CustomerService
           $customer->name = $request->customer_name ;
           $customer->email = $request->email;
           $customer->phone = $request->phone;
-          $customer->category = $request->category;
+          $customer->category_id = $request->category;
           $customer->card_number = $request->card_number;
           $customer->due_limit = $request->due_limit;
           $customer->current_balance = $request->opening_balance;
@@ -65,22 +65,35 @@ class CustomerService
         $type = $request->type;
         $item = $request->item;
         $list = $request->list;     
-        $search = $request->search;     
+        $search = $request->search;   
+        
+        $query = Customer::with('category')        
+        ->when($type=='category', function ($q) use ($type,$item) {
+             $q->where('category_id','=',$item);
+        })
+        ->when($type=='global', function ($q) use ($type,$search) {                   
+            $q->where('name', 'like', '%'.$search.'%')
+            ->orWhere('phone', 'like', '%'.$search.'%')
+            ->orWhere('address', 'like', '%'.$search.'%');                    
+        }) 
+        ->orderBy('id', 'desc')           
+        ->paginate($list); 
 
-        if('search_by_category' == $type ){
-            return Customer::with('category')->where('category',$item)->paginate($list);
-        }
-      
-        else if('search_by_global'== $type){            
-            return Customer::with('category')->where(function ($query) use ($search){
-                $query->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('phone', 'like', '%'.$search.'%')
-                    ->orWhere('address', 'like', '%'.$search.'%');                    
-            })->paginate($list);            
-        }
-        else{
-            return Customer::with('category')->paginate($list);
-        }
+        $query->transform(function($customer){
+            return[
+                'id'=>$customer->id,
+                'name'=>$customer->name,
+                'email'=>$customer->email,
+                'phone'=>$customer->phone,
+                'category'=>$customer->category->name,
+                'image'=>$customer->image,
+            ];
+
+        });
+
+        return $query;
+
+       
     }
     public function deleteCustomer($id)
     {

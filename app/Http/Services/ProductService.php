@@ -94,56 +94,73 @@ class ProductService
         $stock->save();
         return response()->json(['message' => 'Product Updated Successfully'], 200);
     }
-    public function GetProductBySearch($request){
-        $type = $request->type;
-        $item = $request->item;
-        $list = $request->list;     
-        $search = $request->search;     
+    public function GetProductBySearch($request){    
+        
+        $query = $this->searchProduct($request);
+     
+         $query->transform(function($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'code' => $product->product_code,
+                'category' => $product->relcategory->name,
+                'unit' => $product->relunit->name,
+                'price' => $product->sales_price,
+                'available_quantity' => $product->stock->available_quantity,
+                'discount' => $product->discount,
+                'image' => $product->image,          
+            ];
+        });
+        
+        return $query;
+    
+    }   
 
-        if('search_by_category' == $type ){
-            return Product::with('unit','category','stock')->where('category',$item)->paginate($list);
-        }
-        else if('search_by_brand' == $type){
-            return Product::with('unit','category','stock')->where('brand',$item)->paginate($list);
-        }
-        else if('search_by_global'== $type){            
-            return Product::with('unit','category','stock')->where(function ($query) use ($search){
-                $query->where('product_name', 'like', '%'.$search.'%')
-                    ->orWhere('product_code', 'like', '%'.$search.'%')
-                    ->orWhere('barcode', 'like', '%'.$search.'%')
-                    ->orWhere('sales_price', 'like', '%'.$search.'%');
-            })->paginate($list);            
-        }
-        else{
-            return Product::with('unit','category','stock')->orderBy('id', 'desc')->select('id','product_name','product_code','category','brand','unit','sales_price','barcode','image','discount')->paginate($list);
-        }
-    }
     public function GetProductStockBySearch($request){
-        $type = $request->type;
-        $item = $request->item;
-        $list = $request->list;     
-        $search = $request->search;     
 
-        if('search_by_category' == $type ){
-            return Product::with('unit','category','stock')->where('category',$item)->paginate($list);
-        }
-        else if('search_by_brand' == $type){
-            return Product::with('unit','category','stock')->where('brand',$item)->paginate($list);
-        }
-        else if('search_by_global'== $type){            
-            return Product::with('unit','category','stock')->where(function ($query) use ($search){
-                $query->where('product_name', 'like', '%'.$search.'%')
-                    ->orWhere('product_code', 'like', '%'.$search.'%')
-                    ->orWhere('barcode', 'like', '%'.$search.'%');                    
-            })->paginate($list);            
-        }
-        else{
-            return Product::with('unit','category','stock')->orderBy('id', 'desc')->select('id','product_name','product_code','category','brand','unit','alert_qty','barcode')->paginate($list);
-        }
+        $query = $this->searchProduct($request);
+
+        $result = $query->getCollection()->transform(function($product) {
+            return [
+                'name' => $product->product_name,
+                'code' => $product->product_code,                
+                'available_quantity' => $product->stock->available_quantity,
+                'sold_quantity' => $product->stock->sold_quantity,
+                'purchased_qty' => $product->stock->purchased_quantity,
+                'wastage_quantity' => $product->stock->wastage_quantity,             
+                     
+            ];
+        });
+        
+        return $query;
     }
     public function deleteProduct($id)
     {
         Product::find($id)->delete();
         Product_stock::where('product_id',$id)->delete();
+    }
+    public function searchProduct($request){
+        $type = $request->type;
+        $item = $request->item;
+        $list = $request->list;     
+        $search = $request->search;     
+
+        $query = Product::with('relUnit','relCategory','stock')     
+        ->when($type=='brand', function ($q) use ($type,$item) {
+             $q->where('brand','=',$item);
+        })
+        ->when($type=='category', function ($q) use ($type,$item) {
+             $q->where('category','=',$item);
+        })
+        ->when($type=='global', function ($q) use ($type,$search) {                   
+            $q->where('product_name', 'like', '%'.$search.'%')
+                ->orWhere('product_code', 'like', '%'.$search.'%')
+                ->orWhere('barcode', 'like', '%'.$search.'%')
+                ->orWhere('sales_price', 'like', '%'.$search.'%');                    
+        })
+        ->orderBy('id', 'desc')            
+        ->paginate($list); 
+        return $query;
+
     }
 }

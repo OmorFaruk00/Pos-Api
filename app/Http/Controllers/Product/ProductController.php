@@ -12,6 +12,7 @@ use App\Models\Unit;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Product\CollectionHelper;
 
 class ProductController extends Controller
 {
@@ -100,6 +101,44 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+    public function product($type=null,$item=null){    
+         
+             $query = Product::with('relUnit','relCategory','stock')             
+            ->orderBy('id', 'desc')
+            ->when($type=='brand', function ($q) use ($type,$item) {
+                 $q->where('brand','=',$item);
+            })
+            ->when($type=='category', function ($q) use ($type,$item) {
+                 $q->where('category','=',$item);
+            })
+            ->when($type=='global', function ($q) use ($type,$item) {                   
+                $q->where('product_name', 'like', '%'.$item.'%')
+                    ->orWhere('product_code', 'like', '%'.$item.'%')
+                    ->orWhere('barcode', 'like', '%'.$item.'%')
+                    ->orWhere('sales_price', 'like', '%'.$item.'%');                    
+            })            
+            ->paginate(5); 
+            
+            
+            $query->transform(function($product, $key) {
+                return [
+                    'name' => $product->product_name,
+                    'code' => $product->product_code,
+                    'category' => $product->relcategory->name,
+                    'unit' => $product->relunit->name,
+                    'price' => $product->sales_price,
+                    'available_quantity' => $product->stock->available_quantity,
+                    'discount' => $product->discount,
+                    'image' => $product->image,
+                    
+                    
+                ];
+            });
+    // return response()->json($result);
+            
+            return $query;
+        
     }
 
 
