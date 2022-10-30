@@ -11,6 +11,11 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ReportController;
 
 
 
@@ -84,6 +89,20 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::post('create-invoice',[PosController::class,'createInvoice']);
     Route::post('sales',[PosController::class,'salesList']);
     Route::get('sales-info/{id}',[PosController::class,'salesInfo']);
+    Route::get('return-product/{item}',[PosController::class,'ReturnProduct']);
+    Route::post('product-return',[PosController::class,'ReturnProductSubmit']);
+    Route::post('return-list',[PosController::class,'salesReturn']);
+    Route::get('return-info/{id}',[PosController::class,'salesReturnInfo']);
+    Route::resource('expense-category','ExpenseCategoryController');
+    Route::resource('expense','ExpenseController');
+    Route::post('expense-list',[ExpenseController::class,'ExpenseList']);
+    Route::get('dashboard',[DashboardController::class,'index']);
+    Route::resource('supplier','SupplierController');
+    Route::post('supplier-list',[SupplierController::class,'SupplierList']);
+    Route::post('sales-report',[ReportController::class,'SalesReport']);
+    Route::post('sales-return-report',[ReportController::class,'SalesReturnReport']);
+    Route::post('expense-report',[ReportController::class,'ExpenseReport']);
+    
 
     
 
@@ -99,6 +118,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 
 });
 
-Route::get('pos',[PosController::class,'index']);
+// Route::get('pos',[PosController::class,'index']);
 Route::get('/data/{type?}/{item?}',[ProductController::class,'product']);
 

@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string("email")->nullable();
             $table->string("phone")->nullable();
             $table->text("address")->nullable();
-            $table->foreignId("category_id")->constrained();
+            $table->string("category_id");
             $table->string("card_number")->nullable();
             $table->string("due_limit")->nullable();
             $table->string("previous_due")->nullable();            

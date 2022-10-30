@@ -68,10 +68,10 @@ class CustomerService
         $search = $request->search;   
         
         $query = Customer::with('category')        
-        ->when($type=='category', function ($q) use ($type,$item) {
+        ->when($type=='category', function ($q) use ($item) {
              $q->where('category_id','=',$item);
         })
-        ->when($type=='global', function ($q) use ($type,$search) {                   
+        ->when($type=='global', function ($q) use ($search) {                   
             $q->where('name', 'like', '%'.$search.'%')
             ->orWhere('phone', 'like', '%'.$search.'%')
             ->orWhere('address', 'like', '%'.$search.'%');                    

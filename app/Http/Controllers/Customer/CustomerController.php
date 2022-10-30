@@ -21,7 +21,7 @@ class CustomerController extends Controller
     public function index()
     {
         try {
-            return Customer::select("id","name","previous_due")->get();
+            return Customer::select("id","name","previous_due")->orderBy('id','desc')->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }

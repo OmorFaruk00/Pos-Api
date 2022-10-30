@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\PosService;
-use App\Models\Sale;
-use App\Models\Sale_detail;
+
 
 class PosController extends Controller
 {
@@ -15,17 +14,10 @@ class PosController extends Controller
         $this->service = $posService;
     }
 
-    public function index(Request $request)
-    {
-        
    
-
-    }
     public function createInvoice(Request $request)
     {
-
-        $request->validate([
-            "customer" => "required",
+        $request->validate([            
             "paid_amount" => "required",
         ]);
 
@@ -35,25 +27,63 @@ class PosController extends Controller
             return $e->getMessage();
         }
     }
+
     public function salesList(Request $request)
     {
         try {
             return $this->service->selesList($request);
         } catch (\Exception $e) {
             return $e->getMessage();
-        }
-        
+        }        
        
     }
     public function salesInfo($id){
-        $sales = Sale::with('customer','sale_details.product')->find($id);
-        return response()->json($sales);
+      
+        try {
+            return $this->service->ProductSelesInfo($id);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
 
     }
-    public function test(){
-        return
-        $this->service->testservice();
+    public function salesReturn(Request $request){
+      
+        try {
+            return $this->service->selesReturnList($request);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
 
+    }
+    public function salesReturnInfo($id){
+      
+        try {
+            return $this->service->ProductReturnInfo($id);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
+
+    }
+    public function ReturnProduct($item){ 
+        try {
+            return $this->service->getReturnProductItem($item);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }   
+    }
+    public function ReturnProductSubmit(Request $request){
+        try {
+            return $this->service->ReturnProductStore($request);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
+    }
+    public function Return(Request $request){
+        try {
+            return 'data';
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
     }
 
 

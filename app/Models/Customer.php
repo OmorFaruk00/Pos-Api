@@ -12,4 +12,9 @@ class Customer extends Model
     {
         return $this->hasOne(CustomerCategory::class,'id','category_id');
     }
+   
+    public function getNameAttribute($value)
+    {
+        return 'Mr. '.ucfirst($value);
+    }
 }
