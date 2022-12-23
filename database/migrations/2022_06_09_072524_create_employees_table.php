@@ -28,7 +28,7 @@ class CreateEmployeesTable extends Migration
             $table->text('permissions')->nullable();
             $table->string('role')->nullable();           
             $table->string('weekly_working_hours', 7)->nullable();           
-            $table->string('created_by');
+            $table->string('created_by')->nullable();
             $table->string('merit', 20)->nullable();
             $table->rememberToken();
             $table->timestamps();

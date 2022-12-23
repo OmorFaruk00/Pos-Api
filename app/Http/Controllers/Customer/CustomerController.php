@@ -5,36 +5,41 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use Illuminate\Support\Str;
-use App\Http\Services\CustomerService;
+use App\Http\Repository\CustomerRepository;
 use App\Http\Requests\CustomerRequest;
 
 class CustomerController extends Controller
 {
-    private $service;
+    private $repository;
 
-    public function __construct(CustomerService $customerService)
+    public function __construct(CustomerRepository $customerRepository)
     {        
-        $this->service = $customerService;
+        $this->repository = $customerRepository;
     }
        
     public function index()
     {
         try {
-            return Customer::select("id","name","previous_due")->orderBy('id','desc')->get();
+            return $this->repository->getCustomer(); 
+            
         } catch (\Exception $e) {
             return $e->getMessage();
         }
         
     }   
     public function SearchCustomer(Request $request){
-        return $this->service->GetCustomerBySearch($request);
+        try {
+            return $this->repository->GetCustomerBySearch($request);           
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } 
+        
     }
    
     public function store(CustomerRequest $request)
     {      
         try {
-            return $this->service->storeCustomer($request);            
+            return $this->repository->storeCustomer($request);            
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
@@ -43,15 +48,15 @@ class CustomerController extends Controller
     public function edit($id)
     {
         try {
-            return Customer::find($id);
+            return $this->repository->editCustomer($id);  
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, $id)
     {      
         try {
-            return $this->service->updateCustomer($request,$id);            
+            return $this->repository->updateCustomer($request,$id);            
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
@@ -60,8 +65,7 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         try {
-            Customer::find($id)->delete();
-            return response()->json(['message' => 'Customer Delete Successfully'], 201);
+            return $this->repository->deleteCustomer($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

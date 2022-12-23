@@ -5,30 +5,24 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
-use App\Http\Requests\UpdateRequest;
-use App\Http\Services\ProductService;
-use App\Models\Brand;
-use App\Models\Unit;
-use App\Models\Category;
+use App\Http\Repository\ProductRepository;
 use App\Models\Product;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Product\CollectionHelper;
 
 class ProductController extends Controller
 {
-    
-    private $service;
+   
+    private $repository;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductRepository $productRepository)
     {
-        $this->service = $productService;
+        $this->repository = $productRepository;
     }
 
   
 
     public function index()
     {
-        return $this->service->GetProductDetails();
+        return $this->repository->GetProductDetails();
         
     }
 
@@ -38,14 +32,17 @@ class ProductController extends Controller
     }
 
     public function store(ProductRequest $request)
-    {
+    { 
+        
         try {
-            return $this->service->storeProduct($request);            
+             return $this->repository->storeProduct($request); 
+                
         } catch (\Exception $e) {
             return $e->getMessage();
         }        
    
     }
+ 
     
     public function edit($id)
     {
@@ -56,29 +53,20 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $request->validate([
-           'product_name'=> 'required|unique:products,product_name,'.$id,
-           'product_code'=> 'required|unique:products,product_code,'.$id,
-           'barcode'=> 'nullable|unique:products,barcode,'.$id,
-           'category'=> 'required',
-           'unit'=> 'required',
-           'purchase_price'=> 'required|numeric',
-           'sales_price'=> 'required|numeric',
-           'opening_qty'=> 'required|numeric',
-           'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-
-        ]);
-        try {            
-            return $this->service->updateProduct($request,$id);            
+     
+        try {
+             return $this->repository->updateProduct($request,$id);   
+                    
         } catch (\Exception $e) {
             return $e->getMessage();
-        }
+        } 
+       
     }
-    public function SearchProduct(Request $request){
+    public function SearchProduct(Request $request){      
         try {            
-            return $this->service->GetProductBySearch($request);
+            return $this->repository->GetProductBySearch($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -87,8 +75,8 @@ class ProductController extends Controller
     public function destroy($id)
     {        
         try {
-            return $this->service->deleteProduct($id);  
-            return response()->json(['message' => 'Product Delete Successfully'], 201);
+            return $this->repository->deleteProduct($id); 
+            
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -97,7 +85,7 @@ class ProductController extends Controller
     
     public function StockProduct(Request $request){
         try {            
-            return $this->service->GetProductStockBySearch($request);
+            return $this->repository->GetProductStockBySearch($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

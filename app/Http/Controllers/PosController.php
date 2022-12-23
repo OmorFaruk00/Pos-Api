@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Services\PosService;
+use App\Http\Repository\PosRepository;
 
 
 class PosController extends Controller
 {
-    private $service;
-    public function __construct(PosService $posService)
+    private $repository;
+    public function __construct(PosRepository $posRepository)
     {
-        $this->service = $posService;
+        $this->repository = $posRepository;
     }
 
    
@@ -22,7 +22,7 @@ class PosController extends Controller
         ]);
 
         try {
-            return $this->service->createInvoiceService($request);
+            return $this->repository->createInvoice($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -31,7 +31,7 @@ class PosController extends Controller
     public function salesList(Request $request)
     {
         try {
-            return $this->service->selesList($request);
+            return $this->repository->selesList($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         }        
@@ -40,7 +40,7 @@ class PosController extends Controller
     public function salesInfo($id){
       
         try {
-            return $this->service->ProductSelesInfo($id);
+            return $this->repository->ProductSelesInfo($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
@@ -49,7 +49,7 @@ class PosController extends Controller
     public function salesReturn(Request $request){
       
         try {
-            return $this->service->selesReturnList($request);
+            return $this->repository->selesReturnList($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
@@ -58,7 +58,7 @@ class PosController extends Controller
     public function salesReturnInfo($id){
       
         try {
-            return $this->service->ProductReturnInfo($id);
+            return $this->repository->ProductReturnInfo($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
@@ -66,14 +66,14 @@ class PosController extends Controller
     }
     public function ReturnProduct($item){ 
         try {
-            return $this->service->getReturnProductItem($item);
+            return $this->repository->getReturnProductItem($item);
         } catch (\Exception $e) {
             return $e->getMessage();
         }   
     }
     public function ReturnProductSubmit(Request $request){
         try {
-            return $this->service->ReturnProductStore($request);
+            return $this->repository->ReturnProductStore($request);
         } catch (\Exception $e) {
             return $e->getMessage();
         } 

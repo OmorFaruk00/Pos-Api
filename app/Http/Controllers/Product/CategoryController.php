@@ -11,6 +11,12 @@ class CategoryController extends Controller
 
     public function index()
     {
+        try {
+            $Category = Category::select('id','name')->orderBy('id', 'desc')->get();
+            return response()->json($Category);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function create()
@@ -34,11 +40,11 @@ class CategoryController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($list)
     {
         try {
 
-            $Category = Category::orderBy('id', 'desc')->paginate($id);
+            $Category = Category::orderBy('id', 'desc')->paginate($list);
             return response()->json($Category);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -74,8 +80,7 @@ class CategoryController extends Controller
     }
 
     public function destroy($id)
-    {
-        // return $id;
+    {       
         try {
             Category::find($id)->delete();
             return response()->json(['message' => 'Category Delete Successfully'], 201);

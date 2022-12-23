@@ -6,32 +6,35 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+   
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+  
     public function rules()
     {
-        
-        
+
         return [
-            "customer_name" => "required",
+            "name" => "required",
             "phone" => "required",
+            "category_id" => "required",
             "email" => "nullable|email",
-            "card_number" => "nullable|numeric",
-            "due_limit" => "nullable|numeric",
+            "card_number" => "nullable",
+            "due_limit" => "nullable",
+            "address" => "nullable",
+            "opening_balance" => "nullable",
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'category_id.required' => 'The category field is required.',
+
         ];
     }
 }

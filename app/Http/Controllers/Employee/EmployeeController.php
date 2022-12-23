@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\EmployeeRequest;
-use App\Http\Services\EmployeeService;
+use App\Http\Repository\EmployeeRepository;
 use Illuminate\Support\Str;
 use App\Models\Employee;
 use App\Models\Department;
@@ -17,11 +17,11 @@ use App\Models\Role;
 class EmployeeController extends Controller
 {
 
-    private $service;
+    private $repository;
 
-    public function __construct(EmployeeService $employeeService)
+    public function __construct(EmployeeRepository $employeeRepository)
     {
-        $this->service = $employeeService;
+        $this->repository = $employeeRepository;
     }
     public function index()
     {
@@ -38,7 +38,7 @@ class EmployeeController extends Controller
     public function getEmployee(Request $request)
     {        
         try {
-            return $this->service->GetEmployeeBySearch($request);   
+            return $this->repository->GetEmployeeBySearch($request);   
             
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -49,7 +49,7 @@ class EmployeeController extends Controller
     public function store(EmployeeRequest $request)
     {    
         try {
-            return $this->service->storeEmployee($request);   
+            return $this->repository->storeEmployee($request);   
             
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -64,7 +64,7 @@ class EmployeeController extends Controller
     public function status($id)
     {
         try {
-           return $this->service->CustomerStatus($id);
+           return $this->repository->EmployeeStatus($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -94,7 +94,7 @@ class EmployeeController extends Controller
             'role' => 'required',                                  
         ]);       
         try {
-            return $this->service->updateEmployee($request,$id);  
+            return $this->repository->updateEmployee($request,$id);  
         } catch (\Exception $e) {
             return $e->getMessage();
         }

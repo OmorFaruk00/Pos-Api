@@ -3,100 +3,75 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Supplier;
+use App\Http\Repository\SupplierRepository;
+use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
-    public function SupplierList(Request $request)
-    {
-        try {            
-            $search = $request->search;
-            $list = $request->list;            
-    
-            $Supplier = Supplier::
-            when($search !=null, function ($q) use ($search) {  
-                $q->where('name', 'like', '%'.$search.'%')           
-                ->orWhere('phone', 'like', '%'.$search.'%');                           
-            })
-            ->orderBy('id', 'desc')                
-            ->paginate($list);
-            return response()->json($Supplier);
+    private $repository;
 
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+    public function __construct(SupplierRepository $supplierRepository)
+    {
+        $this->repository = $supplierRepository;
     }
+ 
 
     public function index()
     {
-        try {                   
-            $result = Supplier::select('id','name')->get();
-            return response()->json($result);
+        try {
+            return $this->repository->getSupplier();
+            
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function store(Request $request)
-    {    
-        $data  = $this->validate($request,
-        [
-            'name' => 'required',           
-            'phone' => 'required',           
-            'email' => 'nullable',           
-            'opening_balance'   => 'nullable',
-            'address'   => 'nullable',
-        ]);     
+    public function store(SupplierRequest $request)
+    {
         
         try {
-            $data['created_by'] = auth()->user()->id;           
-            $result = Supplier::create($data);
-            return response()->json(['message' => 'Supplier Added Successfully'], 201);
+            return $this->repository->storeSupplier($request->validated());
+
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-
-    public function show($list)
-    {
-       
-    }
+    
 
     public function edit($id)
     {
         try {
-            return Supplier::find($id);
+            return $this->repository->editSupplier($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(SupplierRequest $request, $id)
     {
-        $data  = $this->validate($request,
-        [
-            'name' => 'required',           
-            'phone' => 'required',           
-            'email' => 'nullable',           
-            'opening_balance'   => 'nullable',
-            'address'   => 'nullable',
-        ]);
-
         try {
-            $Supplier = Supplier::findOrFail($id);           
-            $Supplier->update($data);           
-            return response()->json(['message' => 'Supplier Updated Successfully'], 201);
+            return $this->repository->updateSupplier($request->validated(),$id);
+         
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }       
+
+    }
+    public function SupplierList(Request $request)
+    {
+        try {
+            return $this->repository->SupplierListBySearch($request);
+         
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+      
     }
 
     public function destroy($id)
     {
-       
         try {
-            $data = Supplier::find($id)->delete();           
-            return response()->json(['message' => 'Supplier Delete Successfully'], 201);
+            return $this->repository->deleteSupplier($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

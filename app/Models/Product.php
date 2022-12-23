@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function relUnit()
     {
@@ -15,10 +16,14 @@ class Product extends Model
     }
     public function relCategory()
     {
-        return $this->belongsTo('App\Models\Category',  'category','id');
+        return $this->hasOne('App\Models\Category', 'id', 'category');
+    }
+    public function relBrand()
+    {
+        return $this->hasOne('App\Models\Brand',  'id','brand');
     }
     public function stock()
     {
-        return $this->hasOne('App\Models\Product_stock',  'product_id','id');
+        return $this->hasOne('App\Models\ProductStock',  'product_id','id');
     }
 }

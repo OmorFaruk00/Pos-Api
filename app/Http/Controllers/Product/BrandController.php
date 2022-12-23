@@ -11,6 +11,13 @@ class BrandController extends Controller
 
     public function index()
     {
+        try {
+            
+            $Brand = Brand::select('id','name')->orderBy('id', 'desc')->get();
+            return response()->json($Brand);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function create()
@@ -48,7 +55,7 @@ class BrandController extends Controller
     public function edit($id)
     {
         try {
-            return Brand::find($id);
+            return Brand::findorfail($id);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

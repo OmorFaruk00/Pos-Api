@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\ExpenseCategory;
+use Illuminate\Http\Request;
 
 class ExpenseCategoryController extends Controller
 {
     public function index()
     {
-        try {            
+        try {
             $Category = ExpenseCategory::orderBy('id', 'desc')->get();
             return response()->json($Category);
         } catch (\Exception $e) {
@@ -24,16 +24,16 @@ class ExpenseCategoryController extends Controller
     public function store(Request $request)
     {
 
-        $data  = $this->validate($request,
-        [
-            'name' => 'required|unique:expense_categories,name',           
-            'description'   => 'nullable',
-        ],
-        // [
-        //     'name.required'     => ' name is required.',           
-        // ]
+        $data = $this->validate($request,
+            [
+                'name' => 'bail|required|unique:expense_categories,name|min:5',
+                'description' => 'nullable',
+            ],
+            // [
+            //     'name.required'     => ' name is required.',
+            // ]
         );
-        
+
         try {
             $data['created_by'] = auth()->user()->id;
             $result = ExpenseCategory::insert($data);
@@ -45,7 +45,7 @@ class ExpenseCategoryController extends Controller
 
     public function show($list)
     {
-        try {            
+        try {
             $Category = ExpenseCategory::orderBy('id', 'desc')->paginate($list);
             return response()->json($Category);
         } catch (\Exception $e) {
@@ -64,16 +64,16 @@ class ExpenseCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data  = $this->validate($request,
-        [
-            'name' => 'required|unique:expense_categories,name,' . $id,         
-            'description'   => 'nullable',
-        ],
+        $data = $this->validate($request,
+            [
+                'name' => 'required|unique:expense_categories,name,' . $id,
+                'description' => 'nullable',
+            ],
         );
 
         try {
             $Category = ExpenseCategory::findOrFail($id);
-            $Category->update($data);           
+            $Category->update($data);
             return response()->json(['message' => 'Category Updated Successfully'], 201);
         } catch (\Exception $e) {
             return $e->getMessage();

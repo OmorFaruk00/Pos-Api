@@ -1843,7 +1843,7 @@
                 "symfony/mime": "^5.4 || ^6"
             },
             "suggest": {
-                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "aws/aws-sdk-php": "Allow sending log messages to AWS Repository like DynamoDB",
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "elasticsearch/elasticsearch": "Allow sending log messages to an Elasticsearch server via official client",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
@@ -1880,7 +1880,7 @@
                     "homepage": "https://seld.be"
                 }
             ],
-            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web Repository",
             "homepage": "https://github.com/Seldaek/monolog",
             "keywords": [
                 "log",
@@ -5036,7 +5036,7 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Generic abstractions related to writing services",
+            "description": "Generic abstractions related to writing Repository",
             "homepage": "https://symfony.com",
             "keywords": [
                 "abstractions",

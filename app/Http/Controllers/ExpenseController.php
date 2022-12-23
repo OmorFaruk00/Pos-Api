@@ -24,10 +24,7 @@ class ExpenseController extends Controller
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orWhereHas('category', function( $query ) use ( $search ){
                     $query->where('name', 'like', '%'.$search.'%');
-                });
-                
-                       
-                           
+                });                          
             })
             ->orderBy('id', 'desc')                
             ->paginate($list); 
@@ -45,7 +42,6 @@ class ExpenseController extends Controller
                 ];
             });
 
-
             return response()->json($expense);
 
         } catch (\Exception $e) {
@@ -58,9 +54,7 @@ class ExpenseController extends Controller
     }
 
     public function store(Request $request)
-    {
-
-      
+    {      
 
         $data  = $this->validate($request,
         [
@@ -111,11 +105,8 @@ class ExpenseController extends Controller
             'amount' => 'required',           
             'purpose' => 'required',           
             'description'   => 'nullable',
-        ],
-        [
-            'Expense_id.required'     => ' Expense field is required.',           
-        ]      
-        );
+        ]);            
+      
 
         try {
             $Expense = Expense::findOrFail($id);           

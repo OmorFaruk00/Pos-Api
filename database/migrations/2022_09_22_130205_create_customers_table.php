@@ -26,6 +26,7 @@ class CreateCustomersTable extends Migration
             $table->string("image")->nullable();
             $table->string("status")->default("1");
             $table->string("current_balance")->nullable();
+            $table->string("opening_balance")->nullable();
             $table->string("created_by")->nullable();
             $table->string("updated_by")->nullable();
             $table->timestamps();

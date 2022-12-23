@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class ProductService extends ServiceProvider
 {
     /**
-     * Register services.
+     * Register Repository.
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class ProductService extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
+     * Bootstrap Repository.
      *
      * @return void
      */

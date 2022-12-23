@@ -16,6 +16,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PurchaseControlller;
 
 
 
@@ -58,16 +59,16 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     });
     // accounts  
 
-    Route::prefix('employee')->group(function () {
-        Route::get("show", [EmployeeController::class, 'EmployeeShow']);
-        Route::get("show-paginate/{item}", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
-        Route::post("add", [EmployeeController::class, 'EmployeeAdd']);
-        Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
-        Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
-        Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
-        Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
-        Route::get("role", [EmployeeController::class, 'EmployeeRole']);
-    });
+    // Route::prefix('employee')->group(function () {
+    //     Route::get("show", [EmployeeController::class, 'EmployeeShow']);
+    //     Route::get("show-paginate/{item}", [EmployeeController::class, 'EmployeeShowPaginate'])->middleware('permission:Employee-show');
+    //     Route::post("add", [EmployeeController::class, 'EmployeeAdd']);
+    //     Route::get("edit/{id}", [EmployeeController::class, 'EmployeeEdit']);
+    //     Route::post("update/{id}", [EmployeeController::class, 'EmployeeUpdate']);
+    //     Route::get("status/{id}", [EmployeeController::class, 'EmployeeStatus']);
+    //     Route::get("details/{id}", [EmployeeController::class, 'EmployeeDetails']);
+    //     Route::get("role", [EmployeeController::class, 'EmployeeRole']);
+    // });
 
     Route::resource('brand', Product\BrandController::class);
     Route::resource('category', Product\CategoryController::class);
@@ -102,6 +103,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::post('sales-report',[ReportController::class,'SalesReport']);
     Route::post('sales-return-report',[ReportController::class,'SalesReturnReport']);
     Route::post('expense-report',[ReportController::class,'ExpenseReport']);
+    Route::post('stock-report',[ReportController::class,'StockReport']);
+    Route::post('profit-loss-report',[ReportController::class,'ProfitLossReport']);
+    Route::post('purchase-invoice',[PurchaseControlller::class,'PurchaseInvoice']);
+    Route::post('purchase',[PurchaseControlller::class,'PurchaseList']);
+    Route::get('purchase-info/{id}',[PurchaseControlller::class,'PurchaseInfo']);
     
 
     
@@ -119,5 +125,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
 });
 
 // Route::get('pos',[PosController::class,'index']);
-Route::get('/data/{type?}/{item?}',[ProductController::class,'product']);
+Route::get('/product-list',function(){
+    return App\Models\Product::get();
+});
 

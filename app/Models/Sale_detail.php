@@ -10,6 +10,6 @@ class Sale_detail extends Model
     use HasFactory;
     public function product()
     {
-        return $this->hasOne('App\Models\Product',  'id','product_id')->select('id','product_name','product_code','category');
+        return $this->hasOne('App\Models\Product',  'id','product_id');
     }
 }
