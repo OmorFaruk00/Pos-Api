@@ -23,6 +23,7 @@ class CreateSalesTable extends Migration
             $table->string("paid_amount");
             $table->string("due_amount")->nullable();
             $table->string("created_by");
+            $table->date("sale_date");
             $table->timestamps();
         });
     }

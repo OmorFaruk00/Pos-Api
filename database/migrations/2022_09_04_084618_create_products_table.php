@@ -29,7 +29,7 @@ class CreateProductsTable extends Migration
             $table->string('warranty')->nullable();
             $table->string('guarantee')->nullable();            
             $table->string('image')->nullable();
-            $table->string('discount')->nullable();
+            $table->string('discount')->default('0');
             $table->text('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

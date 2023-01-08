@@ -16,6 +16,7 @@ class ProductFactory extends Factory
         return [
             'product_name'=>$this->faker->unique()->sentence(1),
             'product_code'=>$this->faker->unique()->numberBetween(1,50),
+            'barcode'=>$this->faker->unique()->numberBetween(1,50),
             'category' =>\App\Models\Category::all()->random(),
             'brand' =>\App\Models\Brand::all()->random(),
             'unit' =>\App\Models\Unit::all()->random(),

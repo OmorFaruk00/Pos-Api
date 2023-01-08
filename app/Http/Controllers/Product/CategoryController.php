@@ -12,8 +12,8 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $Category = Category::select('id','name')->orderBy('id', 'desc')->get();
-            return response()->json($Category);
+            $category = Category::select('id','name')->orderBy('id', 'desc')->get();
+            return response()->json($category);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -29,11 +29,10 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name',
         ]);
         try {
-            $Category = new Category();
-            $Category->name = $request->name;
-            $Category->vat = $request->vat;
-            $Category->created_by = auth()->user()->id;
-            $Category->save();
+            $category = new Category();
+            $category->name = $request->name;            
+            $category->created_by = auth()->user()->id;
+            $category->save();
             return response()->json(['message' => 'Category Added Successfully'], 201);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -44,8 +43,8 @@ class CategoryController extends Controller
     {
         try {
 
-            $Category = Category::orderBy('id', 'desc')->paginate($list);
-            return response()->json($Category);
+            $category = Category::orderBy('id', 'desc')->paginate($list);
+            return response()->json($category);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -68,11 +67,10 @@ class CategoryController extends Controller
 
         ]);
         try {
-            $Category = Category::findOrFail($id);
-            $Category->name = $request->name;
-            $Category->vat = $request->vat;
-            $Category->updated_by = auth()->user()->id;
-            $Category->save();
+            $category = Category::findOrFail($id);
+            $category->name = $request->name;           
+            $category->updated_by = auth()->user()->id;
+            $category->save();
             return response()->json(['message' => 'Category Updated Successfully'], 201);
         } catch (\Exception $e) {
             return $e->getMessage();
